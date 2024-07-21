@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{D50B4954-824F-436B-92B5-955C4D6DF280}</ProjectGuid>
+    <RootNamespace>romustrike</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.34322.80</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)freeglut\include;$(SolutionDir)directx8\include</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)freeglut\build\lib\Debug;$(SolutionDir)directx8\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/wd 4430 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level2</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppwd.lib;opengl32.lib;glu32.lib;dxguid.lib;gdi32.lib;msvcprtd.lib;strmiids.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseLib</ShowProgress>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <NoEntryPoint>false</NoEntryPoint>
+      <TargetMachine>MachineX86</TargetMachine>
+      <Profile>false</Profile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppw.lib;opengl32.lib;glu32.lib;glaux.lib;dxguid.lib;gdi32.lib;msvcprt.lib;strmiids.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseLib</ShowProgress>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <Profile>true</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="blob.cpp" />
+    <ClCompile Include="bouton.cpp" />
+    <ClCompile Include="bsp.cpp" />
+    <ClCompile Include="chat.cpp" />
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="console.cpp" />
+    <ClCompile Include="cross.cpp" />
+    <ClCompile Include="dsutil.cpp" />
+    <ClCompile Include="dxutil.cpp" />
+    <ClCompile Include="engine.cpp" />
+    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="font.cpp" />
+    <ClCompile Include="gltga.cpp" />
+    <ClCompile Include="glwin.cpp" />
+    <ClCompile Include="grenade.cpp" />
+    <ClCompile Include="GrenadeMan.cpp" />
+    <ClCompile Include="grenadesimple.cpp" />
+    <ClCompile Include="grenadesmoke.cpp" />
+    <ClCompile Include="image.cpp" />
+    <ClCompile Include="input_box.cpp" />
+    <ClCompile Include="lazer.cpp" />
+    <ClCompile Include="mark.cpp" />
+    <ClCompile Include="md5.cpp" />
+    <ClCompile Include="missile.cpp" />
+    <ClCompile Include="Model_MDL.cpp" />
+    <ClCompile Include="mp3.cpp" />
+    <ClCompile Include="option_bouton.cpp" />
+    <ClCompile Include="panel.cpp" />
+    <ClCompile Include="particle.cpp" />
+    <ClCompile Include="particleBoom.cpp" />
+    <ClCompile Include="particleBurst.cpp" />
+    <ClCompile Include="particleHeSmoke.cpp" />
+    <ClCompile Include="particleMan.cpp" />
+    <ClCompile Include="particleSimple.cpp" />
+    <ClCompile Include="particleSmoke.cpp" />
+    <ClCompile Include="particleTorch.cpp" />
+    <ClCompile Include="PhysEnv.cpp" />
+    <ClCompile Include="Pings.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerfile.cpp" />
+    <ClCompile Include="romu.cpp" />
+    <ClCompile Include="romustrike.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="texMan.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="tga.cpp" />
+    <ClCompile Include="ticker.cpp" />
+    <ClCompile Include="utility.cpp" />
+    <ClCompile Include="vectormath.cpp" />
+    <ClCompile Include="vehicle.cpp" />
+    <ClCompile Include="wad.cpp" />
+    <ClCompile Include="world.cpp" />
+    <ClCompile Include="xmlmessaging.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bitset.h" />
+    <ClInclude Include="blob.h" />
+    <ClInclude Include="bouton.h" />
+    <ClInclude Include="bsp.h" />
+    <ClInclude Include="bubsock.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="console.h" />
+    <ClInclude Include="dsutil.h" />
+    <ClInclude Include="dxutil.h" />
+    <ClInclude Include="engine.h" />
+    <ClInclude Include="exception.h" />
+    <ClInclude Include="fastmath.h" />
+    <ClInclude Include="Flag.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="geom.h" />
+    <ClInclude Include="glext.h" />
+    <ClInclude Include="glinc.h" />
+    <ClInclude Include="gltga.h" />
+    <ClInclude Include="glwin.h" />
+    <ClInclude Include="grenade.h" />
+    <ClInclude Include="GrenadeMan.h" />
+    <ClInclude Include="grenadeSimple.h" />
+    <ClInclude Include="grenadesmoke.h" />
+    <ClInclude Include="image.h" />
+    <ClInclude Include="input_box.h" />
+    <ClInclude Include="jeep1.h" />
+    <ClInclude Include="lazer.h" />
+    <ClInclude Include="mark.h" />
+    <ClInclude Include="matrix.h" />
+    <ClInclude Include="md5.h" />
+    <ClInclude Include="missile.h" />
+    <ClInclude Include="Model_MDL.h" />
+    <ClInclude Include="mp3.h" />
+    <ClInclude Include="option_bouton.h" />
+    <ClInclude Include="panel.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="particleBoom.h" />
+    <ClInclude Include="particleBurst.h" />
+    <ClInclude Include="particlehesmoke.h" />
+    <ClInclude Include="particleMan.h" />
+    <ClInclude Include="particleSimple.h" />
+    <ClInclude Include="particleSmoke.h" />
+    <ClInclude Include="particleTorch.h" />
+    <ClInclude Include="PhysEnv.h" />
+    <ClInclude Include="pings.h" />
+    <ClInclude Include="rand.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="romu.h" />
+    <ClInclude Include="romustrike.h" />
+    <ClInclude Include="rouemodel.h" />
+    <ClInclude Include="son.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="studio.h" />
+    <ClInclude Include="texMan.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="tga.h" />
+    <ClInclude Include="ticker.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="utility.h" />
+    <ClInclude Include="vectormath.h" />
+    <ClInclude Include="vehicle.h" />
+    <ClInclude Include="wad.h" />
+    <ClInclude Include="world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon3.ico" />
+    <Image Include="icon4.ico" />
+    <Image Include="romustrike.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="romustrike.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

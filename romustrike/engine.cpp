@@ -82,7 +82,7 @@ using namespace std;
 #include "console.h"
 #include "option_bouton.h"
 
-#include "..\ZipArchive\ZipArchive.h"
+//#include "..\ZipArchive\ZipArchive.h"
 
 
 #include "bubsock.h"
@@ -7660,8 +7660,8 @@ for (int ga=0;ga<lespos.size();ga++)
 
 
 							glRasterPos3f(lejoueur[j]->pos[0],lejoueur[j]->pos[1],lejoueur[j]->pos[2]+30); 
-							for (unsigned int i=0;i<strlen(lejoueur[j]->playername);i++) 
-								glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(lejoueur[j]->playername+i)); 
+							/*for (unsigned int i = 0;i<strlen(lejoueur[j]->playername);i++)
+								glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(lejoueur[j]->playername+i));*/
 
 						}
 					}

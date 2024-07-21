@@ -325,12 +325,12 @@ glColor4f(1.0f, 1.0f, 1.0f, 1.0f );//
 
 glDisable(GL_BLEND);
 glRasterPos2i(17+(-strlen(vies)*5)+X-H[2]/2+H[2]/4,Y-W[2]/2); 
-for (unsigned int t=0;t<strlen(vies);t++) 
-glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(vies+t));
+/*for (unsigned int t = 0;t<strlen(vies);t++)
+glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(vies+t));*/
  
 glRasterPos2i(15+(-strlen(players)*5)+XX-H[2]/2+H[2]/4,-5+YY-W[2]/2); 
-for (unsigned int tt=0;tt<strlen(players);tt++) 
-glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(players+tt)); 
+/*for (unsigned int tt = 0;tt<strlen(players);tt++)
+glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(players+tt)); */
 /*
 glRasterPos2i(30+(-strlen(ammos)*5)+XX*2-H[2]/2+H[2]/4,-5+YY-W[2]/2); 
 for (unsigned int to=0;to<strlen(vies);to++) 

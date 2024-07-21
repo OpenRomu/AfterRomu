@@ -5,6 +5,7 @@
 //#include <vector>     
 //#include "dsutil.h"
 #include "font.h"
+#include <string>
 using namespace std;
 
 class Romu {

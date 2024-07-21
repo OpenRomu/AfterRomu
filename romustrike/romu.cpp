@@ -152,7 +152,6 @@ else
 
 	if (!((engine_state==64 ||engine_state==51) && strlen(Message_Tchat)==0))
 	{
-		
 		if (scroll<-1.0f)
 		scroll=-1.0f;
 
