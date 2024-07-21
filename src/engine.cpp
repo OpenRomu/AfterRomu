@@ -3111,7 +3111,7 @@ pos_y_mouse=m_height- m_input.ypos;
 			if (m_playerfile)
 				{
 					if (m_playerfile->player_id ==0)
-						{// pas enregistré
+						{// pas enregistrÃ©
 							//aller enregistrement
 							menu_state=4;
 							if(m_romu)
@@ -3880,7 +3880,7 @@ sprintf(NomFich,"%s",local_file);
 			downloading=INET_ERR;
 		}
 
-		// On prépare la requête HTTP v1.1 et on l'envoie
+		// On prÃ©pare la requÃªte HTTP v1.1 et on l'envoie
 		strcpy(Requete, "GET ");
 		strcat(Requete, Chemin);
 		strcat(Requete, " HTTP/1.1\r\nHost: ");
@@ -3888,19 +3888,19 @@ sprintf(NomFich,"%s",local_file);
 		strcat(Requete, "\r\n\r\n");
 		send(Socket, Requete, strlen(Requete), 0);
 
-		// On reçoit la réponse du serveur auquel on s'est connecté
+		// On reÃ§oit la rÃ©ponse du serveur auquel on s'est connectÃ©
 		Recu = recv(Socket, Buffer, sizeof(Buffer), 0);
 
-		// Vérification, si réponse valide => fichier valide et prêt à être téléchargé
+		// VÃ©rification, si rÃ©ponse valide => fichier valide et prÃªt Ã  Ãªtre tÃ©lÃ©chargÃ©
 		write_count = Buffer + 9;
 
-		// On vérifie s'il y a une redirection
+		// On vÃ©rifie s'il y a une redirection
 		if(write_count[0] == '3' && write_count[1] == '0' && (write_count[2] == '1' || write_count[2] == '2'))
 		{
 		
 		}
 
-		// On vérifie si le fichier a été trouvé
+		// On vÃ©rifie si le fichier a Ã©tÃ© trouvÃ©
 		if(write_count[0] != '2' || write_count[1] != '0' || write_count[2] != '0')
 		{
 			char bu[500];
@@ -3909,25 +3909,25 @@ sprintf(NomFich,"%s",local_file);
 			downloading=INET_ERR;
 		}
 
-		// On récupère la taille du fichier
+		// On rÃ©cupÃ¨re la taille du fichier
 		if((write_count = strstr(Buffer, "Content-Length: ")) == NULL)
 		{
-			envoi_msg("URL invalide !!!\nAucune taille de fichier n'est spécifiée dans la réponse du serveur !");
+			envoi_msg("URL invalide !!!\nAucune taille de fichier n'est spÃ©cifiÃ©e dans la rÃ©ponse du serveur !");
 			downloading=INET_ERR;
 		}
 		write_count += 16;
 		char * ee;
 		if((ee = strstr(write_count, "\r\n")) == NULL)
 		{
-			envoi_msg("URL invalide !!!\nRéponse du serveur incorrecte !");
+			envoi_msg("URL invalide !!!\nRÃ©ponse du serveur incorrecte !");
 			downloading=INET_ERR;
 		}
 		m_dwTotalSize = _atoi64(Left(write_count, ee - write_count));
 
-		// On place le pointeur au niveau des données binaires du fichier que l'on télécharge
+		// On place le pointeur au niveau des donnÃ©es binaires du fichier que l'on tÃ©lÃ©charge
 		if((write_count = strstr(Buffer, "\r\n\r\n")) == NULL)
 		{
-			envoi_msg("URL invalide !!!\nRéponse du serveur incorrecte !");
+			envoi_msg("URL invalide !!!\nRÃ©ponse du serveur incorrecte !");
 			downloading=INET_ERR;
 		}
 		write_count += 4;
@@ -3935,15 +3935,15 @@ sprintf(NomFich,"%s",local_file);
 		/*
 		if(FichExist(NomFich))
 		{
-			envoi_msg("Le fichier que vous allez télécharger existe déjà à l'emplacement spécifié.\nSouhaitez-vous l'écraser ?");
+			envoi_msg("Le fichier que vous allez tÃ©lÃ©charger existe dÃ©jÃ  Ã  l'emplacement spÃ©cifiÃ©.\nSouhaitez-vous l'Ã©craser ?");
 				goto Sortir;
 		}
 */
-		// On ouvre (ou crée) le fichier en local
+		// On ouvre (ou crÃ©e) le fichier en local
 		output_file = fopen(NomFich, "wb");
 		if(!output_file)
 		{
-			envoi_msg("Fichier local impossible à créer !");
+			envoi_msg("Fichier local impossible Ã  crÃ©er !");
 			downloading=INET_ERR;
 		}
 		fwrite(write_count, sizeof(char), Recu - (write_count - Buffer), output_file);
@@ -3957,12 +3957,12 @@ downloading=INET_CHUNK;
 
 		//TempsTel = 0;
 
-	//	envoi_msg("Téléchargemant en cour");
+	//	envoi_msg("TÃ©lÃ©chargemant en cour");
 
-		// On lance le timer de calcul de la progression du téléchargement + débit moyen
+		// On lance le timer de calcul de la progression du tÃ©lÃ©chargement + dÃ©bit moyen
 		//SetTimer(FenetrehWnd, 1, 1000, (TIMERPROC)NULL);
 
-		// On commence à écrire dans le fichier et télécharger la suite, jusqu'à la fin ou arrêt du téléchargement
+		// On commence Ã  Ã©crire dans le fichier et tÃ©lÃ©charger la suite, jusqu'Ã  la fin ou arrÃªt du tÃ©lÃ©chargement
 		Recu=1;
 		bool encours;
 		encours=!Arret && Recu && total_down != m_dwTotalSize;
@@ -6464,7 +6464,7 @@ int rr=1;
 							if(TOURNOIS_ON==0)
 							{
 							//on est en tournois
-							// on a pas commencé
+							// on a pas commencÃ©
 								//tous les monde est la si ekip 1 et 2 complete
 								bool complet[2];
 								complet[0]=true;
@@ -6993,7 +6993,7 @@ int rr=1;
 								if (HORS_DE_LA_MAP   )
 								{
 							//||)	((diff<-0.5f) && (lejoueur[VRAI]->Offset_crouch!=-6.0f)
-									//	force_crouch=true; //forcé le crouch au prochain tour
+									//	force_crouch=true; //forcÃ© le crouch au prochain tour
 									lejoueur[VRAI]->Offset_crouch=-20.0f;
 									lejoueur[VRAI]->pos[2]=lejoueur[VRAI]->pos[2]+lejoueur[VRAI]->Offset_crouch;
 									yeux[2]=yeux[2]+lejoueur[VRAI]->Offset_crouch;
@@ -7568,10 +7568,10 @@ for (int ga=0;ga<lespos.size();ga++)
 						yyy2[1] = -fl2[1]*fsin(aa) + fl2[0]*fcos(aa);
 	
 
-						fl[0] =lejoueur[VRAI]->pos[0]+yyy[1]; /// argh c pas ça FIXME
+						fl[0] =lejoueur[VRAI]->pos[0]+yyy[1]; /// argh c pas Ã§a FIXME
 						fl[1] =lejoueur[VRAI]->pos[1]+yyy[0];
 						fl[2] =lejoueur[VRAI]->pos[2]+yyy[2]; //fl devrai etre la position du bout du canon
-						fl2[0] =lejoueur[VRAI]->pos[0]+yyy2[1]; /// argh c pas ça FIXME
+						fl2[0] =lejoueur[VRAI]->pos[0]+yyy2[1]; /// argh c pas Ã§a FIXME
 						fl2[1] =lejoueur[VRAI]->pos[1]+yyy2[0];
 						fl2[2] =lejoueur[VRAI]->pos[2]+yyy2[2]; //fl devrai etre la position du bout du canon
 					}
@@ -8015,7 +8015,7 @@ if (((GetTickCount()-old_pas)>300) && strcmp("run",lejoueur[VRAI]->dep)==0)
 				else
 					type_mark=1;
 
-				//*FRIENDLY j'ai rajouté le vrai dans le test pour eviter de recalculer la normal du tir qui n'est plus bonne
+				//*FRIENDLY j'ai rajoutÃ© le vrai dans le test pour eviter de recalculer la normal du tir qui n'est plus bonne
 				if ((col_tir.found==true) && !(id_joueur==VRAI))
 				{
 					//world.drawBoxEx (col_tir.pt);
@@ -8815,7 +8815,7 @@ if (m_chat)   m_chat->addtext(t);
 
 			pdpMsgReturnBuffer = (DPNMSG_RETURN_BUFFER *) pMsgBuffer;
 
-			// Libérer la mémoire qu'occupe le buffer
+			// LibÃ©rer la mÃ©moire qu'occupe le buffer
 
 			HeapFree (GetProcessHeap (),0,pdpMsgReturnBuffer->pvBuffer);
 
@@ -9901,7 +9901,7 @@ Engine::Joueur_Creation(char * playername,DPNID ID,long cle_joueur)
 		
  		//m_pivot.move( ret);
 		
-		 init_player(i);//bc le 15/05/2008  avant false , probleme de killed a 1 au départ
+		 init_player(i);//bc le 15/05/2008  avant false , probleme de killed a 1 au dÃ©part
 
 		 
 		
@@ -9936,7 +9936,7 @@ Engine::Joueur_Creation(char * playername,DPNID ID,long cle_joueur)
 	}
 
 					
-	 init_player(i);//bc le 15/05/2008  avant false , probleme de killed a 1 au départ
+	 init_player(i);//bc le 15/05/2008  avant false , probleme de killed a 1 au dÃ©part
 			
 	JoueUnSon (19,vec3_t(0.0f,0.0f,0.0f));
 
@@ -11761,7 +11761,7 @@ HRESULT Engine::recoit_Tir(DPNID idplayer,GAMEMSG_TIR* ret)
 					if (lejoueur[j]->vie<=0)
 					{
 						
-						//qui ma tué
+						//qui ma tuÃ©
 							vec3_t recul=vec3_t(0.0f,0.0f,0.0f);
 						
 						if(ret->pos[0]==0.0f && ret->pos[1]==0.0f)
@@ -11847,7 +11847,7 @@ vec3_t Engine::collision_joueur(vec3_t src,vec3_t dir)
 
 int Engine::check_impact(vec3_t src,vec3_t dest,vec3_t pos_mur)
 {
-// premier test en gros pour voir qui peut etre touché entre les deux point
+// premier test en gros pour voir qui peut etre touchÃ© entre les deux point
 	vec3_t mini=pos_mur;
 	int id_mini=-1;
 	float dist_mur=0.0f;
@@ -13932,7 +13932,7 @@ void Engine::kikked(GAMEMSG_KIKKED* ret)
 	char levire[200];
 
 //reception kiking
-	//virer les concerné;
+	//virer les concernÃ©;
 	lockequipe();//----------------------------------------------LOCK
 	
 	for(int i = 0; i < g_lNumberOfActivePlayers; i++)

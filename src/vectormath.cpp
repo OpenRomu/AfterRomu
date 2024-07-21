@@ -116,7 +116,7 @@ BOOL CheckPointInTriangle(vec3_t point, vec3_t a, vec3_t b, vec3_t c) {
 
 vec3_t closestPointOnLine(vec3_t& a, vec3_t& b, vec3_t& p) {
 	
-   // Determine t (the length of the vector from ‘a’ to ‘p’)
+   // Determine t (the length of the vector from â€˜aâ€™ to â€˜pâ€™)
    vec3_t c = p-a;
    vec3_t V = b-a; 
       
@@ -126,12 +126,12 @@ vec3_t closestPointOnLine(vec3_t& a, vec3_t& b, vec3_t& p) {
    double t = dot(V,c);
 
    
-   // Check to see if ‘t’ is beyond the extents of the line segment
+   // Check to see if â€˜tâ€™ is beyond the extents of the line segment
    if (t < 0.0f) return (a);
    if (t > d) return (b);
  
   
-   // Return the point between ‘a’ and ‘b’
+   // Return the point between â€˜aâ€™ and â€˜bâ€™
    //set length of V to t. V is normalized so this is easy
    V[0] = V[0] * t;
    V[1] = V[1] * t;

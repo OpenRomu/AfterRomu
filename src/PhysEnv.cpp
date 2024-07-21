@@ -1191,7 +1191,7 @@ void CPhysEnv::ComputeForces( tParticle	*system, BOOL duringIntegration,float de
 						
 					vec3_t ttt=AxeDevant;
 					ttt.normalize();
-					//projeter de la velocité sur le plan contact tmpv
+					//projeter de la velocitÃ© sur le plan contact tmpv
 
 					tmpv=(curParticle->v-curParticle->contactN*curParticle->contactN.dot(curParticle->v));//toue a
 					vec3_t ausolav;

@@ -283,7 +283,7 @@ InitializeCriticalSection( &g_csPlayerContext );
 				_bstr_t bstrSource(e.Source());
 				_bstr_t bstrDescription(e.Description());
 				char buf[200];
-				sprintf(buf,"Code = %08lx , Code meaning = %s tSource = %s tDescription = %s\n\nMSXML4.dll non enregistré",  e.Error(),e.ErrorMessage(),(LPCSTR) bstrSource,(LPCSTR) bstrDescription);
+				sprintf(buf,"Code = %08lx , Code meaning = %s tSource = %s tDescription = %s\n\nMSXML4.dll non enregistrÃ©",  e.Error(),e.ErrorMessage(),(LPCSTR) bstrSource,(LPCSTR) bstrDescription);
 				MessageBox(NULL,buf,"erreur COM",0);
 			}
 	return 0; // (int) msg.wParam

@@ -24,14 +24,14 @@
 ////////////////////////////////////////////////////////////////////////
 
 #define BUBSOCK_OK		0	// La connection est faite
-#define FALSE_WINSOCK	1	// Winsock ne s'est pas chargé
+#define FALSE_WINSOCK	1	// Winsock ne s'est pas chargÃ©
 #define FALSE_HOST		2	// L'host n'est pas valide
-#define FALSE_SOCKET	3	// La création du socket a échoué
-#define FALSE_CONNECT	4	// La connection a échouée
-#define FALSE_THREAD	5	// Le thread de reception n'a pas été créé
+#define FALSE_SOCKET	3	// La crÃ©ation du socket a Ã©chouÃ©
+#define FALSE_CONNECT	4	// La connection a Ã©chouÃ©e
+#define FALSE_THREAD	5	// Le thread de reception n'a pas Ã©tÃ© crÃ©Ã©
 
 
-// Déclaration de la fonction de reception
+// DÃ©claration de la fonction de reception
 DWORD WINAPI ClientRecv(LPVOID arg);
 
 int sockopen(SOCKET* Client, char* host, int port)
@@ -77,7 +77,7 @@ int sockopen(SOCKET* Client, char* host, int port)
 
 ////////////////////////////////////////////////////////////////////////
 //	SOCKREAD: 
-//		Fonction de reception des données
+//		Fonction de reception des donnÃ©es
 ////////////////////////////////////////////////////////////////////////
 
 //declaration de la fonction Recv
@@ -125,7 +125,7 @@ void sockclose(SOCKET Client)
 
 ////////////////////////////////////////////////////////////////////////
 //	SOCKWRITE: 
-//		Fonction d'envoie de donnée
+//		Fonction d'envoie de donnÃ©e
 ////////////////////////////////////////////////////////////////////////
 
 void sockwrite(SOCKET _Client,char* chaine)
@@ -136,13 +136,13 @@ void sockwrite(SOCKET _Client,char* chaine)
 
 ////////////////////////////////////////////////////////////////////////
 //	SOCKLISTEN: 
-//		Fonction de mise en écoute d'un port
+//		Fonction de mise en Ã©coute d'un port
 ////////////////////////////////////////////////////////////////////////
 
-#define FALSE_BIND		4	// Le bind du socket a échoué
-#define FALSE_LISTEN	6	// La mise en écoute du port a échoué
+#define FALSE_BIND		4	// Le bind du socket a Ã©chouÃ©
+#define FALSE_LISTEN	6	// La mise en Ã©coute du port a Ã©chouÃ©
 
-// Déclaration de la fonction de reception
+// DÃ©claration de la fonction de reception
 DWORD WINAPI ServListen(LPVOID arg);
 
 int socklisten(SOCKET* Client, int port)

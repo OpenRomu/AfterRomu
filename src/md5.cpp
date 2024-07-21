@@ -333,7 +333,7 @@ CMD5::md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 }
 
 
-  /*MD5: début*/
+  /*MD5: dÃ©but*/
 /*
 char *CMD5::md5_str(char *p)
 {

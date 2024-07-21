@@ -271,7 +271,7 @@ Aplayer::anim()
 				bool deja_en_cours=true;
 				int fps_avant;
 				
-				//** MULTI MORT ajouté le 06/01/2005
+				//** MULTI MORT ajoutÃ© le 06/01/2005
 				if (sequence_mort_deja_affecte==false)
 				{
 					strcpy(dep_mort, RenvoieSeqMort());

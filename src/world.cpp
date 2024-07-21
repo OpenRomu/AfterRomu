@@ -89,7 +89,7 @@ point_in_poly21(const vec3_t& p, vec3_t *pf)
     total += acos(v[3].dot(v[0]));//(float) 
  
 
-    if( ((total-6.28f)>-0.03f) && ((total-6.28f)<0.03f))  { // viré le fabsf de merde
+    if( ((total-6.28f)>-0.03f) && ((total-6.28f)<0.03f))  { // virÃ© le fabsf de merde
         return true;
     }
 
@@ -138,7 +138,7 @@ point_in_poly2(const vec3_t& p, const face_t* f)
  
     total += acos(v[f->count-1].dot(v[0]));//(float) 
  
-    if( ((total-6.28f)>-0.03f) && ((total-6.28f)<0.03f))  { // viré le fabsf de merde
+    if( ((total-6.28f)>-0.03f) && ((total-6.28f)<0.03f))  { // virÃ© le fabsf de merde
         return true;
     }
 
@@ -298,7 +298,7 @@ check_collision_car(const face_t* f, collision_data& coldat,float radius)
     vec3_t n = f->p.normal();
     //float radius = 25.0f;
     vec3_t s = coldat.src - n*radius;
-    float t = f->p.dist_to_point(s); //distance entre l'estremité de la boule et la face
+    float t = f->p.dist_to_point(s); //distance entre l'estremitÃ© de la boule et la face
 
     if(t > coldat.dir_len) {
         return;

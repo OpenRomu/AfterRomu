@@ -413,7 +413,7 @@ else
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -587,7 +587,7 @@ else
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -802,7 +802,7 @@ try
 }
 catch(_com_error &e)
 {
-	MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+	MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 	return 0;
 }
 
@@ -1038,7 +1038,7 @@ else
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 }	
@@ -1130,7 +1130,7 @@ long j=0;
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
    // CoUninitialize();
@@ -1550,7 +1550,7 @@ else
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 			return S_FALSE;
 		} 
 
@@ -1602,7 +1602,7 @@ try
 }
 catch(_com_error& e)
 {
-	MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+	MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 	return 0;
 }
 
@@ -2054,7 +2054,7 @@ int CXmlMessaging::GetType_tchat(char*xml)
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2157,7 +2157,7 @@ int CXmlMessaging::GetMsg_tchat(char*xml,char* out_pseudo,char* out_msg)
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2264,7 +2264,7 @@ int CXmlMessaging::GetScroll_tchat(char*xml,char* out_msg)
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2400,7 +2400,7 @@ int CXmlMessaging::GetPings_tchat(char*xml,char* out_msg)
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2518,7 +2518,7 @@ long j=0;
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2692,7 +2692,7 @@ long j=0;
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	
@@ -2933,7 +2933,7 @@ long j=0;
 		}
 		catch(_com_error &e)
 		{
-			MessageBox (NULL,TEXT("erreur accés xml"),TEXT("ROMUSTRIKE"),MB_OK);
+			MessageBox (NULL,TEXT("erreur accÃ©s xml"),TEXT("ROMUSTRIKE"),MB_OK);
 
 		}
 	

@@ -495,7 +495,7 @@ void input_text_key();
 	int    menu_state; //bat 06062002
 	int old_menu_state;
 	int    downloading; //bat 06062002
-	int last_id; //a viré debug
+	int last_id; //a virÃ© debug
 
     HRESULT WINAPI MessageHandler( PVOID pvUserContext, DWORD dwMessageId, PVOID pMsgBuffer );
 	void dpmsg(DWORD id);
@@ -516,10 +516,10 @@ void input_text_key();
 	float prev ;
 	int VRAI;
 	bool    relkeys[MAX_KEYS];
-	unsigned long  old_tick; // pour temporisé les envois de position
-	unsigned long  old_tchat; // pour temporisé les envois de position
+	unsigned long  old_tick; // pour temporisÃ© les envois de position
+	unsigned long  old_tchat; // pour temporisÃ© les envois de position
 	unsigned long old_tick_team;
-	unsigned long  old_pas; // pour temporisé les envois de position
+	unsigned long  old_pas; // pour temporisÃ© les envois de position
 	unsigned int old_son;
  	float speed  ;    // movement speed//05/12/2002
 	float cours  ;    // movement speed//05/12/2002

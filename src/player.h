@@ -116,7 +116,7 @@ public:
 	char action2[20];
 
 	char dep[20];
-	//** MULTI MORT ajouté le 06/01/2005
+	//** MULTI MORT ajoutÃ© le 06/01/2005
 	const char* RenvoieSeqMort();
 	char dep_mort[20];
 	bool sequence_mort_deja_affecte;
