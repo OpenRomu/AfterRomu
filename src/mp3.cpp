@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include <malloc.h>
-#include "glwin.h"
+// @PORT: #include "glwin.h"
  
 #include "mp3.h"
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }

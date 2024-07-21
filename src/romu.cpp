@@ -3,7 +3,7 @@
 #include "romu.h"
 #include "image.h"
 #include "math.h"
-#include "fastmath.h"
+// @PORT: #include "fastmath.h"
 Romu::Romu(const char* filename)
 : m_tex(0),duree(0),state(0),position(0),scroll(0)
 { 

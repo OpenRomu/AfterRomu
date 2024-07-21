@@ -45,15 +45,17 @@ fcos(float a)
 #define deg2rad(x)    ((x)*__DEG2RAD)
 #define rad2deg(x)    ((x)/__DEG2RAD)
 inline static float 
-fast_cos(float angle) 
+cos(float angle) 
 {
-    return fcos(deg2rad(angle));
+    // @PORT: return fcos(deg2rad(angle));
+    return cos(angle);
 }
 
 inline static float 
 fast_sin(float angle) 
 {
-    return fsin(deg2rad(angle));
+    // @PORT: return fsin(deg2rad(angle));
+    return sin(angle);
 }
 
 #endif // __fastmath_h__

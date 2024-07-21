@@ -46,7 +46,7 @@ static char THIS_FILE[] = __FILE__;
 #include <dxerr8.h>
 #include "matrix.h"
 //#include "xmlmessaging.h"
-#include "fastmath.h"
+// @PORT: #include "fastmath.h"
 #include <math.h>
 //#include "dialog2.h"
 #include <mmsystem.h>
@@ -13970,7 +13970,7 @@ void Engine::Earth_quakeframe(float delta )
 }
 
 
-void __stdcall Engine::Juggler  (HINTERNET hInternet, DWORD dwContext,
+void  Engine::Juggler  (HINTERNET hInternet, DWORD dwContext,
                                                          DWORD dwInternetStatus,
                                                          LPVOID lpvStatusInformation,
                                                          DWORD dwStatusInformationLength)

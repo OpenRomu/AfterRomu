@@ -3,6 +3,10 @@
 
 #include "GrenadeMan.h"
 
+// @PORT {
+#include <dplay8.h>
+// }
+
 struct pGrenSystemLazer_t : public pGrenSystem_t
 {
    pGrenSystemLazer_t() {type = pgTypeLazer; spawnTime = 0;}

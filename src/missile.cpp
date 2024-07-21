@@ -4,6 +4,10 @@
 #include "ticker.h"
 #include "Missile.h"
 
+// @PORT {
+#include <dplay8.h>
+// }
+
 void pGrenSystemMissile_t::Init(vec3_t &pos,vec3_t &dir,DPNID amoi )
 {
    Allocate(50);

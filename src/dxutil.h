@@ -61,7 +61,7 @@ HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL* pbValue, BOOL
 //-----------------------------------------------------------------------------
 enum TIMER_COMMAND { TIMER_RESET, TIMER_START, TIMER_STOP, TIMER_ADVANCE,
                      TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME };
-FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command );
+FLOAT  DXUtil_Timer( TIMER_COMMAND command );
 
 
 

@@ -6,7 +6,7 @@
 #include "vehicle.h"
 #include <GL/glu.h>
 #include "image.h"
-#include "fastmath.h"
+// @PORT: #include "fastmath.h"
 #include "jeep1.h"
 #include "rouemodel.h"
 

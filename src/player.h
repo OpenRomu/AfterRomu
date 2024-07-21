@@ -25,7 +25,7 @@
 #include "exception.h" 
 #include <fstream>
 #include "PhysEnv.h"
-#include "glwin.h"
+// @PORT: #include "glwin.h"
 #include "rand.h" //**MULTI MORT 06/01/2005
 /*#include <string>
 #include <stdio.h> 

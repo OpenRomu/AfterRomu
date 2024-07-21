@@ -8,7 +8,7 @@
 #include "romu.h"
 #include "image.h"
 #include "math.h"
-#include "fastmath.h"
+// @PORT: #include "fastmath.h"
 //#include "glut.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

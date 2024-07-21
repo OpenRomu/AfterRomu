@@ -3,6 +3,10 @@
 #include "ticker.h"
 #include "Lazer.h"
 
+// @PORT {
+#include <dplay8.h>
+// }
+
 void pGrenSystemLazer_t::Init(vec3_t &pos,vec3_t &dir,DPNID amoi )
 {
    Allocate(50);

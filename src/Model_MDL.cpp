@@ -7,8 +7,11 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <gl\gl.h>			// OpenGL extensions
-#include <gl\glu.h>			// OpenGL Utilities extensions
+
+// @PORT {
+#include <gl/gl.h>			// OpenGL extensions
+#include <gl/glu.h>			// OpenGL Utilities extensions
+// }
 
 #include "Model_MDL.h"
 #include <string.h>

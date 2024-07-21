@@ -14,7 +14,7 @@
  * OpenGL window
  */
 #include "stdafx.h"
-#include "glwin.h"
+// @PORT: #include "glwin.h"
 #include "exception.h"
 #include "Resource.h"
 

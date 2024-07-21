@@ -285,8 +285,9 @@ HRESULT DXUtil_WriteGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID guidValue )
 //          TIMER_GETELAPSEDTIME  - to get the time that elapsed between 
 //                                  TIMER_GETELAPSEDTIME calls
 //-----------------------------------------------------------------------------
-FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
+FLOAT DXUtil_Timer( TIMER_COMMAND command )
 {
+    /* @PORT {
     static BOOL     m_bTimerInitialized = FALSE;
     static BOOL     m_bUsingQPF         = FALSE;
     static BOOL     m_bTimerStopped     = TRUE;
@@ -455,6 +456,8 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
 
         return -1.0f; // Invalid command specified
     }
+    }*/
+    return 0.0f;
 }
 
 

@@ -25,7 +25,7 @@
 #endif
 
 #include "Model_MDL.h"
-#include "glwin.h"
+// @PORT: #include "glwin.h"
 #include "font.h"
 //#include "world.h"
 #include "config.h"
@@ -464,7 +464,7 @@ float shortint_to_float(float f )
 	void DecaleArme();
 	void Earth_quakeframe(float delta );
 	void mourrir(void);
-	void __stdcall Juggler  (HINTERNET hInternet, DWORD dwContext,
+	void  Juggler  (HINTERNET hInternet, DWORD dwContext,
                                                          DWORD dwInternetStatus,
                                                          LPVOID lpvStatusInformation,
                                                          DWORD dwStatusInformationLength);

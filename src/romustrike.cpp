@@ -770,7 +770,7 @@ o=0;
 
 /*
 
-void __stdcall Juggler  (HINTERNET hInternet, DWORD dwContext,
+void  Juggler  (HINTERNET hInternet, DWORD dwContext,
                                                          DWORD dwInternetStatus,
                                                          LPVOID lpvStatusInformation,
                                                          DWORD dwStatusInformationLength)

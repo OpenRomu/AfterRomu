@@ -17,7 +17,7 @@
 #ifndef __matrix_h__
 #define __matrix_h__
 
-#include "fastmath.h"
+// @PORT: #include "fastmath.h"
 #include "geom.h"
 
 class matrix_t {
@@ -65,7 +65,7 @@ matrix_t::load_identity()
 inline void 
 matrix_t::xrot(float angle)
 {
-    float c = fast_cos(angle);
+    float c = cos(angle);
     float s = fast_sin(angle);
 
     m[5] = c;   
@@ -77,7 +77,7 @@ matrix_t::xrot(float angle)
 inline void 
 matrix_t::yrot(float angle)
 {
-    float c = fast_cos(angle);
+    float c = cos(angle);
     float s = fast_sin(angle);
 
     m[0] = c;   
@@ -89,7 +89,7 @@ matrix_t::yrot(float angle)
 inline void
 matrix_t::zrot(float angle)
 {
-    float c = fast_cos(angle);
+    float c = cos(angle);
     float s = fast_sin(angle);
 
     m[0] = c;   
