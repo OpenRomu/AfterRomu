@@ -53,6 +53,8 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)freeglut\include;$(SolutionDir)directx8\include</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)freeglut\build\lib\Release;$(SolutionDir)directx8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,12 +91,13 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppw.lib;opengl32.lib;glu32.lib;glaux.lib;dxguid.lib;gdi32.lib;msvcprt.lib;strmiids.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppwd.lib;opengl32.lib;glu32.lib;dxguid.lib;gdi32.lib;msvcprtd.lib;strmiids.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TargetMachine>MachineX86</TargetMachine>
       <Profile>true</Profile>
     </Link>
