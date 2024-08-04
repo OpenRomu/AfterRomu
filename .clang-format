@@ -1,0 +1,12 @@
+﻿---
+BasedOnStyle: WebKit
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+ColumnLimit: '120'
+IncludeBlocks: Regroup
+Language: Cpp
+ReflowComments: 'true'
+SortIncludes: 'false'
+UseTab: Never
+
+...

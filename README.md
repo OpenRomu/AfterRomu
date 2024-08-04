@@ -63,6 +63,50 @@ To build AfterRomu, follow these steps:
 After the build process is complete, you should have the AfterRomu executable
 ready to run.
 
+### Code Formatting
+
+To maintain a consistent code style throughout the game project, we utilize
+**Clang-Format** for formatting our codebase. This tool helps ensure that our
+code adheres to a specified style guide, making it easier to read and maintain.
+
+#### Using Docker for Clang-Format
+
+To simplify the setup process and avoid the need to install a compatible
+version of Clang-Format on your local machine, we provide a Docker container.
+Follow the steps below to build and run the Docker container for code
+formatting.
+
+#### Build the Docker Image
+
+First, you need to build the Docker image. Open your terminal and run the
+following command:
+```bash
+$ docker build -t afterromu:latest .
+```
+
+#### Run the Docker Container
+
+Next, you can run the Docker container. Depending on your operating system,
+use one of the following commands:
+```bash
+# Windows
+$ docker run -v ${PWD}:/opt --rm -it --entrypoint bash afterromu
+# Bash / Linux
+$ docker run -v $PWD:/opt --rm -it --entrypoint bash afterromu
+```
+
+#### Format the Code
+
+Once inside the Docker container, you can format the code by executing the
+following command:
+```bash
+$ find src/ -regex '.*\.\(cpp\|hpp\|c\|h\)' -exec clang-format -style=file -i {} \;
+```
+
+This command will search for all C++ source files (.cpp, .hpp, .c, .h)
+in the src/ directory and apply the formatting rules specified in the
+.clang-format configuration file.
+
 ## License
 
 The source code for RomuStrike includes code from the following sources:
