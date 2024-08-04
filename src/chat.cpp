@@ -9,6 +9,7 @@
 #include "image.h"
 #include "math.h"
 #include "fastmath.h"
+#include <string>
 //#include "glut.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

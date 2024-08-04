@@ -1,0 +1,6 @@
+[submodule "directx8"]
+	path = directx8
+	url = git@github.com:edgeforce/directx8.git
+[submodule "freeglut"]
+	path = freeglut
+	url = git@github.com:freeglut/freeglut.git

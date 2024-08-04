@@ -13,6 +13,8 @@
 #include "dsutil.h"
 #include "font.h"
 #include "bitset.h"
+
+#include <string>
  
 struct msg_chat
 {
