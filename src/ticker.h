@@ -30,33 +30,36 @@
 #include <windows.h>
 #include <mmsystem.h>
 
-struct ticker_t
-{  
-   static void Reset(void)    {start = timeGetTime();}
-   static uint PassedI(void)  {return (timeGetTime() - start);}
-   static double Passed(void) {return ((timeGetTime() - start) / 1000.0);}
+struct ticker_t {
+    static void Reset(void) { start = timeGetTime(); }
+    static uint PassedI(void) { return (timeGetTime() - start); }
+    static double Passed(void) { return ((timeGetTime() - start) / 1000.0); }
 
 protected:
-   static DWORD start;
+    static DWORD start;
 };
 
-struct frameTimer_t
-{
-   frameTimer_t()          {frames = 0; now = last = passed = 0; fps = 0;}
-   double &GetNow(void)    {return now;}
-   double &GetLast(void)   {return last;}
-   double &GetPassed(void) {return passed;}
-   int GetFrames(void)     {return frames;}
-   float GetDelta(void)    {return (float) (now - last);}
-   float GetFPS(void)      {return fps;}
-   void Frame(void);
-      
+struct frameTimer_t {
+    frameTimer_t()
+    {
+        frames = 0;
+        now = last = passed = 0;
+        fps = 0;
+    }
+    double& GetNow(void) { return now; }
+    double& GetLast(void) { return last; }
+    double& GetPassed(void) { return passed; }
+    int GetFrames(void) { return frames; }
+    float GetDelta(void) { return (float)(now - last); }
+    float GetFPS(void) { return fps; }
+    void Frame(void);
+
 protected:
-   int frames;  
-   float fps;    
-   double now;
-   double last;
-   double passed;
+    int frames;
+    float fps;
+    double now;
+    double last;
+    double passed;
 };
 
 #endif

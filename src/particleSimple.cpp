@@ -23,62 +23,54 @@
 #include "ticker.h"
 #include "particleSimple.h"
 
-void pSystemSimple_t::Init(vec3_t &pos,vec3_t &dir)
+void pSystemSimple_t::Init(vec3_t& pos, vec3_t& dir)
 {
-   Allocate(50);
-    
-   spawn = pos;
-   spawnTime = 1.0f;
-   passed = 0.0f;
-   Spawn();
+    Allocate(50);
+
+    spawn = pos;
+    spawnTime = 1.0f;
+    passed = 0.0f;
+    Spawn();
 }
 
-bool pSystemSimple_t::Frame(float &frametime, vec3_t &grav)
+bool pSystemSimple_t::Frame(float& frametime, vec3_t& grav)
 {
-   passed += frametime;
+    passed += frametime;
 
-   if (spawnTime > 0 && passed > spawnTime)
-   {
-      passed = 0.0f;
-     //Spawn();
-   }
-   
- 
-   return Cycle(frametime, grav);
+    if (spawnTime > 0 && passed > spawnTime) {
+        passed = 0.0f;
+        // Spawn();
+    }
+
+    return Cycle(frametime, grav);
 }
 
-void pSystemSimple_t::Die(void)
-{
-   spawnTime = -1.0f;
-}
+void pSystemSimple_t::Die(void) { spawnTime = -1.0f; }
 
 void pSystemSimple_t::Spawn(void)
 {
-   for (int i = 0; i < 4; i++)
-   {
-	   vec3_t sp=spawn;
-	   sp[2]=sp[2]+random_t::RandomRange(-20.0f, 20.0f);
+    for (int i = 0; i < 4; i++) {
+        vec3_t sp = spawn;
+        sp[2] = sp[2] + random_t::RandomRange(-20.0f, 20.0f);
 
-      vec3_t dir=vec3_t(random_t::RandomRange(-30.0f, 30.0f),random_t::RandomRange(-30.0f, 30.0f),random_t::RandomRange(-5.0f, 5.0f));
-	  dir=dir*5.0f;
-	  //uint life =
-	  for (float u=0;u<4;u++)
-	  {
-		  pPart_t *n = PartNew();
+        vec3_t dir = vec3_t(random_t::RandomRange(-30.0f, 30.0f), random_t::RandomRange(-30.0f, 30.0f),
+            random_t::RandomRange(-5.0f, 5.0f));
+        dir = dir * 5.0f;
+        // uint life =
+        for (float u = 0; u < 4; u++) {
+            pPart_t* n = PartNew();
 
-		  if (!n)
-			 return;
-		  n->life = ticker_t::PassedI() +
-       (uint) (random_t::RandomRange(500.0f, 1500.0f));;
-		  n->size = random_t::RandomRange(1.0f, 4.0f);
-		  n->vel=dir*(1.0f+(u)/10.0f);//
-		  n->pos=sp; 
-		  
+            if (!n)
+                return;
+            n->life = ticker_t::PassedI() + (uint)(random_t::RandomRange(500.0f, 1500.0f));
+            ;
+            n->size = random_t::RandomRange(1.0f, 4.0f);
+            n->vel = dir * (1.0f + (u) / 10.0f); //
+            n->pos = sp;
 
-
-		  n->pold=sp;
-		  n->gravity = 1;
-		  n->alpha = 1.0f;
-	  }
-   }
+            n->pold = sp;
+            n->gravity = 1;
+            n->alpha = 1.0f;
+        }
+    }
 }

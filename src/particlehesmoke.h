@@ -22,20 +22,23 @@
 
 #include "particleMan.h"
 
-struct pSystemHeSmoke_t : public pSystem_t
-{
-   pSystemHeSmoke_t() {type = pTypeHeSmoke; spawnTime = 0;}
+struct pSystemHeSmoke_t : public pSystem_t {
+    pSystemHeSmoke_t()
+    {
+        type = pTypeHeSmoke;
+        spawnTime = 0;
+    }
 
-   void Init(vec3_t &pos,vec3_t &dir);
-   bool Frame(float &frametime, vec3_t &grav);
-   void Die(void);
+    void Init(vec3_t& pos, vec3_t& dir);
+    bool Frame(float& frametime, vec3_t& grav);
+    void Die(void);
 
 protected:
-   void MakeSmoke(void);
+    void MakeSmoke(void);
 
-   float passed;
-   float spawnTime;
-   vec3_t spawn;
+    float passed;
+    float spawnTime;
+    vec3_t spawn;
 };
 
 #endif

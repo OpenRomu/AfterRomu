@@ -22,57 +22,49 @@
 #include "ticker.h"
 #include "particleSmoke.h"
 
-void pSystemSmoke_t::Init(vec3_t &pos,vec3_t &dir)
+void pSystemSmoke_t::Init(vec3_t& pos, vec3_t& dir)
 {
-   Allocate(200);
+    Allocate(200);
 
-   spawn = pos;
-   spawnTime = 2.0f;
-   passed = 0.0f;
-   
-   MakeSmoke();
+    spawn = pos;
+    spawnTime = 2.0f;
+    passed = 0.0f;
+
+    MakeSmoke();
 }
 
-bool pSystemSmoke_t::Frame(float &frametime, vec3_t &grav)
+bool pSystemSmoke_t::Frame(float& frametime, vec3_t& grav)
 {
-   passed += frametime;
+    passed += frametime;
 
-   if (spawnTime > 0 && passed > spawnTime)
-   {
-      passed = 0.0f;
-    //  MakeSmoke();
-   }
-   
-   return Cycle(frametime, grav);
+    if (spawnTime > 0 && passed > spawnTime) {
+        passed = 0.0f;
+        //  MakeSmoke();
+    }
+
+    return Cycle(frametime, grav);
 }
 
-void pSystemSmoke_t::Die(void)
-{
-   spawnTime = -1;
-}
+void pSystemSmoke_t::Die(void) { spawnTime = -1; }
 
 void pSystemSmoke_t::MakeSmoke(void)
 {
-   for (int i = 0; i < 1; i++)
-   {
-      pPart_t *n = PartNew();
-      
-      if (!n)
-         return;
-   
-      n->life = ticker_t::PassedI() +
-       (uint) (random_t::RandomRange(300.0f, 2000.0f));
-      n->size = random_t::RandomRange(10.0f, 60.0f);
-      n->vel=vec3_t(random_t::RandomRange(-15.0f, 15.0f), 
-       random_t::RandomRange(-5.0f, 15.0f),
-       random_t::RandomRange(-5.0f, 15.0f));
-      n->pos=spawn; 
-      n->pos[0] += random_t::RandomRange(-10.0f, 10.0f);
-      n->pos[1] += random_t::RandomRange(-10.0f, 10.0f);
-      n->pos[2] += random_t::RandomRange(-10.0f, 10.0f);
-      n->pold=n->pos;
-      n->gravity = -0.2f;
-      n->alpha = 0.3f;
-	  
-   }
+    for (int i = 0; i < 1; i++) {
+        pPart_t* n = PartNew();
+
+        if (!n)
+            return;
+
+        n->life = ticker_t::PassedI() + (uint)(random_t::RandomRange(300.0f, 2000.0f));
+        n->size = random_t::RandomRange(10.0f, 60.0f);
+        n->vel = vec3_t(random_t::RandomRange(-15.0f, 15.0f), random_t::RandomRange(-5.0f, 15.0f),
+            random_t::RandomRange(-5.0f, 15.0f));
+        n->pos = spawn;
+        n->pos[0] += random_t::RandomRange(-10.0f, 10.0f);
+        n->pos[1] += random_t::RandomRange(-10.0f, 10.0f);
+        n->pos[2] += random_t::RandomRange(-10.0f, 10.0f);
+        n->pold = n->pos;
+        n->gravity = -0.2f;
+        n->alpha = 0.3f;
+    }
 }

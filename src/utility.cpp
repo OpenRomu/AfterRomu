@@ -21,98 +21,97 @@
 
 #include "utility.h"
 
-long FileGetSize(FILE *stream)
+long FileGetSize(FILE* stream)
 {
-   long curpos, length;
-   curpos = ftell(stream);
-   fseek(stream, 0L, SEEK_END);
-   length = ftell(stream);
-   fseek(stream, curpos, SEEK_SET);
-   return length;
+    long curpos, length;
+    curpos = ftell(stream);
+    fseek(stream, 0L, SEEK_END);
+    length = ftell(stream);
+    fseek(stream, curpos, SEEK_SET);
+    return length;
 }
 
-long FileNameGetSize(char *name)
+long FileNameGetSize(char* name)
 {
-   FILE *f = fopen(name, "r");
-   long size = FileGetSize(f);
-   fclose(f);
-   return size;
+    FILE* f = fopen(name, "r");
+    long size = FileGetSize(f);
+    fclose(f);
+    return size;
 }
 
-byte *FileReadAll(FILE *in, long *dsize)
+byte* FileReadAll(FILE* in, long* dsize)
 {
-   byte *b = 0;
-   long size = 0;
-   
-   size = FileGetSize(in);   
+    byte* b = 0;
+    long size = 0;
 
-   if (!size)
-      return 0;
-   
-   b = new byte[size + 1];
-   memset(b, '\0', size + 1);
+    size = FileGetSize(in);
 
-   if (!b)
-      return 0;
-   
-   fread(b, 1, size, in); // check return with size?
+    if (!size)
+        return 0;
 
-   if (dsize)
-      *dsize = size;
+    b = new byte[size + 1];
+    memset(b, '\0', size + 1);
 
-   return b;
+    if (!b)
+        return 0;
+
+    fread(b, 1, size, in); // check return with size?
+
+    if (dsize)
+        *dsize = size;
+
+    return b;
 }
 
-void LineRead(char **pos, char *dest)
+void LineRead(char** pos, char* dest)
 {
-   char *start = *pos;
+    char* start = *pos;
 
-   while (**pos && **pos != '\n' && **pos != '\r')
-      dest[*pos - start] = *(*pos)++;
-   dest[*pos - start] = '\0';
+    while (**pos && **pos != '\n' && **pos != '\r')
+        dest[*pos - start] = *(*pos)++;
+    dest[*pos - start] = '\0';
 }
 
-char *LineRead(char *pos)
+char* LineRead(char* pos)
 {
-   char *start = pos;
-   char *buffer = 0;
-   
-   while (*pos && *pos != '\n' && *pos != '\r')
-      pos++;
+    char* start = pos;
+    char* buffer = 0;
 
-   buffer = new char[(pos - start) + 1];
-   strncpy(buffer, start, pos - start);
-   buffer[pos - start] = '\0';
+    while (*pos && *pos != '\n' && *pos != '\r')
+        pos++;
 
-   return buffer;
+    buffer = new char[(pos - start) + 1];
+    strncpy(buffer, start, pos - start);
+    buffer[pos - start] = '\0';
+
+    return buffer;
 }
 
-void LineEat(char **pos)
+void LineEat(char** pos)
 {
-   while(**pos && **pos != '\n' && **pos != '\r')
-      (*pos)++;
-   if (**pos)
-      (*pos)++;
+    while (**pos && **pos != '\n' && **pos != '\r')
+        (*pos)++;
+    if (**pos)
+        (*pos)++;
 }
 
-void LineEatWhite(char **pos)
+void LineEatWhite(char** pos)
 {
-   while (**pos &&
-    (**pos == ' ' || **pos == '\t' || **pos == '\r' || **pos == '\n'))
-      (*pos)++;
+    while (**pos && (**pos == ' ' || **pos == '\t' || **pos == '\r' || **pos == '\n'))
+        (*pos)++;
 }
 
-char *LineReadUntil(char **pos, char end)
+char* LineReadUntil(char** pos, char end)
 {
-   char *start = *pos;
-   char *buffer = 0;
+    char* start = *pos;
+    char* buffer = 0;
 
-   while (**pos && **pos != end)
-      (*pos)++;   
+    while (**pos && **pos != end)
+        (*pos)++;
 
-   buffer = new char[(*pos - start) + 1];   
-   strncpy(buffer, start, *pos - start);
-   buffer[*pos - start] = '\0';
+    buffer = new char[(*pos - start) + 1];
+    strncpy(buffer, start, *pos - start);
+    buffer[*pos - start] = '\0';
 
-   return buffer;
+    return buffer;
 }

@@ -27,18 +27,17 @@
 #include "utility.h"
 #include <time.h>
 
-struct random_t
-{
-   static void Init(void) {srand(time(0));}
-   static int Random(void) {return rand();}
-   static inline float RandomRange(float lo, float hi);
+struct random_t {
+    static void Init(void) { srand(time(0)); }
+    static int Random(void) { return rand(); }
+    static inline float RandomRange(float lo, float hi);
 };
 
 inline float random_t::RandomRange(float lo, float hi)
 {
-   int r = rand();
-   float	x = (float)(r & 0x7fff) / (float)0x7fff;
-   return (x * (hi - lo) + lo);
+    int r = rand();
+    float x = (float)(r & 0x7fff) / (float)0x7fff;
+    return (x * (hi - lo) + lo);
 }
 
 #endif

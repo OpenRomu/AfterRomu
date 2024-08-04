@@ -1,14 +1,14 @@
-/* 
+/*
  * HL rendering engine
  * Copyright (c) 2000,2001 Bart Sekura
  *
  * Permission to use, copy, modify and distribute this software
- * is hereby granted, provided that both the copyright notice and 
- * this permission notice appear in all copies of the software, 
+ * is hereby granted, provided that both the copyright notice and
+ * this permission notice appear in all copies of the software,
  * derivative works or modified versions.
  *
  * THE AUTHOR ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
- * CONDITION AND DISCLAIMS ANY LIABILITY OF ANY KIND FOR ANY DAMAGES 
+ * CONDITION AND DISCLAIMS ANY LIABILITY OF ANY KIND FOR ANY DAMAGES
  * WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
  *
  * OGL texture object encapsulation
@@ -20,24 +20,20 @@
 #include "gl/glu.h" // gluBuildMipmaps
 
 Texture::Quality Texture::default_quality = Texture::linear_mipmap_linear;
-//Texture::Quality Texture::default_quality = Texture::nearest_mipmap_nearest;
+// Texture::Quality Texture::default_quality = Texture::nearest_mipmap_nearest;
 
-Texture::Texture(const unsigned char* data,
-                 int width,
-                 int height,
-                 int format,
-                 Quality quality)
-       : m_id(0)
+Texture::Texture(const unsigned char* data, int width, int height, int format, Quality quality)
+    : m_id(0)
 {
     glGenTextures(1, &m_id);
     glBindTexture(GL_TEXTURE_2D, m_id);
 
-    if(quality == unspecified) {
+    if (quality == unspecified) {
         quality = default_quality;
     }
 
     int min, max;
-    switch(quality) {
+    switch (quality) {
     case nearest:
         min = GL_NEAREST, max = GL_NEAREST;
         break;
@@ -70,7 +66,7 @@ Texture::Texture(const unsigned char* data,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, max);
 
     bool mipmap = false;
-    switch(quality) {
+    switch (quality) {
     case nearest_mipmap_nearest:
     case linear_mipmap_nearest:
     case nearest_mipmap_linear:
@@ -80,56 +76,47 @@ Texture::Texture(const unsigned char* data,
     }
 
     int internal_format = format;
-    if(format == GL_RGB && config.bpp == 16) {
+    if (format == GL_RGB && config.bpp == 16) {
         internal_format = GL_RGB16;
     }
 
-    if(mipmap) {
-        gluBuild2DMipmaps(GL_TEXTURE_2D, internal_format, 
-                          width, height, 
-                          format, GL_UNSIGNED_BYTE, 
-                          data);
+    if (mipmap) {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, internal_format, width, height, format, GL_UNSIGNED_BYTE, data);
+    } else {
+
+        /*if (format==GL_RGBA)
+        {
+
+                unsigned int size = width*height;
+    unsigned char* m_data = new unsigned char[size*4];
+    int c = 0;
+    for(unsigned int i = 0; i < size*3; i+=3) {
+        if (data[i]==0 && data[i+1]==0 && data[i+2]==255)
+                        {
+                                m_data[c++] = 0;
+                                m_data[c++] = 0;
+                                m_data[c++] = 0;
+                                m_data[c++] = 0;
+                        }
+                        else
+                        {
+                                m_data[c++] = data[i];
+                                m_data[c++] = data[i+1];
+                                m_data[c++] = data[i+2];
+                                m_data[c++] = 255;
+                        }
     }
-    else {
-        
-		
-		/*if (format==GL_RGBA)
-		{
-			
-			unsigned int size = width*height;
-            unsigned char* m_data = new unsigned char[size*4];
-            int c = 0;
-            for(unsigned int i = 0; i < size*3; i+=3) {
-                if (data[i]==0 && data[i+1]==0 && data[i+2]==255)
-				{
-					m_data[c++] = 0;
-					m_data[c++] = 0;
-					m_data[c++] = 0;
-					m_data[c++] = 0;
-				}
-				else
-				{
-					m_data[c++] = data[i];
-					m_data[c++] = data[i+1];
-					m_data[c++] = data[i+2];
-					m_data[c++] = 255;
-				}
-            }
-			glTexImage2D(GL_TEXTURE_2D, 0, format, 
-						 width, height, 0, 
-						 format, GL_UNSIGNED_BYTE, 
-						 m_data);
-			free(m_data);
-			
-		}
+                glTexImage2D(GL_TEXTURE_2D, 0, format,
+                                         width, height, 0,
+                                         format, GL_UNSIGNED_BYTE,
+                                         m_data);
+                free(m_data);
 
-		else
-		{*/
-			glTexImage2D(GL_TEXTURE_2D, 0, format, 
-						 width, height, 0, 
-						 format, GL_UNSIGNED_BYTE, 
-						 data);
-		//}
+        }
 
+        else
+        {*/
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        //}
     }
 }

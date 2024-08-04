@@ -22,49 +22,44 @@
 #include "ticker.h"
 #include "particleBurst.h"
 
-void pSystemBurst_t::Init(vec3_t &pos,vec3_t &dir)
+void pSystemBurst_t::Init(vec3_t& pos, vec3_t& dir)
 {
-   Allocate(200);
+    Allocate(200);
 
-   spawnTime = 0.5f;
-    
- 
-	pPart_t *n = PartNew();
-      
-      if (!n)
-         return;
-   
-   
-   
-   n->life = ticker_t::PassedI() +
-       (uint) (random_t::RandomRange(50.0f, 100.0f));
-   n->size = 5;
-   n->vel=vec3_t(0.0f, 0.0f, 0.0f);
-   n->pos=pos;
-   n->pold=vec3_t(0.0f, 0.0f, 0.0f);
-   n->gravity = 1;
-   n->alpha = 1.0f;
+    spawnTime = 0.5f;
 
-   passed = 0.0f;
+    pPart_t* n = PartNew();
+
+    if (!n)
+        return;
+
+    n->life = ticker_t::PassedI() + (uint)(random_t::RandomRange(50.0f, 100.0f));
+    n->size = 5;
+    n->vel = vec3_t(0.0f, 0.0f, 0.0f);
+    n->pos = pos;
+    n->pold = vec3_t(0.0f, 0.0f, 0.0f);
+    n->gravity = 1;
+    n->alpha = 1.0f;
+
+    passed = 0.0f;
 }
 
-bool pSystemBurst_t::Frame(float &frametime, vec3_t &grav)
+bool pSystemBurst_t::Frame(float& frametime, vec3_t& grav)
 {
-   passed += frametime;
+    passed += frametime;
 
-   if (spawnTime > 0 && passed > spawnTime)
-   {
-      passed = 0.0f;
-    //  MakeBoom();
-   }
+    if (spawnTime > 0 && passed > spawnTime) {
+        passed = 0.0f;
+        //  MakeBoom();
+    }
 
-   return Cycle(frametime, grav);
+    return Cycle(frametime, grav);
 }
 
 void pSystemBurst_t::Die(void)
 {
-   //if (head)
-     // head->life = ticker_t::PassedI();
+    // if (head)
+    //  head->life = ticker_t::PassedI();
 
-   spawnTime = -1;
+    spawnTime = -1;
 }

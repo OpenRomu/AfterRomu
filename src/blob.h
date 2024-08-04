@@ -11,33 +11,23 @@
 #include "geom.h"
 #include "world.h"
 
-//#include "dplay8.h"
-//#include "dsound.h"       
+// #include "dplay8.h"
+// #include "dsound.h"
 #include "son.h"
 
-
-class blob  
-{
+class blob {
 public:
-	CSound* playersound;
-	world_t * my_world;
-	vec3_t pos;
-	blob();
-	void move(vec3_t dir);
-	void render();
-	void SetWorld(world_t * world) {
-		my_world=world; 
-	
-	}
-	void SetSound(CSound * lessons){
-		playersound=(CSound*) lessons;
-		
-		
-	}
-	void ping();
+    CSound* playersound;
+    world_t* my_world;
+    vec3_t pos;
+    blob();
+    void move(vec3_t dir);
+    void render();
+    void SetWorld(world_t* world) { my_world = world; }
+    void SetSound(CSound* lessons) { playersound = (CSound*)lessons; }
+    void ping();
 
-	virtual ~blob();
-
+    virtual ~blob();
 };
 
 #endif // !defined(AFX_BLOB_H__87FE24EB_044B_466C_A651_2E26F9963F24__INCLUDED_)

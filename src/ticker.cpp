@@ -24,15 +24,14 @@ DWORD ticker_t::start = 0;
 
 void frameTimer_t::Frame(void)
 {
-   frames++;
-   last = now;
-   now = ticker_t::Passed();
-   passed += (now - last);
-   
-   if (passed >= 1)
-   {
-      fps = (frames + fps) / 2;
-      passed = 0;
-      frames = 0;
-   }
+    frames++;
+    last = now;
+    now = ticker_t::Passed();
+    passed += (now - last);
+
+    if (passed >= 1) {
+        fps = (frames + fps) / 2;
+        passed = 0;
+        frames = 0;
+    }
 }

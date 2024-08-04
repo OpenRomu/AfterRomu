@@ -1,14 +1,14 @@
-/* 
+/*
  * HL rendering engine
  * Copyright (c) 2000,2001 Bart Sekura
  *
  * Permission to use, copy, modify and distribute this software
- * is hereby granted, provided that both the copyright notice and 
- * this permission notice appear in all copies of the software, 
+ * is hereby granted, provided that both the copyright notice and
+ * this permission notice appear in all copies of the software,
  * derivative works or modified versions.
  *
  * THE AUTHOR ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
- * CONDITION AND DISCLAIMS ANY LIABILITY OF ANY KIND FOR ANY DAMAGES 
+ * CONDITION AND DISCLAIMS ANY LIABILITY OF ANY KIND FOR ANY DAMAGES
  * WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
  *
  * image manipulation helper
@@ -26,7 +26,7 @@ public:
 
     bool load(const char* filename);
 
-    //accessors
+    // accessors
     int width() const { return m_width; }
     int height() const { return m_height; }
     int bpp() const { return m_bpp; }
@@ -51,7 +51,7 @@ private:
     int m_height;
     int m_bpp;
     unsigned char* m_data;
-    bool           m_alpha;
+    bool m_alpha;
 };
 
 #endif // __image_h__

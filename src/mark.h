@@ -24,44 +24,47 @@
 #include "utility.h"
 
 // tri fan
-struct mMark_t
-{
-   mMark_t() {next = prev = 0; alpha = 1;}
+struct mMark_t {
+    mMark_t()
+    {
+        next = prev = 0;
+        alpha = 1;
+    }
 
-   uint life;
-   vec3_t v[4];
-	vec3_t normal;
-	float alpha;
- 	int color;
-   uint texture;
-   mMark_t *next, *prev;    
+    uint life;
+    vec3_t v[4];
+    vec3_t normal;
+    float alpha;
+    int color;
+    uint texture;
+    mMark_t *next, *prev;
 };
 
-struct mMarkManager_t
-{
-   mMarkManager_t();
-   virtual ~mMarkManager_t();
+struct mMarkManager_t {
+    mMarkManager_t();
+    virtual ~mMarkManager_t();
 
-   void SetTexture(uint t) {texture = t;}
-	void SetTexture_sang(uint t) {texture_sang = t;}
-	void SetTexture_trace(uint t) {texture_trace = t;}
+    void SetTexture(uint t) { texture = t; }
+    void SetTexture_sang(uint t) { texture_sang = t; }
+    void SetTexture_trace(uint t) { texture_trace = t; }
 
-   void Init(int n);
-   void Frame(float &frametime);
-   void Render(void);
-   void AddMark(vec3_t &n, vec3_t &pt, int type_mark);
-	void	drawBox (vec3_t *v);
+    void Init(int n);
+    void Frame(float& frametime);
+    void Render(void);
+    void AddMark(vec3_t& n, vec3_t& pt, int type_mark);
+    void drawBox(vec3_t* v);
+
 protected:
-   mMark_t *MarkNew(void);
-   void MarkDelete(mMark_t *m);
+    mMark_t* MarkNew(void);
+    void MarkDelete(mMark_t* m);
 
-   uint texture;
-   uint texture_sang;
-   uint texture_trace;
-   int marksMax;
-   mMark_t *marksAll;
-   mMark_t *marksFree;
-   mMark_t marksUse;
+    uint texture;
+    uint texture_sang;
+    uint texture_trace;
+    int marksMax;
+    mMark_t* marksAll;
+    mMark_t* marksFree;
+    mMark_t marksUse;
 };
 
 #endif
