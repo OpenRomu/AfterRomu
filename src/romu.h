@@ -1,6 +1,9 @@
 
 #ifndef __romu_h__
 #define __romu_h__
+
+#include <string>
+
 #include "texture.h"
 //#include <vector>     
 //#include "dsutil.h"

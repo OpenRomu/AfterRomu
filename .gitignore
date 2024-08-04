@@ -4,7 +4,10 @@ Release/
 directx8/
 freeglut/
 
+<<<<<<< HEAD
 data/
 
+=======
+>>>>>>> 559350f584c9022a332fa757a225daf8a8330da3
 .vs/
 .vscode/
