@@ -9,9 +9,10 @@ AfterRomu is currently dependent on the following tools and libraries:
 
 - FreeGLUT
 - CMake (for Windows)
-- Visual Studio 2022
+- Visual Studio 2026
 - DirectX 8
 - Windows SDK
+- MSXMLv4 SP2 SDK
 
 ### Building Dependencies
 
@@ -43,7 +44,7 @@ Follow these steps:
    ```
 3. Generate the project files for Visual Studio 2022 (32-bit):
    ```powershell
-   > cmake .. -G "Visual Studio 17 2022" -A Win32
+   > cmake .. -G "Visual Studio 18 2026" -A Win32
    ```
 4. Open the generated `freeglut.sln` solution file in Visual Studio 2022.
 5. In Visual Studio, select "Build" and then "Build ALL_BUILD" to compile the
@@ -56,7 +57,7 @@ built and ready to use in your AfterRomu project.
 
 To build AfterRomu, follow these steps:
 
-1. Open the `AfterRS.sln` solution file in Visual Studio 2022.
+1. Open the `AfterRS.sln` solution file in Visual Studio 2026.
 2. In the Visual Studio menu, go to "Build" and select "Build AfterRS" to
    build both the debug and release versions of the AfterRomu application.
 
