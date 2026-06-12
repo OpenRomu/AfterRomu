@@ -67,7 +67,6 @@ ready to run.
 ## License
 
 The source code for RomuStrike includes code from the following sources:
-- Half-Life, from Valve Software/ID Software (all rights reserved)
 - The "HL Rendering Engine", a minimal engine inspired by Half-Life, created
   by Bart Sekura
 
