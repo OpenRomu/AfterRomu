@@ -162,9 +162,6 @@
     <ClCompile Include="vectormath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vehicle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="wad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -254,9 +251,6 @@
     <ClInclude Include="input_box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jeep1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lazer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -326,9 +320,6 @@
     <ClInclude Include="romustrike.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rouemodel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="son.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -357,9 +348,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vectormath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vehicle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wad.h">

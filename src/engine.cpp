@@ -435,7 +435,7 @@ Engine::Engine()
       g_camera_suivi_old(1), g_camera_suivi(0), m_bHostPlayer(false), release_tir(0), downloading(INET_IDLE),
       force_crouch(false), g_pDS3DBuffer(NULL), g_pDSListener(NULL), g_pSporte(NULL), g_pSound(NULL), m_tex_impact(0),
       marks(0), lagg_ms(50), idpartie(0), killer(0), g_pGraphBuilder(NULL), config("data/config.ini"), phys(false),
-      le_socket(0), m_texj(NULL), m_tex(NULL), parts(NULL), parts2(NULL), grenades(NULL), m_cross(NULL), m_panel(NULL),
+      le_socket(0), m_tex(NULL), parts(NULL), parts2(NULL), grenades(NULL), m_cross(NULL), m_panel(NULL),
       SCOPE_ETA(false), BTN_DROIT(false), lan_mode(false), storm_off(false), output_file(NULL), mode_storm(false),
       time_storm(0.0f), write_count(0)
 
@@ -515,11 +515,6 @@ Engine::~Engine()
 {
     // delete(nouveau);
 
-    for (int yy = 0; yy < lescar.size(); yy++)
-    {
-        if (lescar[yy])
-            delete (lescar[yy]);
-    }
 }
 
 void Engine::resize()
@@ -718,15 +713,6 @@ void Engine::init()
     marks->SetTexture_sang(m_tex_impact->Load("data/env/blood2.tga"));
     marks->SetTexture_trace(m_tex_impact->Load("data/env/hegrenade.tga"));
     // o << "Image" << endl;
-
-    Image img;
-    img.load("data/env/jeep1.bmp");
-    // o << "m_texj" << endl;
-
-    m_texj = new Texture(img.data(), img.width(), img.height(), GL_RGBA);
-    // o << "id_texture_jeep" << endl;
-
-    id_texture_jeep = m_texj->id();
 
     /*
     CPhysEnv * nouveau= new CPhysEnv;
@@ -1983,12 +1969,7 @@ void Engine::display_screen(float delta)
             {
                 if (!lan_mode)
                     m_xmlsession.QuitServer(m_playerfile, idpartie, killer, lejoueur[VRAI]->killed);
-                for (int yy = 0; yy < lescar.size(); yy++)
-                {
-                    if (lescar[yy])
-                        delete (lescar[yy]);
-                }
-                lescar.clear();
+
             }
 
             m_pDP->Close(0);
@@ -2371,16 +2352,6 @@ void Engine::display_screen(float delta)
             {
                 load_map(m_cur_map);
                 world.AffecteGammaSurUneFace(config.GAMMA);
-
-                if (!lan_mode)
-                    m_xmlsession.getobjet(&lescar, m_playerfile, m_cur_map);
-
-                for (int yy = 0; yy < lescar.size(); yy++)
-                {
-
-                    lescar[yy]->SetTexture(id_texture_jeep);
-                    lescar[yy]->SetWorld(&world);
-                }
 
                 SCOPE_ETA = false;
                 char ch[200];
@@ -4639,61 +4610,6 @@ void Engine::handle_input(float delta)
 
     // fin GAMMAPATCH
 
-    if (config.isdebug || mode_op)
-    {
-        if ((m_input.keys[VK_F8]) && !(relkeys[VK_F8]))
-        {
-            if (lejoueur[VRAI]->is_car) //
-            {
-                //	lescar.clear();
-                // on ajoute la voiture au terrain
-
-                CPhysEnv *nouveau = new CPhysEnv;
-
-                nouveau->AxeG = lejoueur[VRAI]->voiture->AxeG;
-                nouveau->SetTexture(id_texture_jeep);
-                nouveau->SetWorld(&world);
-                nouveau->LoadData(lejoueur[VRAI]->voiture->AxeG);
-
-                nouveau->AxeDevant = lejoueur[VRAI]->voiture->AxeDevant;
-                nouveau->AxeHaut = lejoueur[VRAI]->voiture->AxeHaut;
-
-                //	nouveau->SetPos(lejoueur[VRAI]->voiture->AxeG,lejoueur[VRAI]->voiture->Get_Global_velocity());
-                nouveau->SetPos(lejoueur[VRAI]->pos + vec3_t(0.0f, 0.0f, 30.0f),
-                                lejoueur[VRAI]->voiture->Get_Global_velocity());
-
-                lescar.push_back(nouveau);
-
-                lejoueur[VRAI]->is_car = false;
-                //	m_pivot.move(lejoueur[VRAI]->voiture->AxeG);
-                // m_xmlsession.setobjet(m_playerfile,lejoueur[VRAI]->voiture->AxeG+vec3_t(0.0f,0.0f,10.0f),lejoueur[VRAI]->voiture->AxeDevant,lejoueur[VRAI]->voiture->AxeHaut,1,m_cur_map);
-            }
-            else
-            {
-                //	lejoueur[VRAI]->voiture->SetPos(lejoueur[VRAI]->voiture->AxeG);
-
-                lejoueur[VRAI]->voiture->AxeDevant = vec3_t(0.0f, 1.0f, 0.0f);
-                lejoueur[VRAI]->voiture->AxeHaut = vec3_t(0.0f, 0.0f, 1.0f);
-
-                lejoueur[VRAI]->voiture->SetPos(lejoueur[VRAI]->pos - vec3_t(0.0f, 0.0f, 10.0f),
-                                                vec3_t(0.0f, 0.0f, 0.0f));
-
-                lejoueur[VRAI]->is_car = true;
-            }
-        }
-        relkeys[VK_F8] = (m_input.keys[VK_F8]);
-    }
-
-    if ((m_input.keys[VK_F7]) && !(relkeys[VK_F7]))
-    {
-
-        for (int yy = 0; yy < lescar.size(); yy++)
-        {
-            if (lescar[yy])
-                delete (lescar[yy]);
-        }
-        lescar.clear();
-    }
     relkeys[VK_F7] = (m_input.keys[VK_F7]);
 
     if (lejoueur[VRAI]->is_car) // lejoueur[VRAI]->is_car
@@ -4703,8 +4619,6 @@ void Engine::handle_input(float delta)
         bool ga = m_input.keys[config.keys[3]];
         bool dr = m_input.keys[config.keys[2]];
         bool fr = m_input.keys[VK_NUMPAD0];
-
-        lejoueur[VRAI]->voiture->SetTraction(av, ar, dr, ga, fr);
     }
 
     lejoueur[VRAI]->tir = (!couvre_feu) && lejoueur[VRAI]->mort == false &&
@@ -4967,35 +4881,7 @@ void Engine::handle_input(float delta)
     }
     relkeys['5']=(m_input.keys['5']);*/
 
-    if (lejoueur[VRAI]->is_car)
-    {
-
-        /*float d = m_camera.yaw()+yaw;
-        d *= piover180;
-
-        if(m_input.keys[config.keys[0]]) {
-            x = fsin(d)*speed;
-            y = fcos(d)*speed;
-        }
-        if(m_input.keys[config.keys[1]]) {
-            x = -fsin(d)*speed;
-            y = -fcos(d)*speed;
-        }
-        if(m_input.keys[config.keys[3]]) {
-            x = -fsin(d-80)*speed;
-            y = -fcos(d-80)*speed;
-        }
-        if(m_input.keys[config.keys[2]]) {
-            x = fsin(d-80)*speed;
-            y = fcos(d-80)*speed;
-        }
-
-        rotation[0] = pitch;
-        rotation[1] = roll;
-        rotation[2] = yaw;
-        */
-    }
-    else
+    if (!lejoueur[VRAI]->is_car)
     {
 
         float d = m_pivot.yaw() + yaw;
@@ -5943,7 +5829,7 @@ int rr=1;
         {
             // on est pas mort pas en free camera
 
-            if (!lejoueur[VRAI]->is_car && world_is_loaded)
+            if (world_is_loaded)
             {
 
                 vec3_t pos = m_pivot.eye();
@@ -6220,67 +6106,6 @@ int rr=1;
                 m_camera.move(yeux[0], yeux[1], yeux[2]);
             } // pas voiture fin
 
-            else
-            { // vue voiture
-                if (exterieur && world_is_loaded)
-                {
-                    vec3_t dst2;
-                    vec3_t dst3;
-                    vec3_t dstf;
-
-                    dst2 = lejoueur[VRAI]->voiture->AxeG - vec3_t(0.0f, 0.0f, -75.0f);
-                    dstf = lejoueur[VRAI]->voiture->AxeG;
-                    dst3 = m_camera.eye();
-                    vec3_t dst5 = dst2 - dst3;
-                    vec3_t dst4;
-                    world.process_visible_faces_collide(dst2, dst3 - dst2);
-                    dst3 = world.check_collisions(dst2, dst3 - dst2, 1, false);
-                    dst4 = (dst3 + (dst5)*letick);
-                    vec3_t tmp = dst2 - dst4;
-                    if (tmp.len() > 200.0f)
-                        dst_cam = dst4;
-                    else
-                        dst_cam = m_camera.eye();
-
-                    vec3_t r = dstf - vue_cam;
-                    vue_cam = vue_cam + r / 4.0f;
-                    m_camera.cam.load_identity();
-                    m_camera.load();
-                    gluLookAt(dst_cam[0], dst_cam[1], dst_cam[2], vue_cam[0], vue_cam[1], vue_cam[2], 0, 0,
-                              1); // orient ,pos,norm
-                    glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
-                    m_camera.move(dst_cam[0], dst_cam[1], dst_cam[2]);
-                    yeux = m_camera.eye();
-                    lejoueur[VRAI]->fps = letick;
-                    yeux = m_camera.eye();
-                }
-                else
-                {
-                    vec3_t dst2;
-                    vec3_t dst3;
-                    vec3_t dstf;
-
-                    dst2 = lejoueur[VRAI]->voiture->AxeG + lejoueur[VRAI]->voiture->AxeDevant * 9.5f;
-                    dstf = lejoueur[VRAI]->voiture->AxeG + lejoueur[VRAI]->voiture->AxeDevant * 0.2f +
-                           lejoueur[VRAI]->voiture->AxeHaut * 0.15f;
-                    vec3_t vue_h = lejoueur[VRAI]->voiture->AxeHaut;
-                    dst3 = m_camera.eye();
-                    vec3_t dst5 = dst2;
-
-                    dst_cam = dstf;
-                    vue_cam = dst2;
-
-                    m_camera.cam.load_identity();
-                    m_camera.load();
-                    gluLookAt(dst_cam[0], dst_cam[1], dst_cam[2], vue_cam[0], vue_cam[1], vue_cam[2], vue_h[0],
-                              vue_h[1], vue_h[2]); // orient ,pos,norm
-                    glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
-                    m_camera.move(dst_cam[0], dst_cam[1], dst_cam[2]);
-                    yeux = m_camera.eye();
-                    lejoueur[VRAI]->fps = letick;
-                    yeux = m_camera.eye();
-                }
-            }
         }
         else
         {
@@ -6452,7 +6277,7 @@ int rr=1;
                 lesposjoueur.push_back(lejoueur[o]->pos);
                 lesid_joueur.push_back(lejoueur[o]->ID);
             }
-            grenades->Frame(delta, &lespos, &amoi, &lesposjoueur, g_dpnidLocalPlayer, &lesid_joueur, &lejoueur, lescar);
+            grenades->Frame(delta, &lespos, &amoi, &lesposjoueur, g_dpnidLocalPlayer, &lesid_joueur, &lejoueur);
             unlockequipe(); //----------------------------------------------LOCK
         }
         //	world.DessineSkyBox(lejoueur[VRAI]->pos);
@@ -6471,43 +6296,6 @@ int rr=1;
         }
         // world.render_entvars(m_camera);
 
-        for (int yy = 0; yy < lescar.size(); yy++)
-        {
-            if (!menu_mode)
-            {
-                float tetatime = delta;
-                tetatime = tetatime;
-                // tetatime=0.01f;
-
-                lescar[yy]->Simulate(tetatime * 10.0f, true); // delta*2.0f
-                // reout les colision entre vehicule
-
-                /*
-                for(int o1=0;o1<lescar.size();o1++)
-                     for(int o2=0;o2<lescar.size();o2++)
-                     {
-                         if(o1!=o2)
-                         {
-                             vec3_t in=lescar[o1]->AxeG-lescar[o2]->AxeG;
-                             float lin=in.len();
-                             if(lin<50.0f)
-                             {
-
-                                 //vec3_t
-                cc=(lescar[o1]->Get_Global_velocity()-lescar[o2]->Get_Global_velocity())*-0.5f;
-                                 lescar[o1]->SetColision(in*0.5f*(50.0f-lin));
-                             }
-                         }
-
-                     }
-     */
-
-                lescar[yy]->RenderWorld(); // DRAW THE SIMULATION
-            }
-
-            // pos=m_PhysEnv->AxeG;
-            //	lescar[yy]->RenderFake(lescar[yy]->AxeG,lescar[yy]->AxeHaut,lescar[yy]->AxeDevant);
-        }
 
         // my_blob.render();
         /*	for (int yy=0;yy<lescar.size();yy++)
@@ -6535,17 +6323,6 @@ int rr=1;
                 vec3_t explode;
                 //	vec3_t * pexplode;
                 explode = lespos[ga];
-                for (int e = 0; e < lescar.size(); e++)
-                {
-                    vec3_t a = lescar[e]->AxeG + vec3_t(0.0f, 0.0f, -30.0f);
-                    vec3_t b = a - explode;
-                    if (b.len() < 150)
-                    {
-                        b[2] = b[2] * -1.0f;
-                        // lescar[e]->SetShoot(b*2.0f);
-                        lescar[e]->SetShoot(explode);
-                    }
-                }
             }
         }
 
@@ -6693,7 +6470,7 @@ int rr=1;
                     lejoueur[j]->anim();
                 }
 
-                if ((HORS_DE_LA_MAP == false) && (!lejoueur[VRAI]->is_car))
+                if ((HORS_DE_LA_MAP == false))
                 {
 
                     lejoueur[j]->Render_particle(delta);
@@ -6758,7 +6535,7 @@ int rr=1;
                         // ici si on est en snipper on ne rend pas le modele car avec le scroll l'arme est visible
                         if (!sniper)
                         {
-                            if (!lejoueur[j]->is_car)
+                            if (true)
                                 lejoueur[j]->vue.DrawIni();
                         }
                     glPopMatrix();
@@ -7491,19 +7268,7 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
                 dst[0] = shortint_to_float(ret->pos[0]);
                 dst[1] = shortint_to_float(ret->pos[1]);
                 dst[2] = shortint_to_float(ret->pos[2]);
-                lejoueur[i]->voiture->AxeG[0] = shortint_to_float(ret->pos[0]);
-                lejoueur[i]->voiture->AxeG[1] = shortint_to_float(ret->pos[1]);
-                lejoueur[i]->voiture->AxeG[2] = shortint_to_float(ret->pos[2]);
 
-                // lescar[yy]->AxeHaut,lescar[yy]->AxeDevant
-
-                lejoueur[i]->voiture->AxeHaut[0] = shortint_to_float(ret->rot[0]);
-                lejoueur[i]->voiture->AxeHaut[1] = shortint_to_float(ret->rot[1]);
-                lejoueur[i]->voiture->AxeHaut[2] = shortint_to_float(ret->rot[2]);
-
-                lejoueur[i]->voiture->AxeDevant[0] = shortint_to_float(ret->velocity[0]);
-                lejoueur[i]->voiture->AxeDevant[1] = shortint_to_float(ret->velocity[1]);
-                lejoueur[i]->voiture->AxeDevant[2] = shortint_to_float(ret->velocity[2]);
 
                 vel[0] = shortint_to_float(ret->velocity[0]) * lejoueur[VRAI]->fps;
                 vel[1] = shortint_to_float(ret->velocity[1]) * lejoueur[VRAI]->fps;
@@ -7645,17 +7410,7 @@ HRESULT Engine::envoi_position()
         else
         {
 
-            msgWave.pos[0] = float_to_shortint(lejoueur[VRAI]->voiture->AxeG[0]);
-            msgWave.pos[1] = float_to_shortint(lejoueur[VRAI]->voiture->AxeG[1]);
-            msgWave.pos[2] = float_to_shortint(lejoueur[VRAI]->voiture->AxeG[2]);
 
-            msgWave.rot[0] = float_to_shortint(lejoueur[VRAI]->voiture->AxeHaut[0]);
-            msgWave.rot[1] = float_to_shortint(lejoueur[VRAI]->voiture->AxeHaut[1]);
-            msgWave.rot[2] = float_to_shortint(lejoueur[VRAI]->voiture->AxeHaut[2]);
-
-            msgWave.velocity[0] = float_to_shortint(lejoueur[VRAI]->voiture->AxeDevant[0]);
-            msgWave.velocity[1] = float_to_shortint(lejoueur[VRAI]->voiture->AxeDevant[1]);
-            msgWave.velocity[2] = float_to_shortint(lejoueur[VRAI]->voiture->AxeDevant[2]);
 
             /*		msgWave.pos[0] =float_to_shortint(lejoueur[VRAI]->voiture->AxeG[0]);
                     msgWave.pos[1] =float_to_shortint(lejoueur[VRAI]->voiture->AxeG[1]);
@@ -8918,7 +8673,6 @@ void Engine::Joueur_Creation(char *playername, DPNID ID, long cle_joueur)
         lejoueur[i]->local = false;
     }
 
-    lejoueur[i]->voiture->SetTexture(id_texture_jeep);
     lejoueur[i]->etat = true;
 
     char text[50];
@@ -12556,13 +12310,6 @@ void Engine::RESET()
     {
         delete m_tex_impact;
         m_tex_impact = 0;
-    }
-
-    if (m_texj)
-    {
-        // m_texj->Release();
-        SAFE_DELETE(m_texj);
-        m_texj = 0;
     }
 
     if (marks)

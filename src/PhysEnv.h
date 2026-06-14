@@ -9,7 +9,6 @@
 // #include "MathDefs.h"
 #include "geom.h"
 #include "world.h"
-#include "vehicle.h"
 #include "particleMan.h"
 
 // #define EPSILON  0.00001f				// ERROR TERM
@@ -77,11 +76,7 @@ class CPhysEnv
     void SetWorldParticles(vec3_t *coords, int particleCnt);
     void SetTexture(GLuint texid)
     {
-        my_car.SetTexture(texid);
-        my_roueard.SetTexture(texid);
-        my_rouearg.SetTexture(texid);
-        my_roueavd.SetTexture(texid);
-        my_roueavg.SetTexture(texid);
+        (void)texid;
     }
     vec3_t LaNormalA(vec3_t P1, vec3_t P2);
     void SetEXPLODE(pParticleManager_t *parts)
@@ -117,11 +112,6 @@ class CPhysEnv
     vec3_t AxeDevant;
     float GlobalVelo;
     vec3_t AxeHaut;
-    vec3_t AxeRoueAv;
-    vec3_t AxeRoueAvY1;
-    vec3_t AxeRoueAr;
-    Texture *m_tex;
-    GLuint id_texture_jeep;
     //	texMan_t* m_tex;
 
     BOOL m_UseGravity;           // SHOULD GRAVITY BE ADDED IN
@@ -133,11 +123,6 @@ class CPhysEnv
     BOOL m_CollisionRootFinding; // TRYING TO FIND A COLLISION
     int m_IntegratorType;
     vec3_t traceur;
-    vehicle my_car;
-    roue my_roueavd;
-    roue my_roueavg;
-    roue my_roueard;
-    roue my_rouearg;
 
     // Attributes
   private:
@@ -150,7 +135,6 @@ class CPhysEnv
     float pulse;
     bool frein_a_main;
     // vec3_t				pulse_roue;
-    float rot_roue;
 
     float m_UserForceMag; // MAGNITUDE OF USER FORCE
     float m_Kd;           // DAMPING FACTOR
@@ -175,8 +159,6 @@ class CPhysEnv
   private:
     inline void IntegrateSysOverTime(tParticle *initial, tParticle *source, tParticle *target, float deltaTime);
     //	void	RK4Integrate( float DeltaTime);
-    vec3_t Rotate_roueX(vec3_t axeAvant, vec3_t axeHautR, float angle);
-    vec3_t Rotate_roueY(vec3_t axeAvant, vec3_t axeHautR, float angle);
     void MidPointIntegrate(float DeltaTime);
     void EulerIntegrate(float DeltaTime);
     void ComputeForces(tParticle *system, BOOL duringIntegration, float delta);

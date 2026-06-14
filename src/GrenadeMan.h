@@ -50,7 +50,7 @@ struct pGrenadeManager_t
     void SystemNew(pGrenSystem_t *sys, vec3_t &pos, vec3_t &dir, bool die = 0, DPNID id_lanceur = 0);
     void SystemDelete(pGrenSystem_t *sys);
     void Frame(float &frametime, vector<vec3_t> *lespos, vector<DPNID> *amoi, vector<vec3_t> *lesposjoueur,
-               DPNID mon_id, vector<DPNID> *lesid_joueur, vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars);
+               DPNID mon_id, vector<DPNID> *lesid_joueur, vector<Aplayer *> *lesjoueurs);
     void Render(void);
 
   protected:

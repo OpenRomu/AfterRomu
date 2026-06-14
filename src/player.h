@@ -48,7 +48,6 @@ class Aplayer
     vec3_t rot;
     vec3_t velocity;
     bool team;
-    CPhysEnv *voiture;
     bool is_car;
     Model_MDL modele;
     Model_MDL arme;
@@ -69,7 +68,6 @@ class Aplayer
 
     DS3DBUFFER g_dsBufferParams;         // 3D buffer properties
     LPDIRECTSOUND3DBUFFER g_pDS3DBuffer; // 3D sound buffer
-    GLuint id_texture_jeep;
 
     int id_modele_recu;
     int id_arme_recu;

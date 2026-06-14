@@ -22,7 +22,7 @@ Aplayer::Aplayer()
     : cle_joueur(0), score(0), m_tex1(NULL), mort(false), m_tex2(NULL), m_tex3(NULL), m_tex4(NULL), parts(0),
       playersound(0), saut(false), can_jump(true), tir(false), tir_grenade(false), ammo(0), grenade(0),
       smoke_grenade(0), missile(2), Visible(true), killed(0), hauteur(0.0f), deja_en_cours(false), fire(false),
-      fireg(false), is_car(false), id_texture_jeep(0), id_arme_recu(0), id_modele_recu(0), id_modele(0), id_weapon(0),
+      fireg(false), is_car(false), id_arme_recu(0), id_modele_recu(0), id_modele(0), id_weapon(0),
       nb_lazer(0), occupe(false)
 { // FrameTime(0),
     team = false;
@@ -100,9 +100,6 @@ Aplayer::~Aplayer()
         parts = 0;
     }
 
-    if (voiture)
-        delete (voiture);
-
     // delete(model.m_pstudiohdr);
 }
 
@@ -129,14 +126,7 @@ void Aplayer::init(CSoundManager *g_pSoundManager)
 }
 void Aplayer::init_particle(world_t *world)
 {
-
-    voiture = new CPhysEnv;
-
-    voiture->LoadData(vec3_t(3478.0f, 225.0f, -200.0f));
-
-    voiture->SetWorld(world);
-
-    voiture->SetEXPLODE(parts);
+    (void)world;
 
     if (!(parts = new pParticleManager_t))
     {
@@ -229,11 +219,7 @@ void Aplayer::anim()
 
             if (is_car)
             {
-
-                // voiture->Simulate(fps*2.0f,true);
-                voiture->Simulate(fps * 10.0f, true); // 0.2f marche bien
-                voiture->RenderWorld();               // DRAW THE SIMULATION
-                pos = voiture->AxeG;
+                is_car = false;
             }
             else
             {
@@ -526,7 +512,9 @@ void Aplayer::anim()
             }
 
             if (is_car)
-                voiture->RenderFake(voiture->AxeG, voiture->AxeDevant, voiture->AxeHaut);
+            {
+                is_car = false;
+            }
             else
             {
                 pos = pos + velocity;
