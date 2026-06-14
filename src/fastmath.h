@@ -17,37 +17,22 @@
 #ifndef __fastmath_h__
 #define __fastmath_h__
 
-inline static __declspec(naked) float __fastcall fsin(float a)
-{
-    __asm {
-        fld        DWORD PTR [esp+4] 
-        fsin
-        ret 4
-    }
-}
+#include <math.h>
 
-inline static __declspec(naked) float __fastcall fcos(float a)
-{
-    __asm {
-        fld        DWORD PTR [esp+4] 
-        fcos
-        ret 4
-    }
-}
-
-#define __PI (3.14159265358979323846264338327950288f)
-#define __DEG2RAD (__PI / 180)
+#define __PI       (3.14159265358979323846264338327950288f)
+#define __DEG2RAD  (__PI / 180)
 
 #define deg2rad(x) ((x) * __DEG2RAD)
 #define rad2deg(x) ((x) / __DEG2RAD)
+
 inline static float fast_cos(float angle)
 {
-    return fcos(deg2rad(angle));
+    return cosf(deg2rad(angle));
 }
 
 inline static float fast_sin(float angle)
 {
-    return fsin(deg2rad(angle));
+    return sinf(deg2rad(angle));
 }
 
-#endif // __fastmath_h__
+#endif /* __fastmath_h__ */

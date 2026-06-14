@@ -19,15 +19,9 @@
 
 //////////////////////////////////////////////////////////////
 // fast zero memory assuming dwords
-inline static void __fastcall zero_dwords(void *dest, int count)
+inline static void zero_dwords(void *dest, int count)
 {
-    __asm
-    {
-        mov     ecx, [count]
-        mov     edi, [dest]
-        xor     eax, eax
-        rep     stosd
-    }
+    memset(dest, 0, (size_t)count * 4);
 }
 
 ///////////////////////////////////////////////////////////////
