@@ -55,6 +55,8 @@ built and ready to use in your AfterRomu project.
 
 ### Building AfterRomu
 
+#### Using Visual Studio
+
 To build AfterRomu, follow these steps:
 
 1. Open the `AfterRS.sln` solution file in Visual Studio 2026.
@@ -63,6 +65,22 @@ To build AfterRomu, follow these steps:
 
 After the build process is complete, you should have the AfterRomu executable
 ready to run.
+
+#### Using CLI (Experimental)
+
+A script exists to build the game with only a PowerShell script, Visual Studio
+is still recommended for now:
+
+```powershell
+# Build Debug and release
+.\tools\build_manual.ps1 .\AfterRS.sln
+# Build Release ARS
+.\tools\build_manual.ps1 .\AfterRS.sln -Release
+# Build Debug ARS
+.\tools\build_manual.ps1 .\AfterRS.sln -DebugBuild
+# Build Debug ARS with warnings and output silenced for quick iteration
+.\tools\build_manual.ps1 .\AfterRS.sln -DebugBuild -ErrorsOnly
+```
 
 ## License
 
