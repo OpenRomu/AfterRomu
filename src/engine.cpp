@@ -2353,9 +2353,6 @@ void Engine::display_screen(float delta)
                 load_map(m_cur_map);
                 world.AffecteGammaSurUneFace(config.GAMMA);
 
-                if (!lan_mode)
-                    m_xmlsession.getobjet(m_playerfile, m_cur_map);
-
                 SCOPE_ETA = false;
                 char ch[200];
                 sprintf(ch, "Create session ... MAP %s", m_cur_map);

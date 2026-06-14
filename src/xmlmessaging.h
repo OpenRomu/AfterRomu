@@ -117,8 +117,6 @@ class CXmlMessaging
 
     HRESULT GetTournoisDetail(vector<ekip> *lesekip, playerfile_t *playerconfig, int round, int cle_tournois);
     HRESULT SetTournois(playerfile_t *playerconfig, int cle_tournois, int round, int score_ekip1, int score_ekip2);
-    HRESULT setobjet(playerfile_t *playerconfig, vec3_t pos, vec3_t dir, vec3_t haut, int type_objet, char *lamap);
-    HRESULT getobjet(playerfile_t *playerconfig, char *lamap);
     int Get_Id(char *login, char *pwd);
 
     int GetScroll_tchat(char *xml, char *out_msg);

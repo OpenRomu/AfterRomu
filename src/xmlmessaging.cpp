@@ -2380,39 +2380,3 @@ HRESULT CXmlMessaging::GetTournoisDetail(vector<ekip> *lesekip, playerfile_t *pl
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-HRESULT CXmlMessaging::setobjet(playerfile_t *playerconfig, vec3_t pos, vec3_t dir, vec3_t haut, int type_objet,
-                                char *lamap)
-{
-    if (modedebug)
-    {
-        return S_OK;
-    }
-    else
-    {
-        char buffer[500];
-        char url[400];
-        sprintf(url,
-                "LENUM=%i&LEPASS=%s&P[x]=%d&P[y]=%d&P[z]=%d&D[x]=%d&D[y]=%d&D[z]=%d&U[x]=%d&U[y]=%d&U[z]=%d&T=%i&M=%s",
-                playerconfig->player_id, playerconfig->player_pwd, int(pos[0]), int(pos[1]), int(pos[2]), int(dir[0]),
-                int(dir[1]), int(dir[2]), int(haut[0]), int(haut[1]), int(haut[2]), type_objet, lamap);
-        Crypt(buffer, "set_objet", url);
-
-        // sprintf(  buffer,"%s/script/romustrike/delete_server.php3?CLE_SERVEUR=%i",GServerName, serverid );
-        if (XMLHttpRequest(buffer) == true)
-        {
-            return S_OK;
-        }
-        else
-        {
-            return S_FALSE;
-        }
-    }
-}
-
-HRESULT CXmlMessaging::getobjet(playerfile_t *playerconfig, char *lamap)
-{
-    (void)playerconfig;
-    (void)lamap;
-    return S_OK;
-}
