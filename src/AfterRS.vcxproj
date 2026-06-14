@@ -155,7 +155,6 @@
     <ClCompile Include="ticker.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="vectormath.cpp" />
-    <ClCompile Include="vehicle.cpp" />
     <ClCompile Include="wad.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="xmlmessaging.cpp" />
@@ -187,7 +186,6 @@
     <ClInclude Include="grenadesmoke.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="input_box.h" />
-    <ClInclude Include="jeep1.h" />
     <ClInclude Include="lazer.h" />
     <ClInclude Include="mark.h" />
     <ClInclude Include="matrix.h" />
@@ -211,7 +209,6 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="romu.h" />
     <ClInclude Include="romustrike.h" />
-    <ClInclude Include="rouemodel.h" />
     <ClInclude Include="son.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="studio.h" />
@@ -222,7 +219,6 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="vectormath.h" />
-    <ClInclude Include="vehicle.h" />
     <ClInclude Include="wad.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
