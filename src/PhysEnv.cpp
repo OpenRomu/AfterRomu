@@ -52,7 +52,6 @@ CPhysEnv::CPhysEnv() : m_CurrentSys(NULL), m_TargetSys(NULL)
     frein_a_main = false;
 
     AxeG = vec3_t(0.0f, 0.0f, 0.0f);
-    rot_roue = 0.0f;
 
     m_Pick[0] = -1;
     m_Pick[1] = -1;
@@ -68,7 +67,6 @@ CPhysEnv::CPhysEnv() : m_CurrentSys(NULL), m_TargetSys(NULL)
     m_Spring = NULL;
     m_SpringCnt = 0;
     pulse = 0.0f;
-    //	pulse_roue=vec3_t(0.0f,0.0f,0.0f);
 
     m_UseGravity = false;
     m_DrawSprings = TRUE;
@@ -144,112 +142,20 @@ CPhysEnv::~CPhysEnv()
 // Function:	RenderWorld
 // Purpose:		Draw the current system (particles, springs, userforces)
 ///////////////////////////////////////////////////////////////////////////////
-void CPhysEnv::RenderFake(vec3_t pos, vec3_t AxeX, vec3_t AxeY)
-{
-
-    AxeX.normalize();
-    AxeY.normalize();
-    vec3_t AxeZ = LaNormalA(AxeY, AxeX);
-    // glEnable(GL_TEXTURE_2D);
-
-    my_car.Render(pos, AxeZ, AxeX, AxeY);
-    my_roueavd.Render(pos - AxeY * 30.0f + AxeZ * 30.0f + AxeX * 40.0f, AxeZ, AxeX, AxeY, 1.0f, 0.01f);
-    my_roueavg.Render(pos - AxeY * 30.0f + AxeZ * 30.0f + AxeX * -40.0f, AxeZ, AxeX, AxeY, 1.0f, 0.01f);
-    my_roueard.Render(pos - AxeY * 30.0f - AxeZ * 30.0f + AxeX * 40.0f, AxeZ, AxeX, AxeY, 1.0f, 0.01f);
-    my_rouearg.Render(pos - AxeY * 30.0f - AxeZ * 30.0f + AxeX * -40.0f, AxeZ, AxeX, AxeY, 1.0f, 0.01f);
-    // glDisable(GL_TEXTURE_2D);
-}
-
+// RenderWorld - vehicle support removed, simplified rendering
 void CPhysEnv::RenderWorld()
 {
-
     glEnable(GL_CULL_FACE);
-    // glDisable(GL_TEXTURE_2D);
-    my_world->drawBoxEx(m_CurrentSys[0].pos);
+    for (int i = 0; i < m_ParticleCnt && i < 8; i++)
+    {
+        my_world->drawBoxEx(m_CurrentSys[i].pos);
+    }
+}
 
-    my_world->drawBoxEx(m_CurrentSys[1].pos);
-    my_world->drawBoxEx(m_CurrentSys[2].pos);
-    my_world->drawBoxEx(m_CurrentSys[3].pos);
-    my_world->drawBoxEx(m_CurrentSys[4].pos);
-    my_world->drawBoxEx(m_CurrentSys[5].pos);
-    my_world->drawBoxEx(m_CurrentSys[6].pos);
-    my_world->drawBoxEx(m_CurrentSys[7].pos);
-
-    vec3_t AxeX =
-        ((m_CurrentSys[4].pos + m_CurrentSys[7].pos) * 0.5f) - ((m_CurrentSys[5].pos + m_CurrentSys[6].pos) * 0.5f);
-    vec3_t AxeY =
-        ((m_CurrentSys[5].pos + m_CurrentSys[4].pos) * 0.5f) - ((m_CurrentSys[6].pos + m_CurrentSys[7].pos) * 0.5f);
-    vec3_t AxeZ =
-        ((m_CurrentSys[5].pos + m_CurrentSys[4].pos) * 0.5f) - ((m_CurrentSys[0].pos + m_CurrentSys[1].pos) * 0.5f);
-    vec3_t old_axe = AxeG;
-    AxeG = (m_CurrentSys[6].pos + m_CurrentSys[7].pos + m_CurrentSys[4].pos + m_CurrentSys[5].pos) * 0.25f;
-    AxeDevant =
-        ((m_CurrentSys[5].pos + m_CurrentSys[4].pos) * 0.5f) - ((m_CurrentSys[6].pos + m_CurrentSys[7].pos) * 0.5f);
-
-    old_axe = AxeG - old_axe;
-
-    GlobalVelo = old_axe.len();
-    AxeHaut =
-        ((m_CurrentSys[5].pos + m_CurrentSys[4].pos) * 0.5f) - ((m_CurrentSys[0].pos + m_CurrentSys[1].pos) * 0.5f);
-
-    AxeZ = LaNormalA(AxeY, AxeX);
-
-    AxeX.normalize();
-    AxeZ.normalize();
-    AxeY.normalize();
-    // roue 0
-    vec3_t AxeX0 = (m_CurrentSys[0].pos - m_CurrentSys[1].pos);
-    vec3_t AxeY0 = (m_CurrentSys[0].pos - m_CurrentSys[3].pos);
-    vec3_t AxeZ0 = (m_CurrentSys[0].pos - m_CurrentSys[4].pos);
-    AxeZ0 = LaNormalA(AxeY0, AxeX0);
-
-    AxeX0.normalize();
-    AxeZ0.normalize();
-    AxeY0.normalize();
-    // roue 1
-    vec3_t AxeX1 = (m_CurrentSys[0].pos - m_CurrentSys[1].pos);
-    vec3_t AxeY1 = (m_CurrentSys[1].pos - m_CurrentSys[2].pos);
-    vec3_t AxeZ1 = (m_CurrentSys[1].pos - m_CurrentSys[5].pos);
-    AxeZ1 = LaNormalA(AxeY1, AxeX1);
-    AxeX1.normalize();
-    AxeZ1.normalize();
-    AxeY1.normalize();
-
-    AxeRoueAv = (AxeX0 + AxeX1) * 0.5f;
-    AxeRoueAv.normalize();
-    AxeRoueAvY1 = (AxeY0 + AxeY1) * 0.5f;
-    AxeRoueAvY1.normalize();
-
-    // roue 0
-    vec3_t AxeX2 = (m_CurrentSys[2].pos - m_CurrentSys[3].pos);
-    vec3_t AxeY2 = (m_CurrentSys[2].pos - m_CurrentSys[1].pos);
-    vec3_t AxeZ2 = (m_CurrentSys[2].pos - m_CurrentSys[6].pos);
-    AxeZ2 = LaNormalA(AxeY2, AxeX2);
-    AxeX2.normalize();
-    AxeZ2.normalize();
-    AxeY2.normalize();
-    // roue 0
-    vec3_t AxeX3 = (m_CurrentSys[2].pos - m_CurrentSys[3].pos);
-    vec3_t AxeY3 = (m_CurrentSys[3].pos - m_CurrentSys[0].pos);
-    vec3_t AxeZ3 = (m_CurrentSys[3].pos - m_CurrentSys[7].pos);
-    AxeZ3 = LaNormalA(AxeY3, AxeX3);
-    AxeX3.normalize();
-    AxeZ3.normalize();
-    AxeY3.normalize();
-
-    AxeRoueAr = (AxeX2 + AxeX3) * -0.5f;
-    AxeRoueAr.normalize();
-    glEnable(GL_TEXTURE_2D);
-
-    my_car.Render(AxeG, AxeX, AxeY, AxeZ);
-
-    float roue_tourne = m_CurrentSys[0].v.dot(AxeY) / 2.0f;
-
-    my_roueavd.Render(m_CurrentSys[0].pos, AxeX0, AxeY0, AxeZ0, roue_tourne * -1.0f, rot_roue);
-    my_roueavg.Render(m_CurrentSys[1].pos, AxeX1, AxeY1, AxeZ1, roue_tourne * -1.0f, rot_roue);
-    my_roueard.Render(m_CurrentSys[3].pos, AxeX3, AxeY3, AxeZ3, roue_tourne, 0.0f);
-    my_rouearg.Render(m_CurrentSys[2].pos, AxeX2, AxeY2, AxeZ2, roue_tourne, 0.0f);
-    //	glDisable(GL_TEXTURE_2D);
+// RenderFake removed - vehicle support removed
+void CPhysEnv::RenderFake(vec3_t pos, vec3_t AxeX, vec3_t AxeY)
+{
+    (void)pos; (void)AxeX; (void)AxeY;
 }
 
 /*void CPhysEnv::RenderWorldOld()
@@ -1104,45 +1010,7 @@ void CPhysEnv::ComputeForces(tParticle *system, BOOL duringIntegration, float de
                 */
             //}
 
-            if (false && ((loop == 0) || (loop == 1) || (loop == 3) || (loop == 2)))
-            {
-                //	 vec3_t Av=AxeRoueAv+pulse_roue;
 
-                vec3_t Av = Rotate_roueX(AxeRoueAv, AxeHaut, rot_roue);
-                vec3_t Cote = Rotate_roueX(AxeRoueAvY1, AxeHaut, rot_roue);
-
-                Av.normalize();
-                Cote.normalize();
-                float patate = curParticle->f.len();
-
-                vec3_t no = AxeDevant;
-                Av.normalize();
-                no.normalize();
-                vec3_t dirr = Cote - curParticle->contactN * curParticle->contactN.dot(Cote);
-                vec3_t dirrar = Cote - curParticle->contactN * curParticle->contactN.dot(no);
-                vec3_t tmpv;
-
-                if ((loop == 0) || (loop == 1))
-                    curParticle->f += dirr * pulse * 10.0f;
-
-                vec3_t ttt = AxeDevant;
-                ttt.normalize();
-                // projeter de la velocité sur le plan contact tmpv
-
-                tmpv = (curParticle->v - curParticle->contactN * curParticle->contactN.dot(curParticle->v)); // toue a
-                vec3_t ausolav;
-                if ((loop == 3) || (loop == 2))                                                           // arriere
-                    ausolav = (AxeRoueAv - curParticle->contactN * curParticle->contactN.dot(AxeRoueAv)); // toue a
-                else
-                    ausolav = (Av - curParticle->contactN * curParticle->contactN.dot(Av)); // toue a
-                //	tmpv=tmpv-Av*Av.dot(tmpv);
-
-                // ajout frotement
-                vec3_t last = ausolav * tmpv.dot(ausolav);
-
-                curParticle->f += last * -0.7f;
-            }
-            // curParticle->contacting = FALSE;
         }
 
         curParticle++;
@@ -1242,196 +1110,11 @@ inline double CPhysEnv::VectorLength(const vec3_t &v) const
     return length;
 }
 
-vec3_t CPhysEnv::Rotate_roueX(vec3_t axeAvant, vec3_t axeHautR, float angle)
-{
-    float mat[16];
-    float Matrix[16];
+// Rotate_roueX removed
 
-    mat[0] = 1.0f;
-    mat[1] = 0.0f;
-    mat[2] = 0.0f;
-    mat[3] = 0.0f;
-    mat[4] = 0.0f;
-    mat[5] = 1.0f;
-    mat[6] = 0.0f;
-    mat[7] = 0.0f;
-    mat[8] = 0.0f;
-    mat[9] = 0.0f;
-    mat[10] = 1.0f;
-    mat[11] = 0.0f;
-    mat[12] = axeAvant[0];
-    mat[13] = axeAvant[1];
-    mat[14] = axeAvant[2];
-    mat[15] = 1.0f;
+// Rotate_vect removed
 
-    mat[0] = 1.0f;
-    mat[1] = 0.0f;
-    mat[2] = 0.0f;
-    mat[3] = 0.0f;
-    mat[4] = 0.0f;
-    mat[5] = 1.0f;
-    mat[6] = 0.0f;
-    mat[7] = 0.0f;
-    mat[8] = 0.0f;
-    mat[9] = 0.0f;
-    mat[10] = 1.0f;
-    mat[11] = 0.0f;
-    mat[12] = axeAvant[0];
-    mat[13] = axeAvant[1];
-    mat[14] = axeAvant[2];
-    mat[15] = 1.0f;
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    //	glTranslatef(10.0f,0.0,10.0f);
-
-    glRotatef(angle, axeHautR[0], axeHautR[1], axeHautR[2]);
-    glMultMatrixf(mat);
-    //	 vec3_t Av=rotate( ctor Av.
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    vec3_t Av;
-    Av[0] = Matrix[12];
-
-    Av[1] = Matrix[13];
-
-    Av[2] = Matrix[14];
-
-    glPopMatrix();
-    return Av;
-}
-
-vec3_t CPhysEnv::Rotate_vect(vec3_t axeAvant, vec3_t axeHautR, vec3_t src)
-{
-    float mat[16];
-    float mata[16];
-    float Matrix[16];
-
-    mat[0] = axeAvant[0];
-    mat[1] = axeAvant[1];
-    mat[2] = axeAvant[2];
-    mat[3] = 0.0f;
-
-    mat[4] = axeHautR[0];
-    mat[5] = axeHautR[1];
-    mat[6] = axeHautR[2];
-    mat[7] = 0.0f;
-
-    mat[8] = 0.0f;
-    mat[9] = 0.0f;
-    mat[10] = 1.0f;
-    mat[11] = 0.0f;
-
-    mat[12] = src[0];
-    mat[13] = src[1];
-    mat[14] = src[2];
-    mat[15] = 1.0f;
-
-    mata[0] = 0.0f;
-    mata[1] = 0.0f;
-    mata[2] = 0.0f;
-    mata[3] = 0.0f;
-
-    mata[4] = 1.0f;
-    mata[5] = 0.0f;
-    mata[6] = 0.0f;
-    mata[7] = 0.0f;
-
-    mata[8] = 0.0f;
-    mata[9] = 0.0f;
-    mata[10] = 1.0f;
-    mata[11] = 0.0f;
-
-    mata[12] = 0.0f;
-    mata[13] = 0.0f;
-    mata[14] = 0.0f;
-    mata[15] = 1.0f;
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    glMultMatrixf(mat);
-    glTranslatef(10.0f, 0.0, 10.0f);
-    glRotatef(0.5f, axeHautR[0], axeHautR[1], axeHautR[2]);
-
-    // glMultMatrixf(mata);
-
-    // glTranslatef(( GLfloat)src[0],( GLfloat) src[1],( GLfloat)  src[2]);
-
-    //	 vec3_t Av=rotate( ctor Av.
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    vec3_t Av;
-    Av[0] = Matrix[12];
-
-    Av[1] = Matrix[13];
-
-    Av[2] = Matrix[14];
-
-    glPopMatrix();
-    return Av;
-}
-
-vec3_t CPhysEnv::Rotate_roueY(vec3_t axeAvant, vec3_t axeHautR, float angle)
-{
-    float mat[16];
-    float Matrix[16];
-
-    mat[0] = 1.0f;
-    mat[1] = 0.0f;
-    mat[2] = 0.0f;
-    mat[3] = 0.0f;
-    mat[4] = 1.0f;
-    mat[5] = 0.0f;
-    mat[6] = 0.0f;
-    mat[7] = 0.0f;
-    mat[8] = 0.0f;
-    mat[9] = 0.0f;
-    mat[10] = 1.0f;
-    mat[11] = 0.0f;
-    mat[12] = axeAvant[0];
-    mat[13] = axeAvant[1];
-    mat[14] = axeAvant[2];
-    mat[15] = 1.0f;
-
-    mat[0] = 1.0f;
-    mat[1] = 0.0f;
-    mat[2] = 0.0f;
-    mat[3] = 0.0f;
-    mat[4] = 0.0f;
-    mat[5] = 1.0f;
-    mat[6] = 0.0f;
-    mat[7] = 0.0f;
-    mat[8] = 0.0f;
-    mat[9] = 0.0f;
-    mat[10] = 1.0f;
-    mat[11] = 0.0f;
-    mat[12] = axeAvant[0];
-    mat[13] = axeAvant[1];
-    mat[14] = axeAvant[2];
-    mat[15] = 1.0f;
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    //	glTranslatef(10.0f,0.0,10.0f);
-
-    glRotatef(angle, axeHautR[0], axeHautR[1], axeHautR[2]);
-    glMultMatrixf(mat);
-    //	 vec3_t Av=rotate( ctor Av.
-    glGetFloatv(GL_MODELVIEW_MATRIX, Matrix); // get current matrix
-    vec3_t Av;
-    Av[0] = Matrix[12];
-
-    Av[1] = Matrix[13];
-
-    Av[2] = Matrix[14];
-
-    glPopMatrix();
-    return Av;
-}
+// Rotate_roueY removed
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function:	IntegrateSysOverTime
@@ -1795,38 +1478,7 @@ int CPhysEnv::CheckForCollisions2(tParticle *system)
 
 void CPhysEnv::SetTraction(bool av, bool ar, bool dr, bool ga, bool fr)
 {
-    vec3_t AxeX =
-        ((m_CurrentSys[5].pos + m_CurrentSys[4].pos) * 0.5f) - ((m_CurrentSys[6].pos + m_CurrentSys[7].pos) * 0.5f);
-    AxeX.normalize();
-    frein_a_main = fr;
-
-    if ((av || ar))
-    {
-        if (av)
-        {
-            // if(m_CurrentSys[0].v.len()<10.0f)
-            pulse = 1.0f;
-        }
-        else
-        {
-            pulse = -1.0f;
-            //	pulse_roue=pulse_roue*-1.0f;
-        }
-    }
-    if (dr)
-        rot_roue = -20.0f;
-
-    if (ga)
-        rot_roue = 20.0f;
-
-    if (!(av || ar))
-    {
-        pulse = 0.0f;
-    }
-    if (!(dr || ga))
-    {
-        rot_roue = 0.0f;
-    }
+    (void)av; (void)ar; (void)dr; (void)ga; (void)fr;
 }
 
 void CPhysEnv::ResolveCollisions(tParticle *system)
