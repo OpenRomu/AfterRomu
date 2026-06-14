@@ -45,7 +45,7 @@ static char THIS_FILE[] = __FILE__;
 #include "matrix.h"
 // #include "xmlmessaging.h"
 #include "fastmath.h"
-#include <math.h>
+    #include <math.h>
 // #include "dialog2.h"
 #include <mmsystem.h>
 #include "rand.h"
@@ -54,6 +54,7 @@ static char THIS_FILE[] = __FILE__;
 using namespace std;
 #include <stdio.h>
 #include <string>
+#include <cmath>
 
 /////////////////////////////sound bat///////////////////////////////////
 #include "resource.h"
@@ -4933,13 +4934,13 @@ void Engine::handle_input(float delta)
 
         if (cycle)
         {
-            x = fsin(d - 80 + (3 * 0) * (__PI / 180)) * speed * str3;
-            y = fcos(d - 80 + (3 * 0) * (__PI / 180)) * speed * str3;
+            x = sinf(d - 80 + (3 * 0) * (__PI / 180)) * speed * str3;
+            y = cosf(d - 80 + (3 * 0) * (__PI / 180)) * speed * str3;
         }
         else
         {
-            x = fsin(d - 80 + (3 * rot) * (__PI / 180)) * speed * str3;
-            y = fcos(d - 80 + (3 * rot) * (__PI / 180)) * speed * str3;
+            x = sinf(d - 80 + (3 * rot) * (__PI / 180)) * speed * str3;
+            y = cosf(d - 80 + (3 * rot) * (__PI / 180)) * speed * str3;
         }
         rotation[0] = pitch;
         rotation[1] = roll;
@@ -5998,13 +5999,13 @@ int rr=1;
 
                 vec3_t yyy = flash;
 
-                yyy[2] = flash[2] * fcos(b) - flash[1] * fsin(b);
-                yyy[1] = flash[2] * fsin(b) + flash[1] * fcos(b);
+                yyy[2] = flash[2] * cosf(b) - flash[1] * sinf(b);
+                yyy[1] = flash[2] * sinf(b) + flash[1] * cosf(b);
 
                 flash = yyy;
 
-                yyy[0] = flash[1] * fcos(a) + flash[0] * fsin(a);
-                yyy[1] = -flash[1] * fsin(a) + flash[0] * fcos(a);
+                yyy[0] = flash[1] * cosf(a) + flash[0] * sinf(a);
+                yyy[1] = -flash[1] * sinf(a) + flash[0] * cosf(a);
 
                 flash[0] = lejoueur[VRAI]->pos[0] + yyy[0];
                 flash[1] = lejoueur[VRAI]->pos[1] + yyy[1];
@@ -6023,13 +6024,13 @@ int rr=1;
 
                 yyy = yeux;
 
-                yyy[2] = yeux[2] * fcos(b) - yeux[1] * fsin(b);
-                yyy[1] = yeux[2] * fsin(b) + yeux[1] * fcos(b);
+                yyy[2] = yeux[2] * cosf(b) - yeux[1] * sinf(b);
+                yyy[1] = yeux[2] * sinf(b) + yeux[1] * cosf(b);
 
                 yeux = yyy;
 
-                yyy[0] = yeux[1] * fcos(a) + yeux[0] * fsin(a);
-                yyy[1] = -yeux[1] * fsin(a) + yeux[0] * fcos(a);
+                yyy[0] = yeux[1] * cosf(a) + yeux[0] * sinf(a);
+                yyy[1] = -yeux[1] * sinf(a) + yeux[0] * cosf(a);
 
                 yeux[0] = lejoueur[VRAI]->pos[0] + yyy[0];
                 yeux[1] = lejoueur[VRAI]->pos[1] + yyy[1];
@@ -6056,13 +6057,13 @@ int rr=1;
 
                     yyy = yeux_libres;
 
-                    yyy[2] = yeux_libres[2] * fcos(b) - yeux_libres[1] * fsin(b);
-                    yyy[1] = yeux_libres[2] * fsin(b) + yeux_libres[1] * fcos(b);
+                    yyy[2] = yeux_libres[2] * cosf(b) - yeux_libres[1] * sinf(b);
+                    yyy[1] = yeux_libres[2] * sinf(b) + yeux_libres[1] * cosf(b);
 
                     yeux_libres = yyy;
 
-                    yyy[0] = yeux_libres[1] * fcos(a) + yeux_libres[0] * fsin(a);
-                    yyy[1] = -yeux_libres[1] * fsin(a) + yeux_libres[0] * fcos(a);
+                    yyy[0] = yeux_libres[1] * cosf(a) + yeux_libres[0] * sinf(a);
+                    yyy[1] = -yeux_libres[1] * sinf(a) + yeux_libres[0] * cosf(a);
 
                     yeux_libres[0] = lejoueur[VRAI]->pos[0] + yyy[0];
                     yeux_libres[1] = lejoueur[VRAI]->pos[1] + yyy[1];
@@ -6485,10 +6486,10 @@ int rr=1;
                     vec3_t yyy2 = lejoueur[VRAI]->arme.StudioCalcAttachments(false);
                     fl = yyy;
                     fl2 = yyy2;
-                    yyy[0] = fl[1] * fcos(aa) + fl[0] * fsin(aa);
-                    yyy[1] = -fl[1] * fsin(aa) + fl[0] * fcos(aa);
-                    yyy2[0] = fl2[1] * fcos(aa) + fl2[0] * fsin(aa);
-                    yyy2[1] = -fl2[1] * fsin(aa) + fl2[0] * fcos(aa);
+                    yyy[0] = fl[1] * cosf(aa) + fl[0] * sinf(aa);
+                    yyy[1] = -fl[1] * sinf(aa) + fl[0] * cosf(aa);
+                    yyy2[0] = fl2[1] * cosf(aa) + fl2[0] * sinf(aa);
+                    yyy2[1] = -fl2[1] * sinf(aa) + fl2[0] * cosf(aa);
 
                     fl[0] = lejoueur[VRAI]->pos[0] + yyy[1]; /// argh c pas ça FIXME
                     fl[1] = lejoueur[VRAI]->pos[1] + yyy[0];
@@ -6526,9 +6527,9 @@ int rr=1;
                     static double offset;
                     offset = offset + 50 * delta * multi;
 
-                    lejoueur[j]->vue.m_origin[0] = fcos(offset * __PI / 180);
-                    lejoueur[j]->vue.m_origin[2] = -fabs(fsin(offset * __PI / 180));
-                    // lejoueur[j]->vue.m_origin[1]=fcos(offset*__PI/180);
+                    lejoueur[j]->vue.m_origin[0] = cosf(offset * __PI / 180);
+                    lejoueur[j]->vue.m_origin[2] = -fabs(sinf(offset * __PI / 180));
+                    // lejoueur[j]->vue.m_origin[1]=cosf(offset*__PI/180);
                     if (lejoueur[j])
 
                         //*SCOPE
@@ -6691,17 +6692,17 @@ int rr=1;
             vv.y=0.0f;
             vv.z=1.0f;
 
-            vOrientFront.x = vv.z*fcos(a) + vv.x*fsin(a);
+            vOrientFront.x = vv.z*cosf(a) + vv.x*sinf(a);
             vOrientFront.y=vv.y;
-            vOrientFront.z = -vv.z*fsin(a) + vv.x*fcos(a);
+            vOrientFront.z = -vv.z*sinf(a) + vv.x*cosf(a);
 
             vv.x=0.0f;
             vv.y=1.0f;
             vv.z=0.0f;
 
             vOrientTop.x = vv.x ;
-            vOrientTop.y = vv.z*fsin(b) + vv.y*fcos(b);
-            vOrientTop.z=  vv.z*fcos(b) - vv.y*fsin(b)  ;
+            vOrientTop.y = vv.z*sinf(b) + vv.y*cosf(b);
+            vOrientTop.z=  vv.z*cosf(b) - vv.y*sinf(b)  ;
 
              */
 
@@ -12507,7 +12508,7 @@ void Engine::Earth_quakeframe(float delta)
 {
     if (tps_earthquake < 7.0f)
     {
-        earth_quake = -1.0f * fsin(tps_earthquake * -50.0f) * exp(1.0f - tps_earthquake) / 5.0f; // de 4-10
+        earth_quake = -1.0f * sinf(tps_earthquake * -50.0f) * exp(1.0f - tps_earthquake) / 5.0f; // de 4-10
         tps_earthquake = tps_earthquake + delta;
     }
     else

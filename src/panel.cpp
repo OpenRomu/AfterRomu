@@ -274,7 +274,7 @@ void Panel::print(int m_width, int m_height, int nbammo, int vie, int nb_player,
     if (tps_vie < 7.0f)
     {
 
-        ratio = 3.0f + fsin(tps_vie * -10.0f) * exp(1.0f - tps_vie) / 2.0f; // de 4-10
+        ratio = 3.0f + sinf(tps_vie * -10.0f) * exp(1.0f - tps_vie) / 2.0f; // de 4-10
     }
     else
     {
@@ -287,7 +287,7 @@ void Panel::print(int m_width, int m_height, int nbammo, int vie, int nb_player,
 
     if (tps_vie < 7.0f)
     {
-        ratioc = 1.0f + fsin(tps_vie * -10.0f) * exp(1.0f - tps_vie); // de 4-10
+        ratioc = 1.0f + sinf(tps_vie * -10.0f) * exp(1.0f - tps_vie); // de 4-10
         // ratio= exp(1.0f-tps_players);//de 4-10
     }
     else
@@ -313,7 +313,7 @@ void Panel::print(int m_width, int m_height, int nbammo, int vie, int nb_player,
 
     if (tps_players < 7.0f)
     {
-        ratio = 3.0f + fsin(tps_players * -10.0f) * exp(1.0f - tps_players); // de 4-10
+        ratio = 3.0f + sinf(tps_players * -10.0f) * exp(1.0f - tps_players); // de 4-10
         // ratio= exp(1.0f-tps_players);//de 4-10
     }
     else

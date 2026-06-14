@@ -78,7 +78,7 @@ void console::frame(int m_width, int m_height, bool isdebug, float delta)
 
         if (tps_vie < 7.0f)
         {
-            ratioc = 1.0f + (fsin(tps_vie * -10.0f) * exp(1.0f - tps_vie)) / 80.0f; // de 4-10
+            ratioc = 1.0f + (sinf(tps_vie * -10.0f) * exp(1.0f - tps_vie)) / 80.0f; // de 4-10
             // ratio= exp(1.0f-tps_players);//de 4-10
         }
         else
