@@ -71,8 +71,8 @@ inline void matrix_t::load_identity()
 
 inline void matrix_t::xrot(float angle)
 {
-    float c = fast_cos(angle);
-    float s = fast_sin(angle);
+    float c = cosf(deg2rad(angle));
+    float s = sinf(deg2rad(angle));
 
     m[5] = c;
     m[6] = s;
@@ -82,8 +82,8 @@ inline void matrix_t::xrot(float angle)
 
 inline void matrix_t::yrot(float angle)
 {
-    float c = fast_cos(angle);
-    float s = fast_sin(angle);
+    float c = cosf(deg2rad(angle));
+    float s = sinf(deg2rad(angle));
 
     m[0] = c;
     m[2] = -s;
@@ -93,8 +93,8 @@ inline void matrix_t::yrot(float angle)
 
 inline void matrix_t::zrot(float angle)
 {
-    float c = fast_cos(angle);
-    float s = fast_sin(angle);
+    float c = cosf(deg2rad(angle));
+    float s =  sinf(deg2rad(angle));
 
     m[0] = c;
     m[1] = s;

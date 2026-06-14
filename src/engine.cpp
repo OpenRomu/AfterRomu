@@ -44,7 +44,6 @@ static char THIS_FILE[] = __FILE__;
 #include <dxerr8.h>
 #include "matrix.h"
 // #include "xmlmessaging.h"
-#include "fastmath.h"
     #include <math.h>
 // #include "dialog2.h"
 #include <mmsystem.h>

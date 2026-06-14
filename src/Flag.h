@@ -26,7 +26,6 @@
 // #include "son.h"
 // #include "PhysEnv.h"
 #include "glwin.h"
-#include "fastmath.h"
 
 /*#include <string>
 #include <stdio.h>

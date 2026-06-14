@@ -2,6 +2,8 @@
 #include "world.h"
 #include "exception.h"
 #include "DXUtil.h"
+#include "fastmath.h"
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>

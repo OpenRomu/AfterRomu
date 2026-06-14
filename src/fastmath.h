@@ -25,14 +25,4 @@
 #define deg2rad(x) ((x) * __DEG2RAD)
 #define rad2deg(x) ((x) / __DEG2RAD)
 
-inline static float fast_cos(float angle)
-{
-    return cosf(deg2rad(angle));
-}
-
-inline static float fast_sin(float angle)
-{
-    return sinf(deg2rad(angle));
-}
-
 #endif /* __fastmath_h__ */

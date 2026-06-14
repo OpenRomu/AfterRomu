@@ -6,7 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include "fastmath.h"
+
 Panel::Panel(const char *lesammo, const char *ammo, const char *smoke, const char *vie, const char *players,
              const char *lazer)
     : courante(0), tps_players(0.0f), tps_vie(0.0f)

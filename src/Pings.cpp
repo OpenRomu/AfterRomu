@@ -6,7 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include "fastmath.h"
+
 Pings::Pings(IDirectPlay8Peer *dp) : tps(0.0f), visible(false)
 
 {
