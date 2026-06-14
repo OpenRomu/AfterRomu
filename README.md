@@ -91,6 +91,17 @@ For Windows, install the package `llvm` on Chocolatery then run:
 cd src && Get-ChildItem -Recurse -Include *.cpp, *.c, *.h, *.hpp | ForEach-Object { clang-format -i $_.FullName }
 ```
 
+## Debugger (Experimental)
+
+You need to modify your Windows SDK installation to enable this feature.
+(Search for "Windows Development Kit", select "Modify," and add "Windows Debugger.")
+
+Then run:
+```powershell
+.\tools\run_debugger.ps1
+```
+The debugger starts automatically when a debug build is created.
+
 ## License
 
 The source code for RomuStrike includes code from the following sources:
