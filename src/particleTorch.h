@@ -24,18 +24,23 @@
 
 struct pSystemTorch_t : public pSystem_t
 {
-   pSystemTorch_t() {type = pTypeTorch; head = 0; spawnTime = 0;}
+    pSystemTorch_t()
+    {
+        type = pTypeTorch;
+        head = 0;
+        spawnTime = 0;
+    }
 
-   void Init(vec3_t &pos,vec3_t &dir);
-   bool Frame(float &frametime, vec3_t &grav);
-   void Die(void);
+    void Init(vec3_t &pos, vec3_t &dir);
+    bool Frame(float &frametime, vec3_t &grav);
+    void Die(void);
 
-protected:
-   void Spawn(void);
+  protected:
+    void Spawn(void);
 
-   float spawnTime;
-   float passed;
-   pPart_t *head;
+    float spawnTime;
+    float passed;
+    pPart_t *head;
 };
 
 #endif

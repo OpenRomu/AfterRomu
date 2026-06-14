@@ -24,18 +24,22 @@
 
 struct pSystemSmoke_t : public pSystem_t
 {
-   pSystemSmoke_t() {type = pTypeSmoke; spawnTime = 0;}
+    pSystemSmoke_t()
+    {
+        type = pTypeSmoke;
+        spawnTime = 0;
+    }
 
-   void Init(vec3_t &pos,vec3_t &dir);
-   bool Frame(float &frametime, vec3_t &grav);
-   void Die(void);
+    void Init(vec3_t &pos, vec3_t &dir);
+    bool Frame(float &frametime, vec3_t &grav);
+    void Die(void);
 
-protected:
-   void MakeSmoke(void);
+  protected:
+    void MakeSmoke(void);
 
-   float passed;
-   float spawnTime;
-   vec3_t spawn;
+    float passed;
+    float spawnTime;
+    vec3_t spawn;
 };
 
 #endif

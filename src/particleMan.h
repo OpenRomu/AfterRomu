@@ -21,45 +21,54 @@
 #define __PARTICLEMANH__
 
 #include "geom.h"
-//#include "engine.h"
+// #include "engine.h"
 #include "particle.h"
 
 // !!must update this when a new system is added
 enum
 {
-   pNumTypes = 7,
-   pTypeSimple = 0, 
-   pTypeSpit,
-   pTypeBurst,
-   pTypeBoom,
-   pTypeTorch,
-   pTypeSmoke,
-   pTypeHeSmoke
-
+    pNumTypes = 7,
+    pTypeSimple = 0,
+    pTypeSpit,
+    pTypeBurst,
+    pTypeBoom,
+    pTypeTorch,
+    pTypeSmoke,
+    pTypeHeSmoke
 };
 
 struct pParticleManager_t
 {
-   pParticleManager_t();
-   virtual ~pParticleManager_t();
+    pParticleManager_t();
+    virtual ~pParticleManager_t();
 
-   pSystem_t *GetSystems(void) {return systems;}
+    pSystem_t *GetSystems(void)
+    {
+        return systems;
+    }
 
-   void SetGravity(vec3_t &g) {gravity=g;}
-   void SetId(int id, uint t) {if (id < pNumTypes) ids[id] = t;}
-   //void SetGeom(gGeom_t *g) {geom = g;}
+    void SetGravity(vec3_t &g)
+    {
+        gravity = g;
+    }
+    void SetId(int id, uint t)
+    {
+        if (id < pNumTypes)
+            ids[id] = t;
+    }
+    // void SetGeom(gGeom_t *g) {geom = g;}
 
-   void SystemNew(pSystem_t *sys, vec3_t &pos, bool die = 0, vec3_t &dir=vec3_t(0.0f,0.0f,0.0f));
-   void SystemDelete(pSystem_t *sys);
-   void Frame(float &frametime);
-   void Render(void);
+    void SystemNew(pSystem_t *sys, vec3_t &pos, bool die = 0, vec3_t &dir = vec3_t(0.0f, 0.0f, 0.0f));
+    void SystemDelete(pSystem_t *sys);
+    void Frame(float &frametime);
+    void Render(void);
 
-protected:
-//	world_t  * pworld;
-   uint ids[pNumTypes];
-   vec3_t gravity;
-   //gGeom_t *geom; // don't delete, we don't own it
-   pSystem_t *systems;
+  protected:
+    //	world_t  * pworld;
+    uint ids[pNumTypes];
+    vec3_t gravity;
+    // gGeom_t *geom; // don't delete, we don't own it
+    pSystem_t *systems;
 };
 
 #endif

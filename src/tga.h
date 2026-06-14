@@ -20,9 +20,9 @@
 /*
    CHANGELOG
       - 04/27/00
-         - code now deals with buffers rather than file streams   
+         - code now deals with buffers rather than file streams
          - added a header struct, things make more sense now
-   TODO  
+   TODO
       - add ability to write tga from passed data and format
 */
 #ifndef TGA_H
@@ -32,49 +32,88 @@
 
 enum
 {
-   notFound = 1000,
-   badType,
-   badBits,    
-   badData,    
-   bitsRGB = 24,
-   bitsRGBA = 32,
-   bitsGray = 8
+    notFound = 1000,
+    badType,
+    badBits,
+    badData,
+    bitsRGB = 24,
+    bitsRGBA = 32,
+    bitsGray = 8
 };
 
 struct tga_t
 {
-   tga_t();
-   tga_t(char *name);
-   virtual ~tga_t()           {}
-   int Load(char *name);
-   int LoadBuffer(byte *buff) {return ParseBuffer(buff);}
-   void Write(char *dest, byte *buff, int w, int h, int pbits);
-   void Reset(void);
-   void Release(void)         {delete [] data; data = 0;}
-   int GetLastError(void)     {return lastError;}
-   int GetWidth(void)         {return width;}
-   void SetWidth(int w)       {width = w;}
-   int GetHeight(void)        {return height;}
-   void SetHeight(int h)      {height = h;}
-   int GetBits(void)          {return bits;}
-   void SetBits(int b)        {bits = b;}
-   byte *GetData(void)        {return data;}
-   void SetData(byte *src)    {data = src;}
-   byte operator[](int ndx)   {return data[ndx];}
-   
-protected:
-   int ParseBuffer(byte *buffer);
-   int CheckSize(int x);
-   byte *GetRGB(byte *buff, int size);
-   byte *GetRGBA(byte *buff, int size);
-   byte *GetGray(byte *buff, int size);
-   byte *GrabData(byte *buff, int size);
+    tga_t();
+    tga_t(char *name);
+    virtual ~tga_t()
+    {
+    }
+    int Load(char *name);
+    int LoadBuffer(byte *buff)
+    {
+        return ParseBuffer(buff);
+    }
+    void Write(char *dest, byte *buff, int w, int h, int pbits);
+    void Reset(void);
+    void Release(void)
+    {
+        delete[] data;
+        data = 0;
+    }
+    int GetLastError(void)
+    {
+        return lastError;
+    }
+    int GetWidth(void)
+    {
+        return width;
+    }
+    void SetWidth(int w)
+    {
+        width = w;
+    }
+    int GetHeight(void)
+    {
+        return height;
+    }
+    void SetHeight(int h)
+    {
+        height = h;
+    }
+    int GetBits(void)
+    {
+        return bits;
+    }
+    void SetBits(int b)
+    {
+        bits = b;
+    }
+    byte *GetData(void)
+    {
+        return data;
+    }
+    void SetData(byte *src)
+    {
+        data = src;
+    }
+    byte operator[](int ndx)
+    {
+        return data[ndx];
+    }
 
-   int lastError;
-   int bits;
-   int width;
-   int height;
-   int size;
-   byte *data;
+  protected:
+    int ParseBuffer(byte *buffer);
+    int CheckSize(int x);
+    byte *GetRGB(byte *buff, int size);
+    byte *GetRGBA(byte *buff, int size);
+    byte *GetGray(byte *buff, int size);
+    byte *GrabData(byte *buff, int size);
+
+    int lastError;
+    int bits;
+    int width;
+    int height;
+    int size;
+    byte *data;
 };
 #endif

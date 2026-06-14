@@ -25,7 +25,7 @@
 #include <string.h>
 
 typedef unsigned char byte;
-typedef unsigned int  uint;
+typedef unsigned int uint;
 
 long FileGetSize(FILE *stream);
 long FileNameGetSize(char *name);

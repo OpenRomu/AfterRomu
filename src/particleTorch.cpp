@@ -23,73 +23,72 @@
 #include "ticker.h"
 #include "particleTorch.h"
 
-void pSystemTorch_t::Init(vec3_t &pos,vec3_t &dir)
+void pSystemTorch_t::Init(vec3_t &pos, vec3_t &dir)
 {
-   Allocate(200);
-   
-   spawnTime = 0.1f;
+    Allocate(200);
 
-   if (!(head = PartNew()))
-      return;
-   
-   head->life = 100; // always alive
-   head->size = 15.0f;
-   head->vel=vec3_t(0.0f, 0.0f, 0.0f);
-   head->pos=pos;
-   head->pold=vec3_t(0.0f, 0.0f, 0.0f);
-   head->gravity = 0;
-   head->alpha = 1.0f;
+    spawnTime = 0.1f;
 
-   Spawn();
+    if (!(head = PartNew()))
+        return;
 
-   passed = 0.0f;
+    head->life = 100; // always alive
+    head->size = 15.0f;
+    head->vel = vec3_t(0.0f, 0.0f, 0.0f);
+    head->pos = pos;
+    head->pold = vec3_t(0.0f, 0.0f, 0.0f);
+    head->gravity = 0;
+    head->alpha = 1.0f;
+
+    Spawn();
+
+    passed = 0.0f;
 }
 
 bool pSystemTorch_t::Frame(float &frametime, vec3_t &grav)
 {
-   passed += frametime;
+    passed += frametime;
 
-   if (passed > spawnTime && head)
-   {
-      passed = 0.0f;
-    //  Spawn();
-   }     
+    if (passed > spawnTime && head)
+    {
+        passed = 0.0f;
+        //  Spawn();
+    }
 
-   if (head && head->life != 0 && head->life < ticker_t::PassedI())
-      head = 0;
-   
-   return Cycle(frametime, grav);
+    if (head && head->life != 0 && head->life < ticker_t::PassedI())
+        head = 0;
+
+    return Cycle(frametime, grav);
 }
 
 void pSystemTorch_t::Die(void)
 {
-   if (head)
-      head->life = ticker_t::PassedI();
+    if (head)
+        head->life = ticker_t::PassedI();
 }
 
 void pSystemTorch_t::Spawn(void)
 {
-   for (int i = 0; i < 10; i++)
-   {
-      pPart_t *n = PartNew();
+    for (int i = 0; i < 10; i++)
+    {
+        pPart_t *n = PartNew();
 
-      if (n)
-      {
-         n->life = ticker_t::PassedI() +
-          (uint) (random_t::RandomRange(300.0f, 600.0f));
-         n->size = random_t::RandomRange(10.0f, 150.0f);
+        if (n)
+        {
+            n->life = ticker_t::PassedI() + (uint)(random_t::RandomRange(300.0f, 600.0f));
+            n->size = random_t::RandomRange(10.0f, 150.0f);
 
-         n->vel[0] = random_t::RandomRange(-300.0f, 300.0f);
-         n->vel[1] = random_t::RandomRange(-300.0f, 300.0f);
-         n->vel[2] = random_t::RandomRange(10.0f, 300.0f);
+            n->vel[0] = random_t::RandomRange(-300.0f, 300.0f);
+            n->vel[1] = random_t::RandomRange(-300.0f, 300.0f);
+            n->vel[2] = random_t::RandomRange(10.0f, 300.0f);
 
-         n->pos=head->pos;
-         n->pos[0] += random_t::RandomRange(-5.0f, 5.0f);
-         n->pos[1] += random_t::RandomRange(-5.0f, 5.0f); 
-         n->pos[2] += random_t::RandomRange(-5.0f, 5.0f);
-         n->pold=head->pos;
-         n->gravity = 1;
-         n->alpha = 1.0f;
-      }
-   }
+            n->pos = head->pos;
+            n->pos[0] += random_t::RandomRange(-5.0f, 5.0f);
+            n->pos[1] += random_t::RandomRange(-5.0f, 5.0f);
+            n->pos[2] += random_t::RandomRange(-5.0f, 5.0f);
+            n->pold = head->pos;
+            n->gravity = 1;
+            n->alpha = 1.0f;
+        }
+    }
 }

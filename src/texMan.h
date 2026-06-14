@@ -24,22 +24,28 @@
 
 struct texMan_t
 {
-   static void Release(void);
-   static uint Load(char *name);
+    static void Release(void);
+    static uint Load(char *name);
 
-protected:
-   
-   struct tEntry_t
-   {
-      tEntry_t()          {name = 0; next = 0;}
-      virtual ~tEntry_t() {delete [] name;}
+  protected:
+    struct tEntry_t
+    {
+        tEntry_t()
+        {
+            name = 0;
+            next = 0;
+        }
+        virtual ~tEntry_t()
+        {
+            delete[] name;
+        }
 
-      char *name;
-      uint id;
-      tEntry_t *next;
-   };
+        char *name;
+        uint id;
+        tEntry_t *next;
+    };
 
-   static tEntry_t *textures;
+    static tEntry_t *textures;
 };
 
 #endif

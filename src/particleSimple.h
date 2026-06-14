@@ -24,19 +24,21 @@
 
 struct pSystemSimple_t : public pSystem_t
 {
-   pSystemSimple_t() {type = pTypeSimple; spawnTime = 0;}
+    pSystemSimple_t()
+    {
+        type = pTypeSimple;
+        spawnTime = 0;
+    }
 
-   void Init(vec3_t &pos,vec3_t &dir);
-   bool Frame(float &frametime, vec3_t &grav);
-   void Die(void);
-	void Spawn(void);
+    void Init(vec3_t &pos, vec3_t &dir);
+    bool Frame(float &frametime, vec3_t &grav);
+    void Die(void);
+    void Spawn(void);
 
-   
-protected:
-   
-   float spawnTime;
-   float passed;
-   vec3_t spawn;
+  protected:
+    float spawnTime;
+    float passed;
+    vec3_t spawn;
 };
 
 #endif

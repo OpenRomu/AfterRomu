@@ -24,18 +24,22 @@
 
 struct pSystemBoom_t : public pSystem_t
 {
-   pSystemBoom_t() {type = pTypeBoom; spawnTime = 0;}
+    pSystemBoom_t()
+    {
+        type = pTypeBoom;
+        spawnTime = 0;
+    }
 
-   void Init(vec3_t &pos,vec3_t &dir);
-   bool Frame(float &frametime, vec3_t &grav);
-   void Die(void);
+    void Init(vec3_t &pos, vec3_t &dir);
+    bool Frame(float &frametime, vec3_t &grav);
+    void Die(void);
 
-protected:
-   void MakeBoom(void);
+  protected:
+    void MakeBoom(void);
 
-   float passed;
-   float spawnTime;
-   vec3_t spawn;
+    float passed;
+    float spawnTime;
+    vec3_t spawn;
 };
 
 #endif
