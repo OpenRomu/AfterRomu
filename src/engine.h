@@ -335,7 +335,6 @@ class Engine : public GLWindow
     bool release_tir_car;
     bool release_mouse;
     // simulation_world *pWorld ;
-    GLuint id_texture_jeep;
     SOCKET le_socket;
     SOCKET so;
     vector<ekip> lesekip;
@@ -356,7 +355,6 @@ class Engine : public GLWindow
     IGraphBuilder *g_pGraphBuilder;
     Cmp3 *mp3;
     texMan_t *m_tex_impact;
-    Texture *m_texj;
     mMarkManager_t *marks;
     float m_tchat;
     char m_txt_tchat[500];
@@ -395,8 +393,6 @@ class Engine : public GLWindow
     LPDIRECTSOUND3DLISTENER g_pDSListener; // 3D listener object
     DS3DBUFFER g_dsBufferParams;           // 3D buffer properties
     DS3DLISTENER g_dsListenerParams;       // Listener properties
-    vector<CPhysEnv *> lescar;
-
     blob my_blob;
     // sound bat
     bool lan_mode;
