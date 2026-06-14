@@ -17,7 +17,7 @@ void pGrenSystemLazer_t::Init(vec3_t &pos, vec3_t &dir, DPNID amoi)
 
 bool pGrenSystemLazer_t::Frame(float &frametime, vec3_t &grav, vector<vec3_t> *lespos, vector<DPNID> *amoi,
                                vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *les_idjoueur,
-                               vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars)
+                               vector<Aplayer *> *lesjoueurs)
 {
     passed += frametime;
 
@@ -27,7 +27,7 @@ bool pGrenSystemLazer_t::Frame(float &frametime, vec3_t &grav, vector<vec3_t> *l
         // Spawn();
     }
 
-    return Cycle(frametime, grav, lespos, amoi, lesposjoueur, mon_id, les_idjoueur, lesjoueurs, lescars);
+    return Cycle(frametime, grav, lespos, amoi, lesposjoueur, mon_id, les_idjoueur, lesjoueurs);
 }
 
 void pGrenSystemLazer_t::Die(void)

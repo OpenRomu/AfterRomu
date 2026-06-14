@@ -75,7 +75,7 @@ void pGrenSystem_t::GrenDelete(pGren_t *d)
 
 bool pGrenSystem_t::Cycle(float &frametime, vec3_t &grav, vector<vec3_t> *lespos, vector<DPNID> *amoi,
                           vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *lesid_joueur,
-                          vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars)
+                          vector<Aplayer *> *lesjoueurs)
 {
     pGren_t *curr = pUse.next;
     pGren_t *next = 0;
@@ -130,19 +130,6 @@ bool pGrenSystem_t::Cycle(float &frametime, vec3_t &grav, vector<vec3_t> *lespos
                     }
                 }
 
-                for (int ex = 0; ex < lescars.size(); ex++)
-                {
-                    CPhysEnv *car = lescars.at(ex);
-                    if (curr->life - 95000 < tps)
-                    {
-                        vec3_t a = curr->pos - (car->AxeG + vec3_t(0.0f, 0.0f, -30.0f));
-                        if (a.len() < 50.0f)
-                        {
-
-                            curr->life = 1.0f;
-                        }
-                    }
-                }
             }
             else
             {

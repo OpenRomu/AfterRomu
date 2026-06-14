@@ -64,7 +64,7 @@ void pGrenadeManager_t::SystemDelete(pGrenSystem_t *sys)
 // this checks for collisions
 void pGrenadeManager_t::Frame(float &frametime, vector<vec3_t> *lespos, vector<DPNID> *amoi,
                               vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *lesid_joueur,
-                              vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars)
+                              vector<Aplayer *> *lesjoueurs)
 {
     pGrenSystem_t *curr = systems;
     pGrenSystem_t *n = 0;
@@ -74,8 +74,7 @@ void pGrenadeManager_t::Frame(float &frametime, vector<vec3_t> *lespos, vector<D
     {
         n = curr->GetNext();
 
-        if (!(ok = curr->Frame(frametime, gravity, lespos, amoi, lesposjoueur, mon_id, lesid_joueur, lesjoueurs,
-                               lescars)))
+        if (!(ok = curr->Frame(frametime, gravity, lespos, amoi, lesposjoueur, mon_id, lesid_joueur, lesjoueurs)))
         {
 
             //	int  i =engineplayers.size();

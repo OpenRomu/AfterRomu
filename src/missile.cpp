@@ -18,7 +18,7 @@ void pGrenSystemMissile_t::Init(vec3_t &pos, vec3_t &dir, DPNID amoi)
 
 bool pGrenSystemMissile_t::Frame(float &frametime, vec3_t &grav, vector<vec3_t> *lespos, vector<DPNID> *amoi,
                                  vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *les_idjoueur,
-                                 vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars)
+                                 vector<Aplayer *> *lesjoueurs)
 {
     passed += frametime;
 
@@ -28,7 +28,7 @@ bool pGrenSystemMissile_t::Frame(float &frametime, vec3_t &grav, vector<vec3_t> 
         // Spawn();
     }
 
-    return Cycle(frametime, grav, lespos, amoi, lesposjoueur, mon_id, les_idjoueur, lesjoueurs, lescars);
+    return Cycle(frametime, grav, lespos, amoi, lesposjoueur, mon_id, les_idjoueur, lesjoueurs);
 }
 
 void pGrenSystemMissile_t::Die(void)

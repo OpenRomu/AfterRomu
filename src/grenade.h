@@ -91,13 +91,12 @@ struct pGrenSystem_t
     pGren_t *GrenNew(void);
     void GrenDelete(pGren_t *d);
     bool Cycle(float &frametime, vec3_t &grav, vector<vec3_t> *lespos, vector<DPNID> *amoi,
-               vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *lesid_joueur, vector<Aplayer *> *lesjoueurs,
-               vector<CPhysEnv *> lescars);
+               vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *lesid_joueur, vector<Aplayer *> *lesjoueurs);
     void drawBox(vec3_t *v);
     virtual void Init(vec3_t &pos, vec3_t &dir, DPNID id_lanceur) = 0;
     virtual bool Frame(float &frametime, vec3_t &grav, vector<vec3_t> *lespos, vector<DPNID> *amoi,
                        vector<vec3_t> *lesposjoueur, DPNID mon_id, vector<DPNID> *lesid_joueur,
-                       vector<Aplayer *> *lesjoueurs, vector<CPhysEnv *> lescars) = 0;
+                       vector<Aplayer *> *lesjoueurs) = 0;
     virtual void Render(vec3_t &x, vec3_t &y);
     virtual void Collide(pGren_t *part, vec3_t &n);
     virtual void Die(void) = 0;
