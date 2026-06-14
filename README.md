@@ -82,6 +82,15 @@ is still recommended for now:
 .\tools\build_manual.ps1 .\AfterRS.sln -DebugBuild -ErrorsOnly
 ```
 
+## Formatting the code
+
+A clang-format config is available for formating.
+
+For Windows, install the package `llvm` on Chocolatery then run:
+```powershell
+cd src && Get-ChildItem -Recurse -Include *.cpp, *.c, *.h, *.hpp | ForEach-Object { clang-format -i $_.FullName }
+```
+
 ## License
 
 The source code for RomuStrike includes code from the following sources:
