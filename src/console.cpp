@@ -71,47 +71,16 @@ void console::frame(int m_width, int m_height, bool isdebug, float delta)
         glEnable(GL_BLEND);
         glColor4f(0.0f, 0.3f, 1.0f, 0.5f);
 
-        // m_tex->bind();
-
         float ratioc = 0.0f;
 
         if (tps_vie < 7.0f)
         {
             ratioc = 1.0f + (sinf(tps_vie * -10.0f) * exp(1.0f - tps_vie)) / 80.0f; // de 4-10
-            // ratio= exp(1.0f-tps_players);//de 4-10
         }
         else
         {
             ratioc = 1.0f;
         }
-
-        /*glColor4f(0.5f,0.5f,0.5f,1.0f);
-        glBegin(GL_QUADS);
-        float oofx=w-w/ratioc;
-        float oofy=h-h/ratioc;
-        glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                                            // Start Drawing A Quad
-        glTexCoord2fv(m_coords->c00); glVertex3f(x-oofx,m_height-y,0.0f);	// Bottom Left
-        glTexCoord2fv(m_coords->c10); glVertex3f(x+w/ratioc,m_height-y,0.0f);	// Bottom Right
-        glTexCoord2fv(m_coords->c11); glVertex3f(x+w/ratioc,m_height-y+h,0.0f);	// Top Right
-        glTexCoord2fv(m_coords->c01); glVertex3f(x-oofx,m_height-y+h,0.0f);	// Top Left
-        glEnd();
-
-        if (m_mousemove)
-        glColor4f(1.0f,0.0f,0.0f,1.0f);
-        else
-        glColor4f(1.0f,1.0f,1.0f,1.0f);
-
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR);
-
-        glBegin(GL_QUADS);											// Start Drawing A Quad
-        glTexCoord2fv(m_coords->c00); glVertex3f(x,m_height-y,0.0f);	// Bottom Left
-        glTexCoord2fv(m_coords->c10); glVertex3f(x+w,m_height-y,0.0f);	// Bottom Right
-        glTexCoord2fv(m_coords->c11); glVertex3f(x+w,m_height-y+h,0.0f);	// Top Right
-        glTexCoord2fv(m_coords->c01); glVertex3f(x,m_height-y+h,0.0f);	// Top Left
-        glEnd();
-
-        */
 
         char matrice[30][100];
         int nb_ligne = 0;
@@ -190,9 +159,6 @@ void console::frame(int m_width, int m_height, bool isdebug, float delta)
 
 void console::GlQuad(float x1, float y1, float x2, float y2)
 {
-
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_COLOR);
-
     glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(0.5f, 0.0f, 0.1f, 0.0f);
 

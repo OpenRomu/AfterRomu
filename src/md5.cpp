@@ -325,27 +325,6 @@ void CMD5::md5_finish(md5_state_t *pms, md5_byte_t digest[16])
         digest[i] = (md5_byte_t)(pms->abcd[i >> 2] >> ((i & 3) << 3));
 }
 
-/*MD5: début*/
-/*
-char *CMD5::md5_str(char *p)
-{
-  md5_state_t state;
-  md5_byte_t digest[16];
-  char *hex_output = (char *)malloc(33);
-  int di;
-
-  md5_init(&state);
-  md5_append(&state, (const md5_byte_t *)p, (int)strlen(p));
-  md5_finish(&state, digest);
-
-  for (di = 0; di < 16; di++){
-    sprintf(hex_output + di * 2, "%02x", digest[di]);
-  }
-  return hex_output;
-}
-*/
-/*MD5: Fin*/
-
 void CMD5::GetMD5(char *map, char *the_md5)
 {
     md5_state_t state;

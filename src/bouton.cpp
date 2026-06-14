@@ -166,7 +166,6 @@ void bouton::frame(int mouseX, int mouseY, int m_width, int m_height, bool mouse
         if (tps_vie < 7.0f)
         {
             ratioc = 1.0f + (sinf(tps_vie * -10.0f) * exp(1.0f - tps_vie)) / 80.0f; // de 4-10
-            // ratio= exp(1.0f-tps_players);//de 4-10
         }
         else
         {
@@ -218,11 +217,8 @@ void bouton::frame(int mouseX, int mouseY, int m_width, int m_height, bool mouse
 
         if (m_font && isdebug)
         {
-            //	glColor4f(1.0f,1.0f,1.0f,1.0f);
             m_font->print(x, m_height - y - 20, text);
         }
-        // glColor4f(1.0f,0.5f,0.5f,0.8f);
-        //  glDepthMask(1);
     }
 }
 

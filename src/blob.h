@@ -10,9 +10,6 @@
 #endif // _MSC_VER > 1000
 #include "geom.h"
 #include "world.h"
-
-// #include "dplay8.h"
-// #include "dsound.h"
 #include "son.h"
 
 class blob

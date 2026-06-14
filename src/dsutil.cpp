@@ -42,13 +42,7 @@ CSoundManager::~CSoundManager()
 HRESULT CSoundManager::Initialize(HWND hWnd, DWORD dwCoopLevel, DWORD dwPrimaryChannels, DWORD dwPrimaryFreq,
                                   DWORD dwPrimaryBitRate)
 {
-
-    //	unsigned int Client;
     HRESULT hr;
-
-    // sockclose(Client);
-    /*
-     */
 
     SAFE_RELEASE(m_pDS);
 
@@ -647,16 +641,6 @@ void CSound::Positionne3Dbuffer(D3DVECTOR *pvPosition, D3DVECTOR *pvVelocity)
     // change 3-D settings. Then call the IDirectSound3DListener::CommitDeferredSettings
     // method to execute all of the deferred commands at once.
 
-    /*Get3DBufferInterface( 0, &g_pDS3DBuffer )  ;
-
-    g_dsBufferParams.dwSize = sizeof(DS3DBUFFER);
-    g_pDS3DBuffer->GetAllParameters( &g_dsBufferParams );
-
-    g_dsBufferParams.dwMode = DS3DMODE_HEADRELATIVE;
- // Set new 3D buffer parameters
-    //g_dsBufferParams.vPosition=pvPosition;
-    */
-
     // test profile
     Get3DBufferInterface(0, &g_pDS3DBuffer);
     if (g_pDS3DBuffer)
@@ -667,34 +651,6 @@ void CSound::Positionne3Dbuffer(D3DVECTOR *pvPosition, D3DVECTOR *pvVelocity)
         g_pDS3DBuffer->SetPosition(pvPosition->x, pvPosition->y, pvPosition->z, DS3D_IMMEDIATE);
         g_pDS3DBuffer->SetVelocity(pvVelocity->x, pvVelocity->y, pvVelocity->z, DS3D_IMMEDIATE);
     }
-    // g_pDS3DBuffer->SetConeAngles(0,0,DS3D_IMMEDIATE);
-    // g_pDS3DBuffer->Set(0,0,DS3D_IMMEDIATE);
-
-    //	g_pDS3DBuffer->SetConeOutsideVolume(-200,DS3D_IMMEDIATE );
-
-    /*
-
-        g_dsBufferParams.dwSize = sizeof(DS3DBUFFER);
-        g_pDS3DBuffer->GetAllParameters( &g_dsBufferParams );
-
-        // Set new 3D buffer parameters
-        g_dsBufferParams.dwMode = DS3DMODE_NORMAL;
-        memcpy( &g_dsBufferParams.vPosition, pvPosition, sizeof(D3DVECTOR) );
-        memcpy( &g_dsBufferParams.vVelocity, pvVelocity, sizeof(D3DVECTOR) );
-        //DS3D_DEFAULTMAXDISTANCE
-        g_dsBufferParams.flMinDistance = 0.0f;//min;//DS3D_DEFAULTMINDISTANCE;
-        g_dsBufferParams.flMaxDistance =max;
-    //	g_dsBufferParams.lConeOutsideVolume=1000;
-
-
-        g_dsBufferParams.flMinDistance = 1.0f;
-        g_dsBufferParams.flMaxDistance = 1000.0f;
-
-
-
-        //if( g_pDS3DBuffer )
-            g_pDS3DBuffer->SetAllParameters( &g_dsBufferParams, DS3D_IMMEDIATE );
-            */
 }
 //-----------------------------------------------------------------------------
 // Name: CSound::Play()

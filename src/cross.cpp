@@ -87,22 +87,9 @@ Cross::~Cross()
 void Cross::print(int m_width, int m_height)
 
 {
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // glColor4f(0.5f,0.5f,0.5f,0.5f);
-    /*glEnable(GL_DEPTH_FUNC);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glColor4f(1.0f,(0.5+sin(duree/2)*0.5),(0.5+cos(duree/2)*0.5),1.0f);
-    */
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-    // glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
-    // glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
-    // glOrtho(0,m_width,0,m_height,-1,1);				// Set Up An Ortho Screen
-    // glMatrixMode(GL_MODELVIEW);									// Select The Modelview Matrix
-    /// glTranslated(m_width/2,m_height/2,0.0f);			// Move To The Current Mouse Position
-    // courante=1;
+
     m_tex[courante]->bind();
     GLfloat ratio = m_height / H[courante];
     GLfloat WW = m_height;
@@ -124,8 +111,6 @@ void Cross::print(int m_width, int m_height)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glBegin(GL_QUADS); // Start Drawing A Quad
 
-    // if (courante==1)
-    //{
     glTexCoord2fv(m_coords[(int)id]->c00);
     glVertex3f(m_width / 2 - WW / 2, m_height / 2 - HH / 2, 0.0f); // Bottom Left
     glTexCoord2fv(m_coords[(int)id]->c10);
@@ -138,18 +123,6 @@ void Cross::print(int m_width, int m_height)
                                                                    //	else
                                                                    //{
 
-    // Coords* z = m_coords[(int)position];
-    // glTexCoord2fv(m_coords[(int)id]->c00); glVertex2s(x,y);
-    // glTexCoord2fv(m_coords[(int)id]->c10); glVertex2s(x+16,y);
-    // glTexCoord2fv(m_coords[(int)id]->c11); glVertex2s(x+16,y+16);
-    // glTexCoord2fv(m_coords[(int)id]->c01); glVertex2s(x,y+16);
-
-    //}
-    /*glTexCoord2fv(c00); glVertex3f(m_width/2-W[courante]/2,m_height/2-H[courante]/2,0.0f);	// Bottom Left
-    glTexCoord2fv(c10); glVertex3f( m_width/2+W[courante]/2,m_height/2-H[courante]/2,0.0f);	// Bottom Right
-    glTexCoord2fv(c11); glVertex3f( m_width/2+W[courante]/2, m_height/2+H[courante]/2,0.0f);	// Top Right
-    glTexCoord2fv(c01); glVertex3f(m_width/2-W[courante]/2, m_height/2+H[courante]/2,0.0f);	// Top Left
-        */
     glEnd();
 
     if (courante == 1)

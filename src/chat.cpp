@@ -80,11 +80,6 @@ void Cchat::draw(float fps, float height, float width)
 {
     float temps = 5.0f;
 
-    // glEnable(GL_DEPTH_FUNC);
-    //	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // glDepthMask(0);
-
     glEnable(GL_BLEND);
 
     tps = tps + fps * 1.0f;
@@ -121,15 +116,6 @@ void Cchat::draw(float fps, float height, float width)
             glColor4f(1.0f, 1.f, 1.0f, 1.0f);
 
         m_font->print(pos_x, t, TAB[i].msg.c_str());
-
-        /*		char c[200];
-                strcpy(c,TAB[i].c_str());
-
-
-                glRasterPos2i(10,height-50.0f-(4.0f*temps)*i+(tps*4.0f));
-                for (unsigned int h=0;h<strlen(c);h++)
-                    glutBitmapCharacter(GLUT_BITMAP_9_BY_15,*(c+h));
-        */
     }
 
     if (tps_phrase > 0.0f)
