@@ -93,24 +93,6 @@ void pParticleManager_t::Frame(float &frametime)
 
         if (!(ok = curr->Frame(frametime, gravity)))
             SystemDelete(curr);
-        /* if (ok)
-         {
-              pPart_t *part = 0;
-
-             for (part = curr->GetAlive()->next; part != curr->GetAlive();part = part->next)
-               {
-
-                   collision_tir col_tir;
-                   col_tir=pworld.check_tirs(part->pos,(part->pos-part->pold));
-                   if (col_tir.found=true)
-                   {
-                       curr->Collide(part, col_tir->n);
-                   }
-             }
-
-         }
-
-         */
 
         curr = n;
     }

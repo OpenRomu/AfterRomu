@@ -110,13 +110,8 @@ Cmp3::load(char *mp3_file)
     WCHAR wFileName[MAX_PATH];
 
     // Determine the file to load based on DirectX Media path (from SDK)
-    // strcpy( szFilename, DXUtil_GetDXSDKMediaPath() );
-    //    _tcscpy( szFilename, pstrFiles[1]);
-    //  _tcscpy( g_szCurrentFile, pstrFiles[1]);
-
     wsprintf(szFilename, TEXT("data\\mp3\\%s.mp3"), mp3_file);
     wsprintf(g_szCurrentFile, TEXT("data\\mp3\\%s.mp3"), mp3_file);
-    // wsprintf(szFilename,TEXT("data\\sound\\dk_EATSHT.wav"));
 
     DWORD dwAttr = GetFileAttributes(szFilename); //
     if (dwAttr == (DWORD)-1)

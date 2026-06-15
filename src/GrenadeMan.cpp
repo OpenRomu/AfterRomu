@@ -76,8 +76,6 @@ void pGrenadeManager_t::Frame(float &frametime, vector<vec3_t> *lespos, vector<D
 
         if (!(ok = curr->Frame(frametime, gravity, lespos, amoi, lesposjoueur, mon_id, lesid_joueur, lesjoueurs)))
         {
-
-            //	int  i =engineplayers.size();
             SystemDelete(curr);
         }
 
@@ -112,7 +110,6 @@ void pGrenadeManager_t::Frame(float &frametime, vector<vec3_t> *lespos, vector<D
                     {
 
                         collision_tir col_tir;
-                        /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
                         myworld->process_visible_faces3(part->pos);
 
                         col_tir = myworld->check_tirs_rec(part->pos, (part->pos - part->pold), 5);
@@ -165,7 +162,6 @@ void pGrenadeManager_t::Frame(float &frametime, vector<vec3_t> *lespos, vector<D
 
         curr = n;
     }
-    // lespos.push_back (vec3_t(0.0f,0.0f,0.0f));
 }
 
 void pGrenadeManager_t::Render(void)
@@ -184,17 +180,7 @@ void pGrenadeManager_t::Render(void)
     y[1] = tmat[5];
     y[2] = tmat[6];
 
-    /* x[0]=1;
-     x[1]=0;
-     x[2]=0;
-      y[0]=0;
-     y[1]=0;
-     y[2]=1;
-  */
-    // glDisable(GL_DEPTH_FUNC);
-
     glEnable(GL_BLEND);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_TEXTURE_2D);
 
     for (pGrenSystem_t *curr = systems; curr; curr = curr->GetNext())
@@ -203,7 +189,5 @@ void pGrenadeManager_t::Render(void)
     }
 
     glDisable(GL_TEXTURE_2D);
-
     glDisable(GL_BLEND);
-    //	glEnable(GL_DEPTH_FUNC);
 }

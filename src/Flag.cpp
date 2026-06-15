@@ -4,19 +4,6 @@
 
 #include "stdafx.h"
 #include "flag.h"
-// #include "xmlmessaging.h"
-// #include "son.h"
-
-// #include "particleSimple.h"
-// #include "particleBurst.h"
-// #include "particleBoom.h"
-// #include "particleSmoke.h"
-
-// #include "son.h"
-// #include <winnt.h>
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 AFlag::AFlag() : ID(NULL), son_init(0), son_attrape(0), son_gagne(0)
 {
@@ -46,8 +33,6 @@ void AFlag::anim()
     modele.m_origin[1] = pos_cur[1];
     modele.m_origin[2] = pos_cur[2];
 
-    // rot += dt * 30*(__PI/180);//pseqdesc->fps;
-    // rot=rot+1*__PI*dt*30;
     rot += dt * 60;
     if (rot >= 360)
         rot = 0;
@@ -66,10 +51,6 @@ void AFlag::animMDL()
     modele.m_origin[1] = pos_cur[1];
     modele.m_origin[2] = pos_cur[2] - 40;
 
-    /*if ((type==0)||((type==1)&&(ID==NULL)))
-    {
-        modele.m_origin[2]=modele.m_origin[2]-40;
-    }*/
     rot += dt * 60;
     if (rot >= 360)
         rot = 0;
@@ -125,8 +106,6 @@ void AFlag::eta_depart()
 }
 void AFlag::eta_attrape()
 {
-    // ID=NULL;
-    // pos_cur=pos_ini;
     num_seq = 2;
     if (son_attrape)
     {
@@ -135,8 +114,6 @@ void AFlag::eta_attrape()
 }
 void AFlag::eta_gagne()
 {
-    // ID=NULL;
-    // pos_cur=pos_ini;
     if (son_gagne)
         son_gagne->Play(0, 0);
 }
@@ -148,7 +125,6 @@ bool AFlag::collision_Flg(DPNID le_id, vec3_t src, int la_team)
 
     vec3_t dir;
     float dirlen = dir.len();
-    //	float ledot;
     vec3_t dirn = dir;
     dirn.normalize();
     vec3_t retv = src + dir;
@@ -170,7 +146,6 @@ bool AFlag::collision_Cmp(DPNID le_id, DPNID le_id_joueur, vec3_t src, int la_te
     {
         vec3_t dir;
         float dirlen = dir.len();
-        //	float ledot;
         vec3_t dirn = dir;
         dirn.normalize();
         vec3_t retv = src + dir;

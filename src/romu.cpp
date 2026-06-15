@@ -86,10 +86,6 @@ void Romu::print(int x, int y, int width, int height, float fps, int engine_stat
     float fps2;
     fps2 = fps;
 
-    /*if (fps2>0.01)
-    fps2=0.01f;
-      */
-
     if ((state == 0) && (position < height))
     {
         position = position + fps2 * 500;
@@ -191,6 +187,4 @@ void Romu::print(int x, int y, int width, int height, float fps, int engine_stat
         glVertex2s(x, y + height + (height - position));
         glEnd();
     }
-
-    //	 glDisable(GL_BLEND);
 }

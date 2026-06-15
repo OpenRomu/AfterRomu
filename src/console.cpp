@@ -14,8 +14,6 @@ console::console()
     : lengthc(35), tps_vie(0.0f), visible(false), m_mousemove(false), m_mouseclick(false), m_release(false),
       m_coords(NULL), m_font(NULL)
 {
-    //	m_font = new Font("data/env/font.tga");
-
     strcpy(text, "");
     X = 0;
     Y = 0;
@@ -151,8 +149,6 @@ void console::frame(int m_width, int m_height, bool isdebug, float delta)
         glDisable(GL_DEPTH_FUNC);
         glDepthMask(1);
         glDisable(GL_BLEND);
-
-        // GlQuad( x, m_height-y+16,x+ww,m_height-y-hh);
     }
     glDisable(GL_BLEND);
 }

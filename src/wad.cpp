@@ -17,7 +17,6 @@
 #include "wad.h"
 #include "exception.h"
 
-// #include <fstream>
 using namespace std;
 
 wad_file_t::wad_file_t(const char *filename) : lumps(0), lump_count(0), file(0), _name(filename)

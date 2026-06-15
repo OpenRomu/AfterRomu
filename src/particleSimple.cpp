@@ -40,7 +40,6 @@ bool pSystemSimple_t::Frame(float &frametime, vec3_t &grav)
     if (spawnTime > 0 && passed > spawnTime)
     {
         passed = 0.0f;
-        // Spawn();
     }
 
     return Cycle(frametime, grav);

@@ -271,15 +271,8 @@ static bool check_collision(const face_t *f, collision_data &coldat, float radiu
         r = closest_on_poly(r, f);
     }
 
-    // t = intersect_sphere(r,-coldat.ndir,coldat.src,radius);
-    /*  vec3_t rprim=r*radius;
-      vec3_t ndirprim=coldat.ndir*radius;
-      vec3_t srcprim=coldat.src*radius;
-  */
     t = intersect_sphere(r, -coldat.ndir, coldat.src, radius);
 
-    // t = intersect_sphere(rprim,-ndirprim,srcprim,1.0f);
-    // t=t/radius.len();
     if (t >= 0.0f && t <= coldat.dir_len)
     { //
         if (!coldat.found || t < coldat.nearest)
@@ -337,15 +330,8 @@ static void check_collision_car(const face_t *f, collision_data &coldat, float r
         r = closest_on_poly(r, f);
     }
 
-    // t = intersect_sphere(r,-coldat.ndir,coldat.src,radius);
-    /*  vec3_t rprim=r*radius;
-      vec3_t ndirprim=coldat.ndir*radius;
-      vec3_t srcprim=coldat.src*radius;
-  */
     t = intersect_sphere(r, -coldat.ndir, coldat.src, radius);
 
-    // t = intersect_sphere(rprim,-ndirprim,srcprim,1.0f);
-    // t=t/radius.len();
     if (t >= 0.0f && t <= coldat.dir_len)
     {
         if (!coldat.found || t < coldat.nearest)

@@ -24,7 +24,6 @@ bool pGrenSystemSimple_t::Frame(float &frametime, vec3_t &grav, vector<vec3_t> *
     if (spawnTime > 0 && passed > spawnTime)
     {
         passed = 0.0f;
-        // Spawn();
     }
 
     return Cycle(frametime, grav, lespos, amoi, lesposjoueur, mon_id, lesid_joueur, lesjoueurs);

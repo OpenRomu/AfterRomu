@@ -617,18 +617,9 @@ void CSound::Init(void)
     g_pDS3DBuffer->GetAllParameters(&g_dsBufferParams);
     g_dsBufferParams.flMinDistance = min;
     g_dsBufferParams.flMaxDistance = max;
-    /*   g_dsBufferParams.vPosition.x=0.0f;
-       g_dsBufferParams.vPosition.y=0.0f;
-       g_dsBufferParams.vPosition.z=0.0f;
-       g_dsBufferParams.vVelocity.x=0.0f;
-       g_dsBufferParams.vVelocity.y=0.0f;
-       g_dsBufferParams.vVelocity.z=0.0f;
-   */
-
     g_dsBufferParams.dwMode = DS3DMODE_NORMAL; // DS3DMODE_NORMAL;
 
     // Set new 3D buffer parameters
-
     g_pDS3DBuffer->SetAllParameters(&g_dsBufferParams, DS3D_IMMEDIATE);
 }
 void CSound::Positionne3Dbuffer(D3DVECTOR *pvPosition, D3DVECTOR *pvVelocity)

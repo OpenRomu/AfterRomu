@@ -48,8 +48,6 @@ Panel::Panel(const char *lesammo, const char *ammo, const char *smoke, const cha
     W[0] = img7.width();
     H[0] = img7.height();
 
-    //	courante=m_tex[1]->id ;
-
     float inc = 1.0f / 1.0f; // 0.0625f;
     m_coords.resize(2);
     m_coords[0] = new Coords;

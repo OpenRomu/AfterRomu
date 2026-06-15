@@ -11,11 +11,9 @@
 #ifndef __player_h__
 #define __player_h__
 
-// #include "ressources.h"
 #include "Model_MDL.h"
 #include "geom.h"
 #include "dplay8.h"
-// #include "dsound.h"
 #include "son.h"
 
 #include "particleMan.h"
@@ -26,15 +24,7 @@
 #include "PhysEnv.h"
 #include "glwin.h"
 #include "rand.h" //**MULTI MORT 06/01/2005
-/*#include <string>
-#include <stdio.h>
-#include <iostream.h>
-#include <stdlib.h>
-#include <stdio.h>
-*/
-/*Model_MDL leshommes[10];
-Model_MDL lesarmes[10];
-CSound* lessons[10];*/
+
 
 class Aplayer
 {
@@ -97,7 +87,6 @@ class Aplayer
 
     void Last_pos(void);
     float GetDelta(void);
-    //	void SetTexture(GLuint texid){m_PhysEnv.SetTexture(texid);}
     void SetTraction(bool av, bool ar, bool dr, bool ga, bool fr);
 
     void anim();

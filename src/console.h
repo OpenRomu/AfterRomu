@@ -46,7 +46,6 @@ class console
     Font *m_font;
     int X;
     int Y;
-    // Texture* m_tex ;
     int H;
     int W;
     int WW;

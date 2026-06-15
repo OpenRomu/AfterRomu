@@ -105,25 +105,9 @@ Aplayer::~Aplayer()
 
 void Aplayer::init(CSoundManager *g_pSoundManager)
 {
-    /*
-           HRESULT hr = g_pSoundManager->Create( playersound, "data/Door5.wav", DSBCAPS_CTRL3D  , DS3DALG_HRTF_FULL );
-           if( FAILED( hr ) || hr == DS_NO_VIRTUALIZATION )
-           {
-               DXTRACE_ERR_NOMSGBOX( TEXT("Create"), hr );
-               return false;
-           }
 
-           // Get the 3D buffer from the secondary buffer
-           if( FAILED( hr = playersound->Get3DBufferInterface( 0, &g_pDS3DBuffer ) ) )
-           {
-               DXTRACE_ERR( TEXT("Get3DBufferInterface"), hr );
-                return false;
-           }
-           g_dsBufferParams.dwSize = sizeof(DS3DBUFFER);
-           g_pDS3DBuffer->GetAllParameters( &g_dsBufferParams );
-
-   */
 }
+
 void Aplayer::init_particle(world_t *world)
 {
     (void)world;
@@ -151,9 +135,6 @@ void Aplayer::Last_pos(void)
 }
 float Aplayer::GetDelta(void)
 {
-
-    // float delta = 0.0f;
-    //	delta = frameTime.GetDelta();
     return 0.04f;
 }
 
@@ -239,10 +220,6 @@ void Aplayer::anim()
                     strcpy(dep, dep_mort);
                     strcpy(action, dep_mort);
 
-                    // strcpy(dep,TEXT("head"));
-                    // strcpy(action,TEXT("head"));
-                    // dep="head";
-                    // action="head";
                     if (strcmp(str_dep, dep) != 0)
 
                     {
@@ -292,9 +269,6 @@ void Aplayer::anim()
                     }
                     else
                     {
-                        /*modele.AdvanceFrame( 0*sens,0);
-                        modele.AdvanceFrame( 0,1);
-                        arme.AdvanceFrame( 0,0);*/
                     }
                 }
                 else
@@ -322,11 +296,6 @@ void Aplayer::anim()
                     {
 
                         if (action != "shoot")
-                        // char ch[20];
-                        // strcpy(ch,TEXT("shoot"));
-                        // sprintf(ch,"%s\0",TEXT("shoot"));
-
-                        // if (strcmp(action,ch)!=0)
                         {
                             modele.fps2 = 0;
                             vue.fps2 = 0;
@@ -336,8 +305,6 @@ void Aplayer::anim()
                             play_sound();
                         }
                         fire = (action != "shoot");
-                        // fire=(strcmp(action,TEXT("shoot"))!=0);
-                        // action="shoot";
                         strcpy(action, TEXT("shoot"));
 
                         if (!strcmp(arme.name, "grenade") || !strcmp(arme.name, "fumigene"))
@@ -481,17 +448,6 @@ void Aplayer::anim()
                         }
                         // tir=false;
                     }
-                    /*vue.SetSequence2(action2,1);
-                    char ch2[20];
-                    strcpy(ch2, TEXT("reload") );
-                    if(strcmp(action2,ch2)==0)
-                    {
-                        vue.m_frame =modele.fps2*vue.maxframes/modele.maxframes  ;
-                    }
-                    else
-                    {
-                        vue.m_frame =modele.fps2;
-                    }*/
                 }
 
             } // noty is_car
@@ -523,15 +479,9 @@ void Aplayer::anim()
                 modele.seq1 = id_seq1_recu;
                 modele.fps2 = fps2_recu;
                 modele.seq2 = id_seq2_recu;
-                /*modele.AdvanceFrame( fps*sens,0);
-                modele.AdvanceFrame( fps,3);
-                arme.AdvanceFrame( fps,0);*/
             }
         }
     }
-
-    /*	g_pDS3DBuffer->SetPosition ((d3dvalue
-     */
 
     modele.m_origin[0] = pos[0];
     modele.m_origin[1] = pos[1];
@@ -553,6 +503,7 @@ void Aplayer::anim()
     arme.m_angles[0] = rot[0];
     arme.m_angles[1] = rot[1];
     arme.m_angles[2] = rot[2];
+
     double a[3];
     a[0] = 0;
     a[1] = 0;
@@ -569,6 +520,7 @@ void Aplayer::anim()
         modele.flash[2] = arme.flash[2];
     }
 }
+
 void Aplayer::reload_arme()
 {
     modele.fps2 = 0;
@@ -605,42 +557,11 @@ void Aplayer::reload_arme()
 
 void Aplayer::affecte_sound(CSound *lessons)
 {
-
-    /*if (playersound!=NULL)
-
-    {
-
-        if (playersound->IsSoundPlaying ()==TRUE)
-        {
-            //playersound->Stop ();
-            playersound->Reset ();
-
-        }
-        //playersound->Play();
-        //playersound=NULL;
-        playersound->~CSound ();
-    }*/
-    // playersound= new CSound( ;
-
-    /*playersound = new CSound( apDSBuffer, dwDSBufferSize, dwNumBuffers, pWaveFile );
-    playersound = new CSound( lessons->m_apDSBuffer, lessons->m_dwDSBufferSize, lessons->m_dwNumBuffers,
-    lessons->m_pWaveFile );
-
-    //playersound= lessons->m_pWaveFile;
-    //lessons->m_apDSBuffer */
     playersound = (CSound *)lessons;
     playersound->Init();
-    // playersound->Reset ();
 }
 void Aplayer::chg_phys(void)
 {
-    if (!is_car)
-    {
-        // voiture->AxeG=pos;
-
-        // voiture->SetPos(pos);
-    }
-
     is_car = (!is_car);
 }
 
@@ -694,49 +615,12 @@ void Aplayer::affecte_arme(Model_MDL *lesarmes, BYTE id_arm, int max)
     {
         id_arm = 0;
     }
-    /*if (max==100)
-    {
-        ofstream o("armes.log");
-        o << "1" << endl;
 
-
-        arme.~Model_MDL();
-        o << "2" << endl;
-        id_weapon=id_arm;
-        o << "3" << endl;
-
-        arme=(Model_MDL)lesarmes[id_weapon];
-        o << "4" << endl;
-
-        arme.lie=1;
-            o << "5" << endl;
-
-        arme.scope=lesarmes[id_weapon].scope  ;
-        arme.balles=lesarmes[id_weapon].balles  ;
-        arme.puissance=lesarmes[id_weapon].puissance  ;
-            o << "6" << endl;
-
-
-        ammo=arme.balles;
-            o << "7" << endl;
-
-
-
-    }
-    else
-    {
-        ofstream o("armes2.log");
-        o << "1" << endl;
-
-*/
-    //	arme.~Model_MDL();
-    // o << "2" << endl;
     int tmp = arme.munition;
     lesarmes[id_weapon].cur_scope = arme.cur_scope;
 
     lesarmes[id_weapon].munition = arme.munition;
     id_weapon = id_arm;
-    // lesarmes[id_weapon].munition=arme.munition;
 
     // o << "3" << endl;
     arme = lesarmes[id_weapon];
@@ -760,37 +644,26 @@ void Aplayer::affecte_arme(Model_MDL *lesarmes, BYTE id_arm, int max)
 
 void Aplayer::SpawnBlood()
 {
-    // parts->SpawnPos(pos);
-    // parts->SystemNew(new pSystemSimple_t, pos, 1);
     parts->SystemNew(new pSystemSimple_t, pos, 1);
-    // parts->SystemNew(new pSystemBurst_t, pos, 1);
 }
+
 void Aplayer::SpawnSmoke()
 {
-    // parts->SpawnPos(pos);
-    // parts->SystemNew(new pSystemSimple_t, pos, 1);
-    // parts->SystemNew(new pSystemBoom_t, pos, 1);
     vec3_t bas;
     bas[0] = pos[0];
     bas[1] = pos[1];
     bas[2] = pos[2];
 
-    // parts->SystemNew(new pSystemBoom_t, bas, 1);
     parts->SystemNew(new pSystemSmoke_t, bas, 1);
 }
 void Aplayer::SpawnTorch()
 {
-    // parts->SpawnPos(pos);
     vec3_t bas;
     bas[0] = pos[0];
     bas[1] = pos[1];
     bas[2] = pos[2] - 10;
 
-    // parts->SystemNew(new pSystemBoom_t, bas, 1);
     parts->SystemNew(new pSystemTorch_t, bas, 1);
-    /*parts->SystemNew(new pSystemSimple_t, pos, 1);
-    parts->SystemNew(new pSystemBoom_t, pos, 1);
-    */
 }
 
 const char *Aplayer::RenvoieSeqMort()
