@@ -3643,62 +3643,11 @@ void Engine::handle_input_main()
             m_chat->addtext("RomuChat Active", 2);
         else
             m_chat->addtext("RomuChat Desactive", 2);
-        // lejoueur[VRAI]->mort=true;
-
-        /*	*/
-        // Joueur_Creation ("21212",4544455454);
-        //	g_lNumberOfActivePlayers++;
-        //	lejoueur[g_lNumberOfActivePlayers-1]->pos=lejoueur[VRAI]->pos+vec3_t(0.0f,-35.0f,-20.0f);
-
-        // lejoueur[g_lNumberOfActivePlayers-1]->is_car=true;
-        /*lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeG=lejoueur[VRAI]->pos+vec3_t(0.0f,-35.0f,+20.0f);
-        lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeDevant=vec3_t(0.0f,1.0f,0.0f);
-        lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeHaut=vec3_t(0.0f,0.0f,1.0f);
-        */
     }
     relkeys[VK_F4] = (m_input.keys[VK_F4]);
-    /*if((m_input.keys[VK_F11]) && !(relkeys[VK_F11]))
-            {
-                if(time_acceleration!=1.0f)
-                    time_acceleration=1.0f;
-                else
-                    time_acceleration=0.0f;
-                    */
-    /*mode_storm=!mode_storm;
-    storm_off=mode_storm;
-
-
-}
-relkeys[VK_F11]=(m_input.keys[VK_F11]);
-*/
 
     if ((m_input.keys[VK_F2]) && !(relkeys[VK_F2]))
     {
-
-        /*
-        char model[100];
-        char tmp[100];
-        if(m_chat)
-        {
-        m_chat->addtext("-----------");
-        for(int r=0;r<lejoueur.size();r++)
-        {
-            DWORD ms=get_lagg(lejoueur[r]->ID);
-            model2str(lejoueur[r]->id_modele,  model);
-            if (lejoueur[r]->mort)
-            {
-            sprintf(tmp, " %i %s %s  (%dms) mort",(r+1),lejoueur[r]->playername,model,ms);
-            }
-            else
-            {
-
-            sprintf(tmp, " %i %s %s  (%dms) vie",(r+1),lejoueur[r]->playername,model,ms);
-            }
-
-            m_chat->addtext(tmp);
-        }
-        m_chat->addtext("-----------");
-        }*/
         if (m_pings->tps > 1.0f)
             m_pings->tps = 0.0f;
         else
@@ -3757,22 +3706,11 @@ relkeys[VK_F11]=(m_input.keys[VK_F11]);
         }
         else
         {
-
-            // Download_Map(m_cur_host,m_cur_map);
-            // m_font->print(xd+4, yd*3-18, "Connection serveur mp3");
             sprintf(distant_file, "/romustrike/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
             sprintf(local_file, "data/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
             sprintf(m_cur_host, "%s", Mp3List.List[curmp3id].host);
             downloading = INET_CONNECT;
             type_download = 1;
-
-            // menu_state=2052;
-
-            /*char dow[100];
-               sprintf(dow,"Downloading %s",m_playerfile->player_mp3 );
-               m_font->print(xd+4, yd*3-18, dow);
-               menu_state=2001;
-               */
         }
         m_xmlsession.set_mp3(m_playerfile, Mp3List.List[curmp3id].id);
     }
@@ -3787,11 +3725,8 @@ void Engine::input_text_key()
 {
     char cs[] = " ";
 
-    // 65 91for(int c = 65; c < 91; c++)
-    //
     if ((strlen(lesinput_box[active_input]->text.text) < lesinput_box[active_input]->max_len))
     {
-        // for(int c = 65; c < 91; c++)
         for (int c = 65; c < 91; c++)
         {
             if ((m_input.keys[c]) && !(relkeys[c]))
@@ -3845,16 +3780,6 @@ void Engine::input_text_key()
                 relkeys[acs[cpt]] = (m_input.keys[acs[cpt]]);
             }
         }
-
-        /*
-        if((strlen(lesinput_box[active_input]->text.text)<lesinput_box[active_input]->max_len) &&
-        (m_input.keys[VK_DECIMAL]) && !(relkeys[VK_DECIMAL]))
-        {
-            strcat(lesinput_box[active_input]->text.text,".");
-        }
-        relkeys[VK_DECIMAL]=(m_input.keys[VK_DECIMAL]);
-
-        */
     }
     if ((strlen(lesinput_box[active_input]->text.text) > 0) && (m_input.keys[VK_BACK]) && !(relkeys[VK_BACK]))
     {
@@ -3959,7 +3884,7 @@ void Engine::handle_input(float delta)
 
     relkeys[VK_F7] = (m_input.keys[VK_F7]);
 
-    if (lejoueur[VRAI]->is_car) // lejoueur[VRAI]->is_car
+    if (lejoueur[VRAI]->is_car)
     {
         bool av = m_input.keys[config.keys[0]];
         bool ar = m_input.keys[config.keys[1]];
@@ -4057,18 +3982,6 @@ void Engine::handle_input(float delta)
             dir_blob[0] = -20.0f;
         }
         relkeys[VK_NUMPAD6] = (m_input.keys[VK_NUMPAD6]);
-
-        /*if(dir_blob[2]!=0.0f || dir_blob[0]!=0.0f)
-                my_blob.move(dir_blob);
-        */
-
-        /*	if((m_input.keys[VK_MULTIPLY]) && !(relkeys[VK_MULTIPLY])) {
-                    my_blob.ping();
-                }
-                relkeys[VK_MULTIPLY]=(m_input.keys[VK_MULTIPLY]);
-
-
-        */
 
         if ((m_input.keys['1']) && !(relkeys['1']))
         {
@@ -4210,23 +4123,8 @@ void Engine::handle_input(float delta)
             lejoueur[VRAI]->yeux[1] = -89;
             lejoueur[VRAI]->yeux[2] = 36;
         }
-        /*else
-        {
-        g_camera_suivi=lejoueur[VRAI]->ID;
-        }
-        */
     }
     relkeys[config.keys[11]] = (m_input.keys[config.keys[11]]);
-
-    /*if((m_input.keys['5']) && !(relkeys['5']))
-    {
-        lejoueur[VRAI]->tir=true;
-    }
-    else
-    {
-        lejoueur[VRAI]->tir=false;
-    }
-    relkeys['5']=(m_input.keys['5']);*/
 
     if (!lejoueur[VRAI]->is_car)
     {
@@ -4298,8 +4196,6 @@ void Engine::handle_input(float delta)
 
         char ch[20];
         strcpy(ch, TEXT("jump"));
-        // if( (strcmp(lejoueur[VRAI]->dep ,ch)!=0) || (strcmp(lejoueur[VRAI]->dep ,ch)==0 &&
-        // lejoueur[VRAI]->modele.AniActFini==true))
 
         if (lejoueur[VRAI]->can_jump == true)
         {
@@ -4330,12 +4226,10 @@ void Engine::handle_input(float delta)
                 {
 
                     strcpy(lejoueur[VRAI]->dep, TEXT("idle1"));
-                    // lejoueur[VRAI]->dep="idle1";
                 }
                 else
                 {
                     strcpy(lejoueur[VRAI]->dep, TEXT("run"));
-                    // lejoueur[VRAI]->dep="run";
                 }
 
                 if (m_input.keys[96])
@@ -4368,8 +4262,6 @@ void Engine::handle_input(float delta)
 
         if ((m_input.keys[config.keys[4]]) && !relkeys[config.keys[4]])
         {
-
-            // if (strcmp(lejoueur[VRAI]->dep ,ch)!=0)
             if (lejoueur[VRAI]->can_jump == true)
             {
                 strcpy(lejoueur[VRAI]->dep, TEXT("jump"));
@@ -4382,7 +4274,6 @@ void Engine::handle_input(float delta)
                 lejoueur[VRAI]->saut = true;
                 lejoueur[VRAI]->sens = 1;
                 lejoueur[VRAI]->modele.fps1 = 0.0f;
-                // relkeys[config.keys[4]]=true;
             }
         }
         relkeys[config.keys[4]] = (m_input.keys[config.keys[4]]);
@@ -4422,31 +4313,6 @@ void Engine::handle_input(float delta)
     }
     relkeys[VK_ESCAPE] = (m_input.keys[VK_ESCAPE]);
 
-    /*if((m_input.keys['P']) && !(relkeys['P']))
-    {
-        lejoueur[VRAI]->affecte_arme (lesarmes,lejoueur[VRAI]->id_weapon +1,max_arme);
-        lejoueur[VRAI]->affecte_sound (lessons[lejoueur[VRAI]->arme.id_son] );
-
-    }*/
-
-    /*static float save_msens = 0.0f;
-    if((m_input.keys['Z']) && !(relkeys['Z'])) {
-        if(save_msens == 0.0f) {
-            save_msens = msens;
-        }
-        znear += 0.1;
-        set_znear();
-        msens *= 0.99f; // slightly decrease mouse sens
-    }
-    if((m_input.keys['X']) && !(relkeys['X'])) {
-        if(save_msens != 0.0f) {
-            znear = 1.0;
-            set_znear();
-            msens = save_msens;
-            save_msens = 0.0f;
-        }
-    }*/
-
     if ((m_input.right_button) && !(BTN_DROIT))
     {
         if ((lejoueur[VRAI]->arme.scope > 0))
@@ -4465,8 +4331,6 @@ void Engine::handle_input(float delta)
     if ((SCOPE_ETA) && (lejoueur[VRAI]->arme.scope > 0) && (exterieur == false) && !lejoueur[VRAI]->mort)
     {
 
-        // for(int j = 0; j < 10; j++)
-        // if (znear<=10)
         if ((world.znear < lejoueur[VRAI]->arme.cur_scope) || (world.znear > lejoueur[VRAI]->arme.cur_scope))
         {
             if (save_msens == 0.0f)
@@ -4490,20 +4354,6 @@ void Engine::handle_input(float delta)
                     msens /= 0.92f;
                 }
             }
-
-            // msens *= lejoueur[VRAI]->arme.scope*0.92f; // slightly decrease mouse sens
-            // msens *= (float)(9.9f/lejoueur[VRAI]->arme.scope); // slightly decrease mouse sens
-
-            /*if(save_msens == 0.0f) {
-                save_msens = msens;
-            }
-            world.znear += 0.5;
-            //znear +=(float)(1/lejoueur[VRAI]->arme.scope);
-            world.set_znear();
-
-             msens *= 0.92f; // slightly decrease mouse sens
-        //	msens *= (float)(9.9f/lejoueur[VRAI]->arme.scope); // slightly decrease mouse sens
-            */
         }
         sniper = true;
     }
@@ -4553,8 +4403,6 @@ void Engine::handle_input(float delta)
     // pour l'arme
     if (m_playerfile)
     {
-        // maximun_arme= floor(m_playerfile->score/10)+3; // tous les 10 point nvl arme
-        // f(pts) = INT(LN(pts*1,5*1,5*1,5/10)/LN(1,5)+1)
         int sc = m_playerfile->score;
 
         float coef = 1.4f;
@@ -4576,7 +4424,6 @@ void Engine::handle_input(float delta)
     if (config.isdebug || lan_mode)
         maximun_arme = max_arme;
 
-    // maximun_arme=max_arme;
     if (!(lejoueur[VRAI]->tir) && (lejoueur[VRAI]->occupe == false) &&
         ((m_input.is_wheeling && m_input.wheel > 0) || (m_input.keys[config.keys[10]] && !relkeys[config.keys[10]])))
     {
@@ -4615,9 +4462,8 @@ void Engine::handle_input(float delta)
     {
         lejoueur[VRAI]->reload_arme();
     }
-
-    // unlockequipe();
 }
+
 void Engine::Change_arme(bool plus)
 {
 
@@ -4660,15 +4506,10 @@ void Engine::Change_arme(bool plus)
 
 void Engine::migratehost()
 {
-    //	m_serverid=m_xmlsession.DevenirServer (m_playerfile,m_cur_map);
-    // bConnectSuccess =true;
-    // m_bHostPlayer = TRUE;
-    // menu_state=1111;
     if (m_playerfile && !lan_mode)
         m_serverid = m_xmlsession.DevenirServer(
             m_playerfile, m_cur_map, (CFT_ON | (TEAM_ON << 1) | (SNIPER_ON << 2)), m_dwMaxPlayers, cle_tournois, round,
             cur_md5, lesinput_box[6]->text.text, strlen(lesinput_box[5]->text.text) > 0, les_armes_autorisees); //
-    // bConnectSuccess =true;
     m_bHostPlayer = TRUE;
     menu_state = 51;
     if (m_chat)
@@ -4707,11 +4548,6 @@ void Engine::overlay()
         m_pings->visible = true;
     }
 
-    // m_cross->print(m_width,m_height);
-
-    // sprintf(tmp, "menu_state %i",menu_state);
-    // m_font->print(0, 132, tmp);
-
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_FUNC);
 }
@@ -4749,15 +4585,6 @@ void Engine::HandleEvent(void)
 
 void Engine::AffichePanel(float delta)
 {
-    // lockequipe();
-
-    /*begin_orto();
-    glDisable(GL_DEPTH_FUNC);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-*/
-    // m_chat->draw(delta,m_height);
-
     m_panel->print(m_width, m_height, lejoueur[VRAI]->arme.munition, lejoueur[VRAI]->vie, g_lNumberOfActivePlayers,
                    lejoueur[VRAI]->arme.name);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -4770,7 +4597,6 @@ void Engine::AffichePanel(float delta)
     m_font->taille = t;
     if (DisplayGamma)
     {
-        //	glColor4f(1.0f,0.0f,0.0f,1.0f);
         char str[20];
         sprintf(str, "Gamma = %d", config.GAMMA);
         m_font->print(20, m_height / 2, str);
@@ -4778,13 +4604,10 @@ void Engine::AffichePanel(float delta)
 
     glDepthMask(1);
 
-    /*glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_FUNC);
-
-    end_orto();*/
-    // unlockequipe();
 }
+
 static float letick;
+
 static void anim()
 {
 
@@ -4804,17 +4627,13 @@ void Engine::frame()
     static vec3_t pos_leaf(0.0f, 0.0f, 0.0f);
     static vec3_t dir_apres_coll(0.0f, 0.0f, 0.0f);
 
-    // parts->SystemNew(new   pSystemBoom_t,vec3_t(0.0f,0.0f,0.0f), 1);
-
     float delta = 0.0f;
     frameTime.Frame();
-    // delta = (frameTime.GetDelta()+delta)/2.0f;
     delta = frameTime.GetDelta();
 
     if (delta > 5.1f)
         delta = 5.1f;
 
-    // delta=0.001f*time_acceleration;
     delta = delta * time_acceleration;
 
     if (mode_storm)
@@ -4915,8 +4734,6 @@ void Engine::frame()
                             CFT_envoi_message(4);
                         }
                     }
-
-                    //	lejoueur[VRAI]->mort=true;
                 }
             }
 
@@ -5061,10 +4878,6 @@ void Engine::frame()
     if ((GetTickCount() - old_tchat) > 20000) //
     {
         old_tchat = GetTickCount();
-        /*
-                if(g_lNumberOfActivePlayers>1)
-                    lejoueur[1]->play_sound();
-        */
         envoi_who(); // envoie socket
     }
 
@@ -5076,8 +4889,8 @@ void Engine::frame()
     speed = 200.0f * delta * cours;
 
     handle_input_main();
-    //	download_task();
     download_task_new();
+
     if (CFT_ON || TEAM_ON)
     {
         //** CFT pour initialiser la partie
@@ -5170,14 +4983,11 @@ void Engine::frame()
                 // si il est en l'air on reprend la velocity precedente
                 if (lejoueur[VRAI]->can_jump == false)
                 {
-                    // dir=dir_apres_coll;
                     dir = dir;
-                    // pos=pos_apres_coll;
                 }
                 dir_apres_coll = dir;
                 world.process_visible_faces_collide(pos, dir);
                 dir[2] = 1.0f;
-                // dir[2]=-1.0f*delta;
                 world.epsilon = 0.3f;
                 world.radius = 23.0f;
                 world.collide = false;
@@ -5197,7 +5007,6 @@ void Engine::frame()
                         lejoueur[VRAI]->pulse = 0.0f;
 
                 dir[2] = (-6.0f + lejoueur[VRAI]->pulse) * delta * 60.0f;
-                // dir[2]= ( lejoueur[VRAI]->pulse  )*delta*60.0f  ;
 
                 bool JeSuisSurUneEchelle = world.DessineEntites(pos);
 
@@ -5358,12 +5167,7 @@ void Engine::frame()
 
                 if (!world_is_loaded || (!exterieur && !lejoueur[VRAI]->mort))
                 {
-                    //	world.radius=10.0f;
 
-                    //	yeux
-                    //=lejoueur[VRAI]->m_PhysEnv.AxeG-lejoueur[VRAI]->m_PhysEnv.AxeDevant*10.0f;//lejoueur[VRAI]->m_PhysEnv.AxeHaut
-                    //+ 	pos_tmp	=lejoueur[VRAI]->m_PhysEnv.AxeG;
-                    //
                 }
                 else
                 {
@@ -5414,13 +5218,6 @@ void Engine::frame()
                 yeux[2] = yeux[2] + earth_quake * 15.0f;
                 flash[1] = flash[1] - earth_quake * 10.0f;
 
-                /*	if (lejoueur[VRAI]->is_car)
-                    {
-                        yeux=lejoueur[VRAI]->voiture->AxeG-lejoueur[VRAI]->voiture->AxeDevant*3.0f+lejoueur[VRAI]->voiture->AxeHaut*5.0f;
-                        flash
-                   =lejoueur[VRAI]->voiture->AxeG+lejoueur[VRAI]->voiture->AxeDevant*10.0f-lejoueur[VRAI]->voiture->AxeHaut*15.0f;
-                    }
-                    */
                 gluLookAt(yeux[0], yeux[1], yeux[2], flash[0], flash[1], flash[2], 0, 0, 1);
                 glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
 
@@ -5440,13 +5237,10 @@ void Engine::frame()
                 if (world_is_loaded && (respawn_time <= 0))
                 { // on  relache lasouris respawn
 
-                    //	ETA_SCOPE=false;
 
                     init_player(VRAI);
                     pos_apres_coll = lejoueur[VRAI]->pos;
                     dir_apres_coll = dir;
-
-                    // exterieur=false;
                 }
                 else
                 {
@@ -5502,7 +5296,6 @@ void Engine::frame()
                     ee.y = rr[1];
                     ee.z = rr[2];
                     id_suivi = j;
-                    // g_pDSListener->SetPosition (  ee.x,  ee.y,  ee.z,DS3D_IMMEDIATE);
                 }
             }
 
@@ -5532,21 +5325,14 @@ void Engine::frame()
             if (col_tir.found)
                 dst3 = col_tir.pt;
 
-            //				dst3= dst2;
             vec3_t dir_c = (dst2 - dst3);
-            //				dir_c.normalize();
             dst4 = (dst3 + dir_c * delta * 0.33f);
 
-            //	dst4=dst5;
-            // dst5.normalize ();
             vec3_t tmp = dst2 - dst4;
             if (tmp.len() > 150.0f)
                 dst_cam = dst4;
             else
                 dst_cam = m_camera.eye();
-
-            //	else
-            //	dst_cam=m_camera.eye ();
 
             vec3_t r = dstf - vue_cam;
 
@@ -5557,19 +5343,12 @@ void Engine::frame()
             m_camera.cam.load_identity();
             m_camera.load();
 
-            //	 		gluLookAt(dst_cam[0] ,dst_cam[1] ,dst_cam[2]
-            //,dstf[0]-vue_cam[0],dstf[1]-vue_cam[1],dstf[2]-vue_cam[2],0,0,1); //orient ,pos,norm
             gluLookAt(dst_cam[0], dst_cam[1], dst_cam[2], vue_cam[0], vue_cam[1], vue_cam[2], 0, 0,
                       1); // orient ,pos,norm
 
             glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
-            //	m_camera.move(dst_cam[0],dst_cam[1],dst_cam[2]);
             m_camera.move(dst_cam);
             yeux = m_camera.eye();
-
-            // m_camera.rotate_delta(rotation);
-            // m_camera.transform();
-            // m_camera.load();
 
             lejoueur[VRAI]->fps = letick;
 
@@ -5601,12 +5380,10 @@ void Engine::frame()
             grenades->Frame(delta, &lespos, &amoi, &lesposjoueur, g_dpnidLocalPlayer, &lesid_joueur, &lejoueur);
             unlockequipe(); //----------------------------------------------LOCK
         }
-        //	world.DessineSkyBox(lejoueur[VRAI]->pos);
         vec3_t tt;
 
         VectorCopy(m_camera.eye(), tt);
 
-        //	/world.render_skyfaces(old_pos+vec3_t(20.0f,20.0f,20.0f));
         if (!mode_storm && world_is_loaded && !config.isdebug)
             world.render_skyfaces(tt);
         if (world_is_loaded && !menu_mode)
@@ -5615,25 +5392,11 @@ void Engine::frame()
             world.render_visible_faces(yeux, storm_off); // g_lNumberOfActivePlayers-1
             world.advance_frame(delta);
         }
-        // world.render_entvars(m_camera);
 
-
-        // my_blob.render();
-        /*	for (int yy=0;yy<lescar.size();yy++)
-       {
-           lescar[yy]->Simulate(delta*3.8f,true);//
-
-
-               lescar[yy]->RenderWorld() ;		// DRAW THE SIMULATION
-               //	pos=m_PhysEnv->AxeG;
-           //lescar[yy]->RenderFake(lescar[yy]->AxeG,lescar[yy]->AxeHaut,lescar[yy]->AxeDevant);
-   }
-         */
         lockequipe(); //----------------------------------------------LOCK
 
         static Camera camera2; // MOUARF ENCORE UN GLOBAL DANS NOTRE FACE
         camera2 = (Camera)m_camera;
-        // long letick=GetTickCount();
         int nb_vi = 0;
 
         for (int ga = 0; ga < lespos.size(); ga++)
@@ -5654,7 +5417,6 @@ void Engine::frame()
                 for (int g = 0; g < lespos.size(); g++) // mauvaise boucle sur le grenade explosion
                 {
                     vec3_t explode;
-                    //	vec3_t * pexplode;
 
                     explode = lespos[g];
                     if (VRAI == j)
@@ -5909,9 +5671,6 @@ void Engine::frame()
                     lapos.x = flash[0];
                     lapos.y = flash[1];
                     lapos.z = flash[2];
-                    /*lapos.x =lejoueur[j]->pos [0];
-                    lapos.y =lejoueur[j]->pos [2];
-                    lapos.z =lejoueur[j]->pos [1];*/
                 }
                 if (((j != VRAI) && (lejoueur[j]->arme.id_son != lejoueur[VRAI]->arme.id_son)))
                 {
@@ -5922,21 +5681,10 @@ void Engine::frame()
                     v.z = 0.0f;
 
                     lejoueur[j]->playersound->Positionne3Dbuffer(&lapos, &v);
-
-                    // lejoueur[j]->reload->Positionne3Dbuffer(&lapos,&lapos);
-                    // lejoueur[j]->meurt->Positionne3Dbuffer(&lapos,&lapos);
-                    //
                 }
             }
         }
-        /*	char e[555];
-            sprintf(e,"visible %d",nb_vi);
 
-                m_chat->addtext(e);
-        */
-        //	if(lejoueur[VRAI]->is_car)
-        //		lejoueur[VRAI]->velocity=(lejoueur[VRAI]->m_PhysEnv.AxeG-old_pos)/lejoueur[VRAI]->fps;
-        //	else
         if (!lejoueur[VRAI]->mort)
             lejoueur[VRAI]->velocity = (lejoueur[VRAI]->pos - old_pos) / lejoueur[VRAI]->fps;
 
@@ -5969,14 +5717,7 @@ void Engine::frame()
         lapos.x = son[0];
         lapos.y = son[1];
         lapos.z = son[2];
-        /*		lapos.x = lejoueur[VRAI]->pos [0];
-                lapos.y = lejoueur[VRAI]->pos [2];
-                lapos.z = lejoueur[VRAI]->pos [1];;
-                lapos.x = lejoueur[VRAI]->pos [0];
-                lapos.y = lejoueur[VRAI]->pos [2];
-            */
-        // lapos.z =son[1];;
-        // g_dsListenerParams.vPosition =lapos;
+
         D3DVECTOR Vel;
         Vel.x = 0.0f;
         Vel.y = 0.0f;
@@ -5984,23 +5725,12 @@ void Engine::frame()
 
         if (!lejoueur[VRAI]->mort)
         {
-            //	g_pDSListener->GetAllParameters( &g_dsListenerParams );
-            /*	lapos.x=0.0f;
-        lapos.y=0.0f;
-        lapos.z=0.0f;
-*/
-
-            // memcpy( &g_dsListenerParams.vPosition, &lapos, sizeof(D3DVECTOR) );
-            //	memcpy( &g_dsListenerParams.vVelocity, &Vel, sizeof(D3DVECTOR) );
-            // c3_t lapos=m_camera.eye();
-
             if (old_pos[0] != lejoueur[VRAI]->pos[0] || old_pos[1] != lejoueur[VRAI]->pos[1] ||
                 old_pos[2] != lejoueur[VRAI]->pos[2])
             {
 
                 g_pDSListener->SetPosition(lapos.x, lapos.y, lapos.z, DS3D_IMMEDIATE);
             }
-            // g_pDSListener->SetVelocity ((float) lapos[0],(float) lapos[2],(float) lapos[1],DS3D_IMMEDIATE);
             D3DVECTOR vOrientFront;
             D3DVECTOR vOrientTop;
 
@@ -6041,34 +5771,24 @@ void Engine::frame()
         {
 
             DecaleArme();
-            // lejoueur[VRAI]->playersound->Positionne3Dbuffer(&lapos,&Vel);
 
-            /*lejoueur[VRAI]->reload->Positionne3Dbuffer(&lapos,&Vel);
-            lejoueur[VRAI]->meurt->Positionne3Dbuffer(&lapos,&Vel);
-            */
             if (!strcmp(lejoueur[VRAI]->arme.name, "grenade") || !strcmp(lejoueur[VRAI]->arme.name, "c4") ||
                 !strcmp(lejoueur[VRAI]->arme.name, "fumigene") || !strcmp(lejoueur[VRAI]->arme.name, "plasma")) //
             {
                 bool ok = false;
 
-                //	JoueUnSon (son_grenade);
-                // grenades->SystemNew(new   pGrenSystemSimple_t , lejoueur[VRAI]->pos,(flash2), 1);
                 vec3_t pos_gre = lejoueur[VRAI]->pos;
                 vec3_t dir_gre = flash;
 
                 if (world_is_loaded && !strcmp(lejoueur[VRAI]->arme.name, "c4"))
                 {
                     collision_tir col_mur;
-                    /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
-                    // world.process_visible_faces3(lejoueur[VRAI]->pos);
                     world.process_visible_faces_collide(lejoueur[VRAI]->pos, flash2);
 
                     col_mur = world.check_tirs_rec(lejoueur[VRAI]->pos, flash2 * 100.0f, 5);
                     if (col_mur.found)
                     {
                         collision_tir col_enface;
-                        /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
-                        //	world.process_visible_faces3(lejoueur[VRAI]->pos);
                         world.process_visible_faces_collide(col_mur.pt + col_mur.normal, col_mur.normal);
 
                         col_enface = world.check_tirs_rec(col_mur.pt, col_mur.normal * 2000.0f, 5);
@@ -6109,18 +5829,12 @@ void Engine::frame()
                             flash2[2] = flash2[2] + 0.1f;
                             if (exterieur)
                             {
-                                // grenades->SystemNew(new   pGrenSystemMissile_t , lejoueur[VRAI]->pos,(flash2),
-                                // 1,true);
-
                                 grenades->SystemNew(new pGrenSystemMissile_t, fl, (flash2), 1, g_dpnidLocalPlayer);
                                 ok = true;
                             }
                             else
                             {
                                 grenades->SystemNew(new pGrenSystemMissile_t, fl, (flash2), 1, g_dpnidLocalPlayer);
-
-                                // grenades->SystemNew(new   pGrenSystemSmoke_t , fl,(flash2), 1,g_dpnidLocalPlayer);
-
                                 ok = true;
                             }
                         }
@@ -6141,8 +5855,6 @@ void Engine::frame()
             }
             else
             {
-
-                //	world.process_visible_faces(m_camera);
                 collision_tir col_tir;
                 if (world_is_loaded)
                     col_tir = world.check_tirs(yeux, boi - yeux);
@@ -6166,8 +5878,6 @@ void Engine::frame()
                     //plus bonne
                     if ((col_tir.found == true) && !(id_joueur == VRAI))
                     {
-                        // world.drawBoxEx (col_tir.pt);
-
                         n = col_tir.normal * -1.00f;
 
                         if (type_mark == 1)
@@ -6175,7 +5885,6 @@ void Engine::frame()
 
                         marks->AddMark(n, col_tir.pt, 0);
                         parts->SystemNew(new pSystemBoom_t, col_tir.pt, 1);
-                        // col_tir=world.check_tirs(yeux,boi-yeux);
                     }
                     else
                     {
@@ -6202,15 +5911,11 @@ void Engine::frame()
                         parts2->SystemNew(new pSystemBurst_t, lejoueur[VRAI]->vue.StudioCalcAttachments(true),
                                           1); // particle canon
                     }
-                    //	marks->AddMark( lejoueur[VRAI]->vue.StudioCalcAttachments ()-col_tir.pt,col_tir.pt , 20);
                 }
-                // parts->SystemNew(new   pSystemBoom_t,flash2, 1); // particle canon
             }
         }
 
         lejoueur[VRAI]->tir = false;
-
-        // world.drawBoxEx (lejoueur[VRAI]->pos);
 
         //******** CFT FRAME c le plus gros
         if ((CFT_ON == true) && (CFT_eta == 2))
@@ -6264,8 +5969,6 @@ void Engine::frame()
                     CFT_eta = 0;
                     CFT_nouvelle_partie();
 
-                    // pos_apres_coll=lejoueur[VRAI]->pos;
-                    // dir_apres_coll=dir;
                 }
             }
             else
@@ -6278,47 +5981,26 @@ void Engine::frame()
                     CFT_eta = 0;
                     CFT_nouvelle_partie();
 
-                    // pos_apres_coll=lejoueur[VRAI]->pos;
-                    // dir_apres_coll=dir;
+
                 }
             }
         }
         //** CFT fin du gros morceau dans frame****************************************/
 
-        /*
-
-
-
-
-
-
-
-             */
-        //	glEnable(GL_BLEND);
-        //	marks->Render ();
-
-        //	glDisable(GL_BLEND);
         if (world_is_loaded)
             world.render_entvarsInvi(m_camera);
-        //	world.DessineSkyBox(lejoueur[VRAI]->pos);
-
-        // world.render_entvarsInvi(m_camera);
     }
 
     begin_orto();
 
     glEnable(GL_DEPTH_FUNC);
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
 
     if (!storm_off && mode_storm)
         glClearColor(0.6f, 0.5f, 0.5f, 1.0f);
     else
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    //    glClearDepth(1.0f);
     glDisable(GL_DEPTH_TEST);
 
     if (g_lNumberOfActivePlayers > 0)
@@ -6326,11 +6008,6 @@ void Engine::frame()
 
         AfficheCroix();
     }
-
-    /*
-glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-*/
 
     if ((m_overlay) || (config.isdebug))
     {
@@ -6346,9 +6023,6 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     if (!menu_mode)
         AffichePanel(delta);
-    /*
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    */
 
     if (g_lNumberOfActivePlayers > 0)
     {
@@ -6493,13 +6167,6 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
 
             if (lejoueur[i]->ID == idplayer)
             {
-
-                /*				 ret->seq_dep=0;
-                                 ret->seq_act=0;
-                                 */
-                /*				 ret->num_act=0;
-                                 ret->num_dep=0;
-                */
 
                 lejoueur[i]->is_car = false;
                 // (!lejoueur[i]->is_car)
@@ -8777,24 +8444,6 @@ HRESULT Engine::colle_Mark(DPNID idplayer, GAMEMSG_MARK *ret)
 
                 lejoueur[j]->playersound->Positionne3Dbuffer(&lapos, &dd);
                 lejoueur[j]->playersound->Play(0, 0);
-
-                // on posi le son du ricochet sur le mur
-                /*if (lejoueur[j]->ricosound->IsSoundPlaying()==TRUE)
-                {
-                        lejoueur[j]->ricosound->Reset();
-                }
-                lejoueur[j]->ricosound->Play( 0, 0);
-                /*lejoueur[j]->id_rico++;
-                if (lejoueur[j]->id_rico>4)
-                        lejoueur[j]->id_rico=0;*/
-                // lejoueur[j]->affecte_ricochet(lessons[10] );
-                /*lapos.x =ret->pos[0];
-                lapos.z =ret->pos[1];
-                lapos.y =ret->pos[2];
-                /*pos.x =lejoueur[j]->pos[0];
-                lapos.y =lejoueur[j]->pos[2];
-                lapos.z =lejoueur[j]->pos[1];*/
-                // lejoueur[j]->ricosound->Positionne3Dbuffer(&lapos,&lapos);
             }
         }
         unlockequipe(); //----------------------------------------------LOCK
@@ -8811,8 +8460,6 @@ HRESULT Engine::colle_Mark(DPNID idplayer, GAMEMSG_MARK *ret)
             JoueUnSon(56 + rnds, ret->pos);
         }
     }
-
-    //	grenades->SystemNew(new   pGrenSystemMissile_t ,  ret->flash,e,0,idplayer);
 
     parts->SystemNew(new pSystemBurst_t, ret->flash, 1);
 
@@ -8845,21 +8492,6 @@ HRESULT Engine::colle_Grenade(DPNID idplayer, GAMEMSG_MARK *ret)
 
     unlockequipe(); //----------------------------------------------LOCK
 
-    // lejoueur[VRAI]->playersound->Play( 0, 0);
-    /*
-
-                int type_gre=0;
-                if (!strcmp(lejoueur[VRAI]->arme.name,"hegrenade"))//lejoueur[VRAI]->id_weapon==11
-                    type_gre=1;
-                else
-                    if (!strcmp(lejoueur[VRAI]->arme.name,"plasma")) //12
-                        type_gre=2;
-                    else
-                        if (!strcmp(lejoueur[VRAI]->arme.name,"smokegrenade"))
-                            type_gre=3;
-
-
-    */
     if (ret->type_gre == 1)
     {
 
@@ -8944,20 +8576,6 @@ HRESULT Engine::envoi_chat(char *text)
 {
     if (g_lNumberOfActivePlayers > 1)
     {
-        /*       // Send a message to all of the players
-               GAMEMSG_GENERIC msgWave;
-               msgWave.dwType = GAME_MSGID_WAVE;
-               strcpy(msgWave.chattext,text);
-               DPN_BUFFER_DESC bufferDesc;
-               bufferDesc.dwBufferSize = sizeof(GAMEMSG_GENERIC);
-               bufferDesc.pBufferData  = (BYTE*) &msgWave;
-
-               DPNHANDLE hAsync;
-               m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1,
-                              0, NULL, &hAsync, DPNSEND_NOLOOPBACK | DPNSEND_NOCOMPLETE | DPNSEND_PRIORITY_LOW );
-
-       */
-
         GAMEMSG_CHAT msgChat;
         msgChat.dwType = GAME_MSGID_WAVE;
 
@@ -8990,16 +8608,6 @@ HRESULT Engine::Confirme_Tue(DPNID dpnidPlayer, float dans_la_tete)
         msgWave.dwType = GAME_MSGID_CONFIRME;
         msgWave.ID_du_joueur_touche = dpnidPlayer; // id du tueur
 
-        /*
-        if ((rndo==1) || (TEAM_ON))
-        g_camera_suivi=dpnidPlayer;
-        else
-        g_camera_suivi=lejoueur[VRAI]->ID;
-        */
-
-        //	g_camera_suivi=dpnidPlayer;
-        // g_camera_suivi=lejoueur[VRAI]->ID;
-        // exterieur=true;
         msgWave.fps = dans_la_tete;
         DPN_BUFFER_DESC bufferDesc;
         bufferDesc.dwBufferSize = sizeof(GAMEMSG_CONF_TUE);
@@ -9278,9 +8886,6 @@ vec3_t Engine::collision_joueur(vec3_t src, vec3_t dir)
                 retv = src + vec3_t(random_t::RandomRange(-5.0f, 5.0f), random_t::RandomRange(-5.0f, 5.0f), 0.0f);
             else
                 retv = src;
-
-            //	float t=intersect_sphere (src,dirn,lejoueur[j]->pos,15.0f);
-            //	if (t>0.0f)
         }
     }
     unlockequipe(); //----------------------------------------------LOCK
@@ -9316,17 +8921,12 @@ int Engine::check_impact(vec3_t src, vec3_t dest, vec3_t pos_mur)
                 {
                     dist_joueur = fabs(sqrt(pow(src[0] - lejoueur[j]->modele.pos_touche[0], 2) +
                                             pow(src[1] - lejoueur[j]->modele.pos_touche[1], 2)));
-                    //	dist_joueur=
-                    //abs(sqrt(pow(dest[0]-lejoueur[j]->modele.pos_touche[0],2)+pow(dest[1]-lejoueur[j]->modele.pos_touche[1],2)+pow(dest[2]-lejoueur[j]->modele.pos_touche[2],2)));
 
-                    // if (mini.len()> lejoueur[j]->modele.pos_touche.len())
                     if (dist_joueur < dist_mur)
                     {
                         id_mini = j;
-                        // mini=lejoueur[j]->modele.pos_touche;
                         dist_mur = dist_joueur;
                     }
-                    // envoi_Tir (lejoueur[j]->ID,lejoueur[j]->modele.pos_touche,10);
                 }
             }
         }
@@ -9379,20 +8979,13 @@ int Engine::check_impact(vec3_t src, vec3_t dest, vec3_t pos_mur)
 
 void world_t::InitSkyBox()
 {
-
-    // std::ofstream o("log/skybox.log");
-
     char *k;
     SkyRange = bsp->FloatForKey(&bsp->Lesentities[0], "MaxRange");
-    // SkyRange=SkyRange;
-    //  o << SkyRange << endl;
 
     k = bsp->ValueForKey(&bsp->Lesentities[0], "skyname");
-    // o << k << endl;
 
     char ligne[30];
     Image img, img2, img3, img4, img5, img6;
-    // char skys[6][3]={"ft","bk","lf","rt","up","dn"};
     // devant
     sprintf(ligne, "%s%s%s\0", TEXT("data\\env\\"), k, TEXT("ft.tga"));
     // o << ligne << endl;
@@ -9634,13 +9227,9 @@ void world_t::InitPositions()
 
     for (int x = 0; x < bsp->num_entities; x++)
     {
-        /////o << bsp->ValueForKey(&bsp->Lesentities[x],"classname") << endl;
-
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_gign") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -9653,8 +9242,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_terro") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -9667,8 +9254,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_gign_rec") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -9681,8 +9266,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_terro_rec") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -9695,23 +9278,17 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "info_player_start") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
             ori[1] = v2;
             ori[2] = v3;
             pos_gign.push_back(ori);
-
-            // o << k << "gign" <<endl;
         }
 
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "info_player_deathmatch") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -9724,32 +9301,24 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "armoury_entity") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
             ori[1] = v2;
             ori[2] = v3;
             pos_armor.push_back(ori);
-            // o << k << "armor" <<endl;
         }
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "func_ladder") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "model");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            //// o << k << endl;
             int kk = 0;
             sscanf(k, "*%d", &kk);
             pos_ladder.push_back(kk);
-            // o << kk << "ladder" <<endl;
         }
 
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "func_breakable") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "model");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             int kk = 0;
             sscanf(k, "*%d", &kk);
             bsp->models[kk].unused = -1;
@@ -9948,19 +9517,12 @@ void Engine::xmlsocket(char *xml)
                 strcpy(out_msg, "");
 
                 m_xmlsession.GetScroll_tchat(xml, out_msg);
-
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
-
                 m_romu->tchat_scroll(out_msg);
             }
 
             if (type == GAME_TCHAT_PINGS)
             {
                 strcpy(m_txt_tchat, "");
-
-                // m_xmlsession.GetPings_tchat(xml,m_txt_tchat) ;
-
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
             }
             if (type == GAME_TCHAT_KILL && !mode_op)
             {
@@ -9969,7 +9531,6 @@ void Engine::xmlsocket(char *xml)
                 menu_mode = true;
                 is_kikked = true;
                 m_chat->addtext("tu a ete vire par un admin", 2);
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
             }
             if (type == GAME_STORM_START)
             {
@@ -10636,7 +10197,6 @@ void Engine::CFT_affiche_message(int r, char *mess)
         model2str(lejoueur[r]->id_modele, model);
         CFT_renvoie_lib_team(lejoueur[r]->QuelTeam, team);
         sprintf(tmp, "%s %s", team, lejoueur[r]->playername);
-        // sprintf(tmp, "Le %s %s %s",model,lejoueur[r]->playername,mess);
         m_chat->addtext(tmp, 2);
         m_chat->addtext(mess, 2);
     }
