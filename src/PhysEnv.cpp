@@ -709,19 +709,11 @@ void CPhysEnv::IntegrateSysOverTime(tParticle *initial, tParticle *source, tPart
     {
         deltaTimeMass = deltaTime * initial->oneOverM;
         // DETERMINE THE NEW VELOCITY FOR THE PARTICLE
-        /*	target->v.x = initial->v.x + (source->f.x * deltaTimeMass);
-            target->v.y = initial->v.y + (source->f.y * deltaTimeMass);
-            target->v.z = initial->v.z + (source->f.z * deltaTimeMass);
-    */
         target->v = initial->v + (source->f * deltaTimeMass);
 
         target->oneOverM = initial->oneOverM;
 
         // SET THE NEW POSITION
-        /*target->pos.x = initial->pos.x + (deltaTime * source->v.x);
-        target->pos.y = initial->pos.y + (deltaTime * source->v.y);
-        target->pos.z = initial->pos.z + (deltaTime * source->v.z);
-*/
         target->pos = initial->pos + (source->v * deltaTime);
 
         initial++;
@@ -765,64 +757,6 @@ void CPhysEnv::MidPointIntegrate(float DeltaTime)
     IntegrateSysOverTime(m_CurrentSys, m_TempSys[0], m_TargetSys, DeltaTime);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Function:	RK4Integrate
-// Purpose:		Calculate new Positions and Velocities given a deltatime
-// Arguments:	DeltaTime that has passed since last iteration
-// Notes:		This integrator uses the Runga-Kutta 4 method
-//				This could use a generic function 4 times instead of unrolled
-//				but it was easier for me to debug.  Fun for you to optimize.
-///////////////////////////////////////////////////////////////////////////////
-
-/*
-
-int CPhysEnv::CheckForCollisions( tParticle	*system_old,tParticle	*system )
-{
-    // be optimistic!
-    int collisionState = NOT_COLLIDING;
-    float const depthEpsilon = 0.2f;//3.8f;
- float const contactEpsilon = 0.35f;//5.0f;
-
-
-
-    int loop;
-    tParticle *curParticle;
-
-tParticle *curParticle_old;
-
-
-
-    m_ContactCnt = 0;		// THERE ARE CURRENTLY NO CONTACTS
-
-
-    curParticle = system;
-    curParticle_old = system_old;
-
-    for (loop = 0; (loop < m_ParticleCnt);
-            loop++,curParticle++)
-    {
-
- //my_world->process_visible_faces3(curParticle_old->pos);
-                my_world->process_visible_faces_collide(curParticle_old->pos,curParticle->pos-curParticle_old->pos);
-        my_world->epsilon=3.0f;
-        my_world->radius=2.0f;
-        my_world->collide =false;
-        my_world->normale_face_touchee[0]=0.0f;
-        my_world->normale_face_touchee[1]=0.0f;
-        my_world->normale_face_touchee[2]=0.0f;
-
-        vec3_t dst = my_world->check_collisions(curParticle->pos,curParticle->pos-curParticle_old->pos,0);
-
-        curParticle->pos=dst;
-
-//curParticle->v=curParticle->pos-curParticle_old->pos;
-        collisionState = NOT_COLLIDING;
-
-        curParticle_old++;
-            }
-            return  collisionState;
-}
-*/
 int CPhysEnv::CheckForCollisions(tParticle *system_old, tParticle *system)
 {
     // be optimistic!
@@ -846,30 +780,8 @@ int CPhysEnv::CheckForCollisions(tParticle *system_old, tParticle *system)
 
         if (true || (loop == 0 || loop == 1 || loop == 2 || loop == 3))
         {
-            //	tCollisionPlane *plane = &m_CollisionPlane[planeIndex];
-
-            // float axbyczd = curParticle->pos.dot(plane->normal) ;
-            //
-
-            // float axbyczd = DotProduct(&curParticle->pos,&plane->normal) + plane->d;
-
-            /*	if (my_world->find_leaf(curParticle->pos)==0)
-                  {
-                          collisionState = PENETRATING; // d'office on est e nvrac on divise en deux et quit
-                          curParticle->contacting = TRUE;
-
-                  }
-                  else
-                  {
-      */
-
             collision_tir col_tir;
             vec3_t tmpdir = (curParticle->v);
-            // my_world->process_visible_faces_collide(AxeG,tmpdir);
-
-            // my_world->process_visible_faces3(curParticle->oldpos);
-
-            // tmpdir=tmpdir*10.0f;
 
             my_world->process_visible_faces_collide(curParticle->pos, curParticle->v);
             my_world->epsilon = 0.05f;
@@ -883,13 +795,9 @@ int CPhysEnv::CheckForCollisions(tParticle *system_old, tParticle *system)
 
             my_world->check_collisions_bat(curParticle->pos, tmpdir, &col_tir, 5);
 
-            //	curParticle->pos=col_tir.pt;
 
             if ((col_tir.found))
             {
-
-                // vec3_t tmp=(curParticle->pos-col_tir.pt);
-
                 vec3_t tmp = (curParticle->v);
                 float axbyczd = tmpdir.dot(col_tir.normal);
                 if (axbyczd < 0.5f)
@@ -944,36 +852,7 @@ void CPhysEnv::copyold(tParticle *system)
         //	ocurParticle++;
     }
 }
-/*
-void CPhysEnv::copyold( tParticle	*system )
-{
-    // be optimistic!
 
-    int loop;
-    tParticle *curParticle;
-    tParticle *ocurParticle;
-
-    ocurParticle=m_TargetSys ;
-
-    curParticle = system;
-    for (loop = 0; (loop < m_ParticleCnt);
-            loop++,curParticle++)
-    {
-        curParticle->pos=ocurParticle->oldpos;
-        curParticle->f=vec3_t(0.0f,0.0f,0.0f);
-        curParticle->v=vec3_t(0.0f,0.0f,0.0f);
-
-        curParticle->pos=ocurParticle->oldpos;
-
-
-
-        ocurParticle++;
-
-    }
-
-
-}
-*/
 int CPhysEnv::CheckForCollisions2(tParticle *system)
 {
     // be optimistic!
@@ -990,13 +869,7 @@ int CPhysEnv::CheckForCollisions2(tParticle *system)
 
     for (loop = 0; (loop < m_ParticleCnt) && (collisionState != PENETRATING); loop++, curParticle++)
     {
-
-        //	tCollisionPlane *plane = &m_CollisionPlane[planeIndex];
-
-        // float axbyczd = curParticle->pos.dot(plane->normal) ;
-        //
         collision_tir col_tir;
-        /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
         my_world->process_visible_faces3(curParticle->pos);
         vec3_t tmpdir = (curParticle->pos - curParticle->oldpos);
         tmpdir.normalize();
@@ -1018,13 +891,7 @@ int CPhysEnv::CheckForCollisions2(tParticle *system)
             {
                 float relativeVelocity;
                 relativeVelocity = col_tir.normal.dot(curParticle->v);
-                /*if(relativeVelocity < 0.01f && relativeVelocity > -0.01f)
-                {
-                    collisionState = CONTACTING;
-                    curParticle->v=vec3_t(0.0f,0.0f,0.0f);
-                    curParticle->type = CONTACTING;
-                }
-                else */
+
                 if (relativeVelocity < 0.0f)
                 {
                     collisionState = COLLIDING;
@@ -1370,7 +1237,6 @@ void CPhysEnv::Simulate(float DeltaTime, BOOL running)
                 m_TargetSys = m_CurrentSys;
                 m_CurrentSys = tempSys;
                 CurrentTime = DeltaTime;
-                /*copyold(m_TargetSys);*/
 
                 // pas de sol machine arriere
             }

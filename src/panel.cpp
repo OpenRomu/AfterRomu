@@ -59,20 +59,6 @@ Panel::Panel(const char *lesammo, const char *ammo, const char *smoke, const cha
     m_coords[0]->c01[0] = 0;
     m_coords[0]->c01[1] = 0 + inc;
 
-    /* inc = 1.0f/4.0f;//0.0625f;
-     int c = 1;
-     for(float y = 1-inc; y >= 0; y -= inc) {
-         for(float x = 0; x < 1.0f; x += inc) {
-             m_coords[c] = new Coords;
-             if(!m_coords[0]) throw out_of_memory();
-             m_coords[c]->c00[0] = x; m_coords[c]->c00[1] = y;
-             m_coords[c]->c10[0] = x+inc; m_coords[c]->c10[1] = y;
-             m_coords[c]->c11[0] = x+inc, m_coords[c]->c11[1] = y+inc;
-             m_coords[c]->c01[0] = x; m_coords[c]->c01[1] = y+inc;
-             c++;
-         }
-     }*/
-
     position = 4;
     m_coords[1] = new Coords;
     m_coords[1]->c00[0] = 0;

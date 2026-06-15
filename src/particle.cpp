@@ -157,23 +157,6 @@ void pSystem_t::Render(vec3_t &x, vec3_t &y)
         glTexCoord2f(0.0f, 1.0f);
         glVertex3fv(pts[3]);
         glEnd();
-        /*
-            glBegin(GL_QUADS);
-            Coords* z = m_coords[0];
-                    glTexCoord2fv(z->c00); glVertex2s(xx ,y);
-                    glTexCoord2fv(z->c10); glVertex2s(yy,y);
-                    glTexCoord2fv(z->c11); glVertex2s(yy,y+height);
-                    glTexCoord2fv(z->c01); glVertex2s(xx,y+height);
-                    glTexCoord2fv(z->c00); glVertex2s(x ,y+(height-position));
-                    glTexCoord2fv(z->c10); glVertex2s(x+width,y+(height-position));
-                    glTexCoord2fv(z->c11); glVertex2s(x+width,y+height+(height-position));
-                    glTexCoord2fv(z->c01); glVertex2s(x,y+height+(height-position));
-
-            glEnd();
-
-        */
-        //  s=curr->pos;
-        // drawBox (&s);
     }
     glDepthMask(1);
 

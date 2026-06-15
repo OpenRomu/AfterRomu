@@ -2963,17 +2963,6 @@ void Engine::download_task()
                 /****************************/
                 //	// o << "connect" << endl;
                 port = 80;
-                // CString str;
-                // str.Format(_T("char %c ", c)
-
-                // Install the status callback function.
-                /*
-                   WINHTTP_STATUS_CALLBACK isCallback =
-                    WinHttpSetStatusCallback( hOpen,
-                    (WINHTTP_STATUS_CALLBACK)Engine::Juggler,
-                         WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
-                         NULL);
- */
 
                 WCHAR lphost[100];
                 DXUtil_ConvertAnsiStringToWide(lphost, m_cur_host);
@@ -2993,9 +2982,6 @@ void Engine::download_task()
                     /* OPEN HTTP REQUEST */
                     /*********************/
 
-                    // flags = INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE;
-                    // if (! stricmp(url_scheme, "https"))
-                    //     flags |= INTERNET_FLAG_SECURE;
                     WCHAR lp_distant_file[100];
                     DXUtil_ConvertAnsiStringToWide(lp_distant_file, distant_file);
                     //
@@ -3273,14 +3259,6 @@ void Engine::download_task_old()
                 // str.Format(_T("char %c ", c)
 
                 // Install the status callback function.
-                /*
-                   WINHTTP_STATUS_CALLBACK isCallback =
-                    WinHttpSetStatusCallback( hOpen,
-                    (WINHTTP_STATUS_CALLBACK)Engine::Juggler,
-                         WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
-                         NULL);
- */
-
                 WCHAR lphost[100];
                 DXUtil_ConvertAnsiStringToWide(lphost, m_cur_host);
                 hConnect = WinHttpConnect(hOpen, (LPCWSTR)lphost, INTERNET_DEFAULT_HTTP_PORT, NULL); //(LPCWSTR) lphost
@@ -7556,51 +7534,7 @@ bool Engine::dezip(char *file)
         return false;
     }
 }
-/*
-bool
-Engine::dezip(TCHAR * file)
-{
 
- CZipArchive zip;
-    // get the path of the executable
-    TCHAR szBuff[_MAX_PATH];
-    char path[150];
-    ::GetCurrentDirectory(150,path);
-    sprintf(szBuff,"%s",file);  //,path %s\\
-    _T("C:\\Temp\\test.zip")
-    CZipString szDest;
-
-
-    // ...
-    // add some code here to get additional information from the user
-    // such as the destination directory or a password, if needed
-    bool toto=zip.Open(file);
-    // zipOpenReadOnly mode is necessary for self extract archives
-    for (int i = 0; i < 4; i++)
-    {
-        CZipFileHeader info;
-        if(zip.GetFileInfo(info,i))
-        {
-            char filename[50];
-            CZipString filename_czip;
-            filename_czip=info.GetFileName();
-
-            if(filename_czip.Find(".bmp"))
-                zip.ExtractFile(i, _T("c:\\Temp"));
-            if(filename_czip.Find(".bmp"))
-                zip.ExtractFile(i, _T("c:\\Temp"));
-
-        }
-
-    }
-
-
-    zip.Close();
-
-    return 0;
-}
-
-*/
 bool Engine::Verify_Map(char *file)
 {
     bool existe;
@@ -7689,70 +7623,6 @@ bool Engine::Verify_Mp3(char *file)
     }
 }
 
-/*
-void Engine::Download_Map(char* host,char * file)
-{
-
-        char distant_file [100];
-        sprintf(distant_file,"/romustrike/map/%s.exe",file);
-        char local_file[100];
-        sprintf(local_file,"%s.exe",file);
-        m_xmlsession.download(host,distant_file,local_file );
-        dezip(local_file);
-
-}
-
-void Engine::Download_Mp3(char* host,char * file )
-{
-    char distant_file [100];
-    sprintf(distant_file,"/romustrike/mp3/%s.mp3",file);
-    char local_file[100];
-    sprintf(local_file,"data/mp3/%s.mp3",file);
-
-    m_xmlsession.download(config.server_xml,distant_file,local_file );
-
-
-}
-*/
-
-/*
-void
-Engine::Verify_Env(char * file)
-{
-    FILE *output_file;
-
-    char chemin[100];
-    sprintf(chemin,"data/env/%s",file);
-
-    //verifie lexistence
-    //si ok exit
-    output_file=fopen(chemin,"rb");
-    if (output_file == NULL)
-    {
-
-    //	MessageBox (m_hwnd,TEXT("Attention download de la map. Cela va prendre quelques secondes
-..."),TEXT("ROMUSTRIKE"),MB_OK);
-        //sinon dwlolad
-        //dezip
-        //exit
-        char distant_file [100];
-        sprintf(distant_file,"/romustrike/env/%s",file);
-        char local_file[100];
-        sprintf(local_file,"data/env/%s",file);
-
-        m_xmlsession.download("romu.soft.free.fr",distant_file,local_file );
-
-
-    }
-    else
-    {
-        fclose(output_file);
-    }
-
-
-
-}
-*/
 void Engine::load_map(char *map)
 {
     m_chat->addtext("load map", 2);
@@ -7917,15 +7787,9 @@ void Engine::load3d()
 
     //**CFT load des objets dans engine.load3d
     lesobjets[0].Load("data/model/flag.mdl");
-    // o << "cft 1" << endl;
     lesobjets[1].Load("data/model/flag.mdl");
-    // o << "cft 2" << endl;
     lesobjets[2].Load("data/model/base.mdl");
-    // o << "cft 3" << endl;
     lesobjets[3].Load("data/model/base.mdl");
-    // o << "cft 4" << endl;
-    //**
-    // o << "cft load" << endl;
     leshommes[0].Load("data/model/rosetti.mdl");
     leshommes[0].lie = 0;
     leshommes[1].Load("data/model/spaceboy.mdl");
@@ -7967,30 +7831,8 @@ void Engine::load3d()
     leshommes[13].Load("data/model/operateur.mdl"); // operateur.mdl
     leshommes[13].lie = 0;
 
-    // o << "homme load" << endl;
-
-    // leshommes[1].Load("data/model/rosetti.mdl");
-    // leshommes[1].lie=0;
-
-    /*        leshommes[2].Load("data/model/space.mdl");
-            leshommes[2].lie=0;
-
-            leshommes[3].Load("data/model/kakashi.mdl");
-            leshommes[3].lie=0;
-
-            leshommes[4].Load("data/model/michel.mdl");
-            leshommes[4].lie=0;
-
-            leshommes[5].Load("data/model/mib.mdl");
-            leshommes[5].lie=0;
-    //ajout
-    */
     max_modele = 14;
-    /*
-        file,lie,type,scope,balles,puissance,id_son,fps_weapon,multi
 
-
-        */
     T_armes liste_armes[max_arme] = {
         {"deagle", 1, "_onehanded", 0, 10, 10, 0, -1.0f, -1.0f, 1.0f, true},
         {"mp5", 1, "_mp5", 0, 20, 10, 3, 30.0f, 10.0f, 2.0f, true},
@@ -8012,36 +7854,6 @@ void Engine::load3d()
         {"awp2", 1, "_rifle", 20, 10, 110, 41, -1.0f, -1.0f, 1.0f, false},
 
     };
-    /*
-    T_armes liste_armes[max_arme]=
-    {
-            {"deagle",		1,	"_onehanded",	0,	10,	10,	0,	-1.0f,	-1.0f,	1.0f,true},
-            {"mp5",			1,	"_mp5",			0,	20,	10,	3,	30.0f,	10.0f,	2.0f,true},
-            {"smokegrenade",	1,	"_hegrenade",	0,	5,	0,	26,	-1.0f,	8.0f,	1.5f,true},
-            {"silencieux",		1,	"_onehanded",	0,	10,	10,	2,	-1.0f,	-1.0f,	1.5f,false},
-            {"xm1014",		1,	"_m249",		0,	5,	40,	8,	-1.0f,  -1.0f,	1.0f,false},
-            {"mac10",		1,	"_onehanded",	0,	20,	5,	1,	40.0f,	10.0f,	2.5f,true},
-            {"hegrenade",	1,	"_hegrenade",	0,	5,	0,	26,	-1.0f,	8.0f,	1.5f,false},
-            {"m249",		1,	"_m249",		0,	40,	10,	9,	30.0f,	10.0f,	2.0f,false},
-            {"plasma",		1,	"_m249",		0,	3,	0,	28,	22.0f,	22.0f,	3.0f,true},
-            {"ak47",		1,	"_mp5",			0,	15,	15,	4,	30.0f,	5.0f,	1.5f,true},
-            {"c4",			1,	"_c4",			0,	5,	0,	38,	-1.0f,	8.0f,	1.5f,true},
-            {"famas",		1,	"_carbine",		0,	30,	20,	39,	22.0f,	8.0f,	1.5f,true},
-            {"sg552",		1,	"_rifle",		10,	20,	20,	6,	30.0f,	10.0f,	1.5f,true},
-            {"m4a1",		1,	"_rifle",		10,	20,	20,	5,	30.0f,	5.0f,	1.5f,true},
-            {"awp",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,true},
-            {"ump45",		1,	"_carbine",		0,	30,	20,	40,	30.0f,	8.0f,	2.0f,false},
-            {"m4a2",		1,	"_rifle",		10,	20,	20,	5,	30.0f,	5.0f,	1.0f,false},
-            {"awp1",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,false},
-            {"awp2",			1,	"_rifle",		20,	10,	100,5,	-1.0f,	-1.0f,	1.0f,false},
-            {"awp3",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,false}
-
-
-    };
-    */
-
-    //{"xm1014.mdl",		1,	"_m249",		0,	5,	40,	8,	-1.0f,-1.0f,	1.0f},
-    // o << "arme sr" << endl;
 
     int offs;
     int offsy;

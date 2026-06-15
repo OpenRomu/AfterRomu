@@ -53,19 +53,6 @@ struct frustum_t
     double zfar;
 };
 
-// static frustum_t frustum;
-
-/*static void
-set_znear()
-{
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(frustum.left, frustum.right,
-              frustum.bottom, frustum.top,
-              znear, frustum.zfar);
-    glMatrixMode(GL_MODELVIEW);
-}*/
-
 class collision_data
 {
   public:

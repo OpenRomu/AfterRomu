@@ -114,15 +114,6 @@ void pParticleManager_t::Render(void)
     y[1] = tmat[5];
     y[2] = tmat[6];
 
-    /* x[0]=1;
-     x[1]=0;
-     x[2]=0;
-      y[0]=0;
-     y[1]=0;
-     y[2]=1;
-  */
-    // glDisable(GL_DEPTH_FUNC);
-
     glEnable(GL_BLEND);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_TEXTURE_2D);
