@@ -12,8 +12,6 @@
 class Model_MDL
 {
   public:
-    // tParticle			*m_CurrentSys,*m_TargetSys;
-
     int maxframes;
     vec3_t pos_touche;
     int idboite_touche;
@@ -327,20 +325,11 @@ inline vec3_t Model_MDL::StudioCalcAttachments(bool moi)
     int i;
     mstudioattachment_t *pattachment;
     v3_t vout;
-    /*if ( m_pStudioHeader->numattachments > 4 )
-    {
-        gEngfuncs.Con_DPrintf( "Too many attachments on %s\n", m_pCurrentEntity->model->name );
-        exit( -1 );
-    }*/
 
     // calculate attachment points
     pattachment = (mstudioattachment_t *)((byte *)m_pstudiohdr + m_pstudiohdr->attachmentindex);
-    // for (i = 0; i < m_pstudiohdr->numattachments; i++)
     for (i = 0; i < 1; i++)
     {
-        // pattachment[i].org=vec3_t (0.0f,0.0f,0.0f);
-        // VectorTransform( pattachment[i].org, (*g_bonetransform)[pattachment[i].bone], m_pCurrentEntity->attachment[i]
-        // );
         VectorTransform2(pattachment[i].org, (g_bonetransform)[pattachment[i].bone], vout);
     }
     if (!droitier && moi)
@@ -348,7 +337,6 @@ inline vec3_t Model_MDL::StudioCalcAttachments(bool moi)
 
     vec3_t out2(vout[0], vout[1], vout[2]);
     return out2;
-    // return pattachment[0].org;
 }
 
 #endif MODEL_MDL_H

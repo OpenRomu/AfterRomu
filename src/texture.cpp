@@ -89,40 +89,6 @@ Texture::Texture(const unsigned char *data, int width, int height, int format, Q
     }
     else
     {
-
-        /*if (format==GL_RGBA)
-        {
-
-            unsigned int size = width*height;
-            unsigned char* m_data = new unsigned char[size*4];
-            int c = 0;
-            for(unsigned int i = 0; i < size*3; i+=3) {
-                if (data[i]==0 && data[i+1]==0 && data[i+2]==255)
-                {
-                    m_data[c++] = 0;
-                    m_data[c++] = 0;
-                    m_data[c++] = 0;
-                    m_data[c++] = 0;
-                }
-                else
-                {
-                    m_data[c++] = data[i];
-                    m_data[c++] = data[i+1];
-                    m_data[c++] = data[i+2];
-                    m_data[c++] = 255;
-                }
-            }
-            glTexImage2D(GL_TEXTURE_2D, 0, format,
-                         width, height, 0,
-                         format, GL_UNSIGNED_BYTE,
-                         m_data);
-            free(m_data);
-
-        }
-
-        else
-        {*/
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        //}
     }
 }

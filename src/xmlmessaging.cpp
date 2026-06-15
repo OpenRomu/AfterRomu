@@ -7,30 +7,12 @@
 
 #include <windows.h>
 #include "stdafx.h"
-/*
-//#include <atlbase.h>     // Text conversion macros -- W2A, W2T, etc
- #include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxdisp.h>        // MFC Automation classes
-#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
-//#include "AMMimeUtils.h"		// MFC support for Internet Explorer 4 Common Controls
-*/
 #include "resource.h"
-// #include <afxinet.h>
 #include <winhttp.h>
-// #include <iostream>
-
 #include <stdlib.h>
-
-// #include <fstream>
 #include <stdio.h>
 #import <msxml4.dll>
 #include "xmlmessaging.h"
-// #import "c:\windows\system\MSXML.DLL" named_guids
-/*
-#import "msxml4.dll"
-using namespace MSXML2;
-*/
 #include "playerfile.h"
 
 CXmlMessaging::CXmlMessaging()
@@ -40,8 +22,6 @@ CXmlMessaging::CXmlMessaging()
 
     HRESULT hr = pDoc.CreateInstance("Msxml2.DOMDocument.4.0");
 
-    // hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
-    //        IID_IXMLDOMDocument2, (void**)&pDoc); // Check the return value, hr
     SUCCEEDED(hr) ? 0 : throw hr;
 
     pDoc->async = VARIANT_FALSE; // default - true,
@@ -95,11 +75,6 @@ void CXmlMessaging::Crypt(char *result, const char *method, const char *src)
 
 CXmlMessaging::~CXmlMessaging()
 {
-    //	pDoc->Release ();
-
-    // pDoc->Release ();
-
-    //	CoUninitialize();
 }
 
 int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_player, char *error_msg)
@@ -137,13 +112,9 @@ int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_playe
         sprintf(url, "LENUM=0&LESOFT=2&LENOM=%s&LEVERSION=100&LEMAIL=%s&LEPASS=%s", playername, playermail, pwd_player);
         Crypt(buffer, "nouveaujoueur", url);
 
-        // sprintf(  buffer,"%s/script/romustrike/nouveaujoueur.php3);
-
         if (XMLHttpRequest(buffer) == true)
         {
             Roots = pDoc->GetdocumentElement();
-
-            // Roots->get_text();
 
             HRESULT hr = Roots->get_childNodes(&NodeList);
 
@@ -178,27 +149,14 @@ int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_playe
         }
         else
         {
-            //	pError->GeterrorCode(), &buffer, pError->Getline(), static_cast<const wchar_t*>(pError->Getreason())
-            //MSXML2::IXMLDOMParseErrorPtr pError = (LPCSTR)pDoc->parseError->Getreason();;
-            /*	sprintf(lbuffer, "erreur XML %s\n",(char *)pDoc->parseError->Getreason());
-                MessageBox (NULL,lbuffer ,TEXT("ROMUSTRIKE"),MB_OK);
-                */
             return 0;
         }
     }
     catch (_com_error &e)
     {
-
-        /*	WCHAR  * wszAddress;
-            sprintf(lbuffer,"%s erreur xml %s",e.ErrorMessage ,e.Description );
-            wcstombs(lbuffer,wszAddress,100 );
-
-            MessageBox (NULL,lbuffer ,TEXT("ROMUSTRIKE"),MB_OK);
-            */
         return 0;
     }
 
-    // CoUninitialize();
     return num_player;
 }
 
@@ -257,29 +215,6 @@ HRESULT CXmlMessaging::GetMap(maplist_t *MapList, playerfile_t *playerconfig)
             }
         } while (re);
         FindClose(hSearch);
-        /*return TRUE;
-
-
-            MapList->List[0].Name = (char*)malloc(6);
-            strcpy(MapList->List[0].Name,TEXT("italy"));
-            MapList->count++;
-
-            MapList->List[1].Name = (char*)malloc(10);
-            strcpy(MapList->List[1].Name,TEXT("chateau"));
-            MapList->count++;
-
-            MapList->List[2].Name = (char*)malloc(7);
-            strcpy(MapList->List[2].Name,TEXT("2rooms"));
-            MapList->count++;
-
-            MapList->List[3].Name = (char*)malloc(10);
-            strcpy(MapList->List[3].Name,TEXT("aztec"));
-            MapList->count++;
-
-            MapList->List[4].Name = (char*)malloc(10);
-            strcpy(MapList->List[4].Name,TEXT("train"));
-            MapList->count++;
-        */
     }
     else
     {
@@ -420,29 +355,6 @@ HRESULT CXmlMessaging::Get_Mp3(maplist_t *MapList, playerfile_t *playerconfig)
             }
         } while (re);
         FindClose(hSearch);
-        /*return TRUE;
-
-
-            MapList->List[0].Name = (char*)malloc(6);
-            strcpy(MapList->List[0].Name,TEXT("italy"));
-            MapList->count++;
-
-            MapList->List[1].Name = (char*)malloc(10);
-            strcpy(MapList->List[1].Name,TEXT("chateau"));
-            MapList->count++;
-
-            MapList->List[2].Name = (char*)malloc(7);
-            strcpy(MapList->List[2].Name,TEXT("2rooms"));
-            MapList->count++;
-
-            MapList->List[3].Name = (char*)malloc(10);
-            strcpy(MapList->List[3].Name,TEXT("aztec"));
-            MapList->count++;
-
-            MapList->List[4].Name = (char*)malloc(10);
-            strcpy(MapList->List[4].Name,TEXT("train"));
-            MapList->count++;
-        */
     }
     else
     {
