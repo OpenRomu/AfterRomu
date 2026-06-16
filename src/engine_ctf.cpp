@@ -117,3 +117,22 @@ HRESULT Engine::CFT_HOST_recoit_recapitulatif(DPNID idplayer, GAMEMSG_CFT_TOTALE
 
     return S_OK;
 }
+
+void Engine::CFT_affiche_message(int r, char *mess)
+{
+    lockequipe(); //----------------------------------------------LOCK
+
+    if (m_chat)
+    {
+        char team[40];
+        char model[100];
+        char tmp[100];
+
+        model2str(lejoueur[r]->id_modele, model);
+        CFT_renvoie_lib_team(lejoueur[r]->QuelTeam, team);
+        sprintf(tmp, "%s %s", team, lejoueur[r]->playername);
+        m_chat->addtext(tmp, 2);
+        m_chat->addtext(mess, 2);
+    }
+    unlockequipe(); //----------------------------------------------LOCK
+}
