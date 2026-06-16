@@ -106,6 +106,7 @@
     <ClCompile Include="blob.cpp" />
     <ClCompile Include="bouton.cpp" />
     <ClCompile Include="bsp.cpp" />
+    <ClCompile Include="bubsock.cpp" />
     <ClCompile Include="chat.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="console.cpp" />
