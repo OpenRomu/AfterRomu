@@ -114,6 +114,7 @@
     <ClCompile Include="dsutil.cpp" />
     <ClCompile Include="dxutil.cpp" />
     <ClCompile Include="engine.cpp" />
+    <ClCompile Include="engine_ctf.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="gltga.cpp" />

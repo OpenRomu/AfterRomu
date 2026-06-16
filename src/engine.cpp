@@ -5,8 +5,6 @@
  */
 
 #define TIMEOUT 0x0100
-#define USE_SOCKCLOSE
-#define USE_SOCKREAD
 
 #include <windows.h>
 #include "stdafx.h"
@@ -9713,32 +9711,6 @@ HRESULT Engine::CFT_envoi_message(int quoi)
     return S_OK;
 }
 
-HRESULT Engine::CFT_HOST_envoi_recapitulatif()
-{
-
-    if ((g_lNumberOfActivePlayers > 0) && m_bHostPlayer)
-    {
-        // Send a message to all of the players
-        GAMEMSG_CFT_TOTALE msgWave;
-        msgWave.dwType = GAME_MSGID_CFT_TOTALE;
-
-        msgWave.Id_Flag_Cs = FlagCS.ID;
-        msgWave.Id_Flag_Tr = FlagTR.ID;
-
-        msgWave.Nb_Cs = CFT_nb_gign;
-        msgWave.Nb_Tr = CFT_nb_terro;
-
-        DPN_BUFFER_DESC bufferDesc;
-        bufferDesc.dwBufferSize = sizeof(GAMEMSG_CFT_TOTALE);
-        bufferDesc.pBufferData = (BYTE *)&msgWave;
-
-        DPNHANDLE hAsync;
-
-        m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1, 0, NULL, &hAsync, DPNSEND_GUARANTEED);
-    }
-
-    return S_OK;
-}
 
 HRESULT Engine::CFT_recoit_message(DPNID idplayer, GAMEMSG_CFT *ret)
 {
