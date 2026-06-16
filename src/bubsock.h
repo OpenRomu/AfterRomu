@@ -18,6 +18,10 @@
 
 #include "resource.h"
 
+// Sane defaults
+#define USE_SOCKCLOSE
+#define USE_SOCKREAD
+
 ////////////////////////////////////////////////////////////////////////
 //	SOCKOPEN:
 //		Fonction d'initialisation et d'ouverture du socket
