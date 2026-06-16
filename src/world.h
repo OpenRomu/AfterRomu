@@ -11,15 +11,17 @@ using namespace std;
 #include "bsp.h"
 #include "bitset.h"
 #include "wad.h"
-// #include <iostream>
+
 #define distance_gun (20000.00f)
 #define MAX_LIGHTMAPS (4)
 
-// #define _CRTDBG_MAP_ALLOC
-// #include <stdlib.h>
-// #include <crtdbg.h>
-
-// static double znear = 1.0;
+#define SKY_DEPTH 4000.0f
+#define SKY_FRONT (1 << 0)
+#define SKY_BACK (1 << 1)
+#define SKY_LEFT (1 << 2)
+#define SKY_RIGHT (1 << 3)
+#define SKY_UP (1 << 4)
+#define SKY_DOWN (1 << 5)
 
 typedef vector<int> int_vec;
 
