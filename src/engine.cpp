@@ -9820,45 +9820,6 @@ HRESULT Engine::CFT_recoit_message(DPNID idplayer, GAMEMSG_CFT *ret)
     return S_OK;
 }
 
-HRESULT Engine::CFT_HOST_recoit_recapitulatif(DPNID idplayer, GAMEMSG_CFT_TOTALE *ret)
-{
-    lockequipe(); //----------------------------------------------LOCK
-
-    if (FlagTR.ID != ret->Id_Flag_Tr)
-    { // c la capture
-        FlagTR.ID = ret->Id_Flag_Tr;
-        FlagTR.eta_attrape();
-        for (int j = 0; j < g_lNumberOfActivePlayers; j++)
-        {
-            if ((lejoueur[j]->etat == true) && (lejoueur[j]->ID == FlagTR.ID))
-            {
-                CFT_affiche_message(j, TEXT("a capture le flag des TERRO"));
-                break;
-            }
-        }
-    }
-    if (FlagCS.ID != ret->Id_Flag_Cs)
-    { // c la capture
-        FlagCS.ID = ret->Id_Flag_Cs;
-        FlagCS.eta_attrape();
-        for (int j = 0; j < g_lNumberOfActivePlayers; j++)
-        {
-            if ((lejoueur[j]->etat == true) && (lejoueur[j]->ID == FlagCS.ID))
-            {
-                CFT_affiche_message(j, TEXT("a capture le flag des COUNTER"));
-                break;
-            }
-        }
-    }
-
-    unlockequipe(); //----------------------------------------------LOCK
-
-    CFT_nb_gign = ret->Nb_Cs;
-    CFT_nb_terro = ret->Nb_Tr;
-
-    return S_OK;
-}
-
 void Engine::RESET()
 {
     if (le_socket != 0)
