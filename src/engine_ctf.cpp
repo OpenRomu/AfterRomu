@@ -136,3 +136,112 @@ void Engine::CFT_affiche_message(int r, char *mess)
     }
     unlockequipe(); //----------------------------------------------LOCK
 }
+
+
+HRESULT Engine::CFT_recoit_message(DPNID idplayer, GAMEMSG_CFT *ret)
+{
+
+    if (ret->type_du_message == 2) // c une demande d'un joueur
+    {
+        if (m_bHostPlayer)
+        {
+            CFT_HOST_envoi_recapitulatif();
+            //** CFT on envoie a tout le monde a voir si pas gourmand
+        }
+    }
+    else
+    {
+        if (CFT_ON)
+        {
+            lockequipe(); //----------------------------------------------LOCK
+
+            for (int j = 0; j < g_lNumberOfActivePlayers; j++)
+            {
+                if ((lejoueur[j]->etat == true) && (lejoueur[j]->ID == idplayer))
+                {
+
+                    if (ret->type_du_message == 0)
+                    { // c la capture
+                        if (lejoueur[j]->QuelTeam == 0)
+                        { // c le gign il a attrape flagTR
+                            FlagTR.ID = idplayer;
+                            FlagTR.eta_attrape();
+                            CFT_affiche_message(j, TEXT("a capture le flag des TERRO"));
+                        }
+                        else
+                        {
+                            FlagCS.ID = idplayer;
+                            FlagCS.eta_attrape();
+                            CFT_affiche_message(j, TEXT("a capture le flag des GIGN"));
+                        }
+                    }
+                    else
+                    {
+
+                        // type message =1
+                        int nb_quidam;
+                        nb_quidam = 0;
+                        int team_gagnant;
+                        team_gagnant = lejoueur[j]->QuelTeam;
+
+                        for (int cpt = 0; cpt < lejoueur.size(); cpt++)
+                        {
+                            if (lejoueur[cpt]->QuelTeam != team_gagnant)
+                                nb_quidam++;
+                        }
+
+                        // ajout des pts en fonction noimbre danbsequipe advers 05/05/2008
+                        if (lejoueur[j]->QuelTeam == 0)
+                        { // c le gign il a attrape flagTR
+                            CFT_affiche_message(j, TEXT("MARQUE pour les GIGN"));
+                            FlagCS.eta_gagne();
+                            CFT_nb_gign = CFT_nb_gign + nb_quidam;
+                        }
+                        else
+                        {
+                            CFT_affiche_message(j, TEXT("MARQUE pour les TERRO"));
+                            FlagCS.eta_gagne();
+                            CFT_nb_terro = CFT_nb_terro + nb_quidam;
+                        }
+                        CFT_eta = 0;
+                        CFT_nouvelle_partie();
+                    }
+                }
+            }
+            unlockequipe(); //----------------------------------------------LOCK
+        }
+        else
+        {
+            if (TEAM_ON)
+            {
+
+                if (ret->type_du_message == 4)
+                {
+                    m_chat->addtext("GIGN gagne la partie", 2);
+                    // on a recu du serveur la team qui gagne
+                    JoueUnSon(36, lejoueur[VRAI]->pos);
+                    CFT_nb_gign++;
+                    CFT_eta = 0;
+                    CFT_count = 0;
+                    CFT_old_count = GetTickCount();
+                    m_overlay = true;
+                }
+                if (ret->type_du_message == 3)
+                {
+                    m_chat->addtext("TERRO gagne la partie", 2);
+                    JoueUnSon(36, lejoueur[VRAI]->pos);
+                    CFT_nb_terro++;
+                    // on a recu du serveur la team qui gagne
+                    CFT_eta = 0;
+                    CFT_count = 0;
+                    CFT_old_count = GetTickCount();
+                    m_overlay = true;
+                }
+                //			lejoueur[VRAI]->mort=true;
+                init_player(VRAI);
+                lejoueur[VRAI]->velocity = vec3_t(0.0f, 0.0f, 0.0f);
+            }
+        }
+    }
+    return S_OK;
+}
