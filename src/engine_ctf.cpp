@@ -245,3 +245,35 @@ HRESULT Engine::CFT_recoit_message(DPNID idplayer, GAMEMSG_CFT *ret)
     }
     return S_OK;
 }
+
+HRESULT Engine::CFT_envoi_message(int quoi)
+{
+    // quoi
+    // 0- capture
+    // 1- nvl partie
+    // 2- recap
+    // 3- gign
+    // 4- terro gagne
+    // envoyer qd un nouveau joueur est cree ou voir ailleurs
+    // permet de renovyer a tout le monde y compris
+    // au nbouveau l'etat de la partie
+
+    if (g_lNumberOfActivePlayers > 0)
+    {
+        // Send a message to all of the players
+        GAMEMSG_CFT msgWave;
+        msgWave.dwType = GAME_MSGID_CFT;
+
+        msgWave.type_du_message = quoi;
+
+        DPN_BUFFER_DESC bufferDesc;
+        bufferDesc.dwBufferSize = sizeof(GAMEMSG_CFT);
+        bufferDesc.pBufferData = (BYTE *)&msgWave;
+
+        DPNHANDLE hAsync;
+
+        m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1, 0, NULL, &hAsync, DPNSEND_GUARANTEED);
+    }
+
+    return S_OK;
+}
