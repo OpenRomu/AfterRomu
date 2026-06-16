@@ -36,7 +36,6 @@ struct pGren_t
     vec3_t pos;
     vec3_t pold;
     vec3_t vel;
-    // vec3_t color; // could use, but i don't
     float alpha;
     bool gravity;
     bool rebond; // grenade missile

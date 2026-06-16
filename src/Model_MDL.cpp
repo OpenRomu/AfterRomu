@@ -13,11 +13,6 @@
 #include "Model_MDL.h"
 #include <string.h>
 
-// #include "fstream.h"
-
-// #include <afx.h>
-// #pragma warning( disable : 4244 ) // double to float
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -75,28 +70,7 @@ int Model_MDL::calculeboite(vec3_t src, vec3_t normal)
     int id_nearest = -1;
     vec3_t lemin(0, 0, 0);
     vec3_t lemax(0, 0, 0);
-    /*glPushMatrix ();
-        glTranslatef (m_origin[0],  m_origin[1],  m_origin[2]);
-        glRotatef (-m_angles[1],  0, 0, 1);
-        glRotatef (0,  0, 1, 0);
-        glRotatef (0,  1, 0, 0);
-    */
-    //	glDisable (GL_TEXTURE_2D);
-    // glDisable (GL_CULL_FACE);
-    // if (g_viewerSettings.transparency < 1.0f && !g_viewerSettings.use3dfx)
-    //	glDisable (GL_DEPTH_TEST);
-    // else
-    //	glEnable (GL_DEPTH_TEST);
 
-    // if (g_viewerSettings.use3dfx)
-    //	glColor4f (1, 0, 0, 0.2f);
-    // else
-    //	glColor4f (1, 0, 0, 0.5f);
-
-    /*glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    */
     nb_boite = m_pstudiohdr->numhitboxes;
     mstudiobbox_t *pbboxes = (mstudiobbox_t *)((byte *)m_pstudiohdr + m_pstudiohdr->hitboxindex);
     int i;
@@ -195,68 +169,12 @@ int Model_MDL::calculeboite(vec3_t src, vec3_t normal)
                 id_nearest = i;
             }
         }
-
-        /*vec3_t pos=(bbmax+bbmin)/2; // centre
-        vec3_t pos2;
-        VectorTransform2 (pos, g_bonetransform[pbboxes[i].bone], pos2);
-        vec3_t inter;
-        inter=pos2;
-        pos2[1] = inter[1]*cos(ang) + inter[0]*sin(ang);
-        pos2[0] = -inter[1]*sin(ang) + inter[0]*cos(ang);
-        pos2=(vec3_t)m_origin + pos2;
-
-
-        vec3_t v_rayon=(bbmax-bbmin); // centre
-        float rayon=v_rayon.len();
-        float t=intersect_sphere (src,normal,pos2,rayon);
-        if (t>0 && t<nearest)
-        {
-            nearest=t;
-            id_nearest=i;
-
-        }
-        */
-
-        /*vec3_t pos2=(lemax+lemin)/2;
-        vec3_t v_rayon=(lemax-lemin);
-        float rayon=v_rayon.len();
-        float t=intersect_sphere (src,normal,pos2,rayon);
-        if (t>0 && t<nearest)
-        {
-            nearest=t;
-            id_nearest=i;
-
-        }*/
-
-        /*drawBox (v2);
-        vec3_t pos=(bbmax+bbmin)/2; // centre
-        vec3_t pos2;*/
-
-        //	VectorTransform2 (pos, g_bonetransform[pbboxes[i].bone], pos2);
-
-        /*pos2=pos2+m_origin;
-        vec3_t v_rayon=(bbmax-bbmin); // centre
-        float rayon=v_rayon.len();
-        float t=intersect_sphere (src,normal,pos2,rayon);
-        if (t>0 && t<nearest)
-        {
-            nearest=t;
-            id_nearest=i;
-
-        }*/
     }
     idgroupe_touche = -1;
     if (id_nearest != -1)
     {
         idgroupe_touche = pbboxes[id_nearest].group;
-        //		drawBox (poboite[id_nearest]);
     }
-    /*glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    glEnable (GL_TEXTURE_2D);
-    glEnable (GL_CULL_FACE);
-    glEnable (GL_DEPTH_TEST);
-    glPopMatrix ();*/
-    // glShadeModel (GL_SMOOTH);
 
     idboite_touche = id_nearest;
     return id_nearest;
@@ -527,12 +445,7 @@ mstudioevent_t *Model_MDL::GetEvents(mstudioseqdesc_t *pseqdesc)
     mstudioseqgroup_t *pseqgroup;
     pseqgroup = (mstudioseqgroup_t *)((byte *)m_pstudiohdr + m_pstudiohdr->seqgroupindex) + pseqdesc->seqgroup;
 
-    // if (pseqdesc->seqgroup == 0)
-    //{
     return (mstudioevent_t *)((byte *)m_pstudiohdr + pseqgroup->data + pseqdesc->eventindex);
-    //}
-
-    // return (mstudioanim_t *)((byte *)m_panimhdr[pseqdesc->seqgroup] + pseqdesc->animindex);
 }
 
 void Model_MDL::SlerpBones(v4_t q1[], v3_t pos1[], v4_t q2[], v3_t pos2[], float s)
@@ -589,7 +502,6 @@ void Model_MDL::AdvanceFrame(float dt, int qui)
     lemin = 0;
     int res;
     res = strcmp(pseqdesc->label, "shoot1");
-    // res=res || strcmp(pseqdesc->label,"pullpin");
     if (res == 0)
     {
         if (fps_weapon == -1)
@@ -603,28 +515,7 @@ void Model_MDL::AdvanceFrame(float dt, int qui)
 
         le_fps_ori = pseqdesc->fps * multi;
     }
-    // res=strncmp( pseqdesc->label, "ref_shoot" , 9 );
-    // if (res==0)
-    // if (strcmp(pseqdesc->label,"shoot")==0)
-    /*{
-        le_fps_ori=pseqdesc->fps;
-        //if (m_frame>=pseqdesc->numframes-1)
-            //lemin=29;
-        if (fps_weapon==-1)
-        {
-            le_fps_ori=pseqdesc->fps;
-        }
-        else
-        {
-            le_fps_ori=fps_weapon;
-        }
-    }
-    else
-    {*/
-    //}
-    // if (dt > 0.1f) dt = 0.1f;
     m_frame += dt * le_fps_ori; // pseqdesc->fps;
-    // m_frame += dt * le_fps_ori;
 
     if (lemax <= 1)
     {
@@ -636,44 +527,15 @@ void Model_MDL::AdvanceFrame(float dt, int qui)
         // wrap
         if (m_frame <= lemin)
         {
-            // m_frame = pseqdesc->numframes - m_frame - 1.5f;
-            // if (res==0)
-            //	m_frame = pseqdesc->numframes-2 ;
-            // else
             m_frame = lemax - 1;
         }
         else
         {
             m_frame -= (int)(m_frame / (lemax - 1)) * (lemax - 1);
-            /*if (m_frame <avant)
-            {
-                m_frame = pseqdesc->numframes-1 ;
-            }*/
         }
     }
 
     AniDepFini = false;
-    // if ((m_frame>=pseqdesc->numframes-1) && (pseqdesc->flags=!0))
-    /*if (pseqdesc->numevents >=1)
-    {
-        //mstudioseqdesc_t	*pseqdesc;
-
-        //pseqdesc = (mstudioseqdesc_t *)((byte *)m_pstudiohdr + m_pstudiohdr->seqindex);
-
-        mstudioevent_t	*zeevent;
-        //zeevent = (mstudioevent_t *)((byte *)pseqdesc + pseqdesc->eventindex);
-        zeevent= GetEvents (pseqdesc);
-        int i;
-        //istringstream c;
-        //c=(istringstream) zeevent->options;
-        //zeevent->options >> i;
-        sscanf(zeevent->options, "%d", &i);
-
-        if (m_frame>=pseqdesc->fps)
-        {
-            AniDepFini=true;
-        }
-    }*/
 
     if (avant > m_frame)
     {
@@ -684,25 +546,12 @@ void Model_MDL::AdvanceFrame(float dt, int qui)
         }
         else
         {
-
-            /*res=strcmp(pseqdesc->label,"start_reload");
-            if (res==0)
-            {
-                AniDepFini=false;
-                SetSequence2(TEXT("after_reload"),1);
-                m_frame=0;
-            }
-            else
-            {*/
             AniDepFini = true;
             // if (res!=0)
             if (qui != 3)
             {
                 m_frame = lemax - 1;
             }
-            // if (res==0)
-            // m_frame = 29.00f ;
-            //}
         }
     }
     else
@@ -836,31 +685,6 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
 
     CalcRotations(pos, q, pseqdesc, panim, m_frame);
 
-    /*if (pseqdesc->numblends ==9)
-    {
-        float				s;
-
-        panim += m_pstudiohdr->numbones;
-        CalcRotations( pos2, q2, pseqdesc, panim, m_frame );
-        s = 4 / 255.0f;
-
-        SlerpBones( q, pos, q2, pos2, s );
-
-        /*if (pseqdesc->numblends == 4)
-        {
-            panim += m_pstudiohdr->numbones;
-            CalcRotations( pos3, q3, pseqdesc, panim, m_frame );
-
-            panim += m_pstudiohdr->numbones;
-            CalcRotations( pos4, q4, pseqdesc, panim, m_frame );
-
-            s = m_blending[0] / 255.0f;
-            SlerpBones( q3, pos3, q4, pos4, s );
-
-            s = m_blending[1] / 255.0f;
-            SlerpBones( q, pos, q3, pos3, s );
-        }
-    }*/
     pbones = (mstudiobone_t *)((byte *)m_pstudiohdr + m_pstudiohdr->boneindex);
 
     int trouve = 0;
@@ -868,7 +692,6 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
 
     for (i = 0; i < m_pstudiohdr->numbones; i++)
     {
-        // if (pbones[i].parent == -1) {continue;}
         if (strcmp(pbones[i].name, "Bip01 Pelvis") == 0)
         {
             id_pelvis = i;
@@ -905,61 +728,14 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
         bonematrix[1][3] = pos[i][1];
         bonematrix[2][3] = pos[i][2];
 
-        /*	if ((pbones[i].parent == id_pelvis) && (trouve>=2) )
-
-            {
-                ang[2]=0;//-ang_dos*(Q_PI*2 / 360);
-                ang[0]=3*m_angles[2]*(Q_PI*2 / 360);
-                //ang[0]=-3*m_angles[2];
-                ang[1]=0;// -ang_dos*(Q_PI*2 / 360);
-                AngleQuaternion (ang,q[i]);
-                //AngleIMatrix(ang,bonematrix);
-                QuaternionMatrix( q[i], bonematrix2 );
-                bonematrix2[0][3] = pos[i][0];
-                bonematrix2[1][3] = pos[i][1];
-                bonematrix2[2][3] = pos[i][2];
-                memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-                R_ConcatTransforms (bonematrix2, bonematrix3, bonematrix);
-                //memcpy(bonematrix,bonematrix3, sizeof(float) * 12);
-            }
-
-        bonematrix[0][3] = pos[i][0];
-        bonematrix[1][3] = pos[i][1];
-        bonematrix[2][3] = pos[i][2];
-            */
 
         if ((strcmp(pbones[i].name, "Bip01 Spine1") == 0) || (strcmp(pbones[i].name, "Bip01 Spine2") == 0) ||
             (strcmp(pbones[i].name, "Bip01 Spine") == 0))
-        // if ((strcmp(pbones[i].name,"Bip01 Spine")==0))
         {
-
-            /*ang[0]=0;
-            ang[1]=0;
-            ang[2]=10;
-            ang[2]= ang_dos ;
-            AngleIMatrix(ang,bonematrix2);
-            //AngleQuaternion (ang,q[i]);
-            memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-            R_ConcatTransforms (bonematrix3, bonematrix2, bonematrix);*/
-
-            // if (m_angles[2]!=0)
-            //{
-            /*--------------------------------
-            ang[2]=-ang_dos*(Q_PI/ 180);
-            ang[0]=0;
-            ang[1]=0;// -ang_dos*(Q_PI*2 / 360);
-            AngleQuaternion (ang,q[i]);
-            QuaternionMatrix( q[i], bonematrix2 );
-            memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-            R_ConcatTransforms (bonematrix3, bonematrix2, bonematrix);
-            ------------------------------------*/
-            // if ((strcmp(pbones[i].name,"Bip01 Spine")==0) || (strcmp(pbones[i].name,"Bip01 Spine1")==0) ||
-            // (strcmp(pbones[i].name,"Bip01 Spine2")==0))
 
             float an1;
             float an2;
-            // if ((strcmp(pbones[i].name,"Bip01 Spine3")==0) || (strcmp(pbones[i].name,"Bip01 Spine1")==0) ||
-            // (strcmp(pbones[i].name,"Bip01 Spine2")==0))
+
             if ((strcmp(pbones[i].name, "Bip01 Spine") == 0))
             {
                 an1 = -ang_dos * (Q_PI / 180);
@@ -982,45 +758,14 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
             bonematrix2[2][3] = pos[i][2];
             memcpy(bonematrix3, bonematrix, sizeof(float) * 12);
             R_ConcatTransforms(bonematrix2, bonematrix3, bonematrix);
-            // memcpy(bonematrix,bonematrix3, sizeof(float) * 12);
 
             bonematrix[0][3] = pos[i][0];
             bonematrix[1][3] = pos[i][1];
             bonematrix[2][3] = pos[i][2];
         }
 
-        /*bonematrix[0][3] = pos[i][0];
-        bonematrix[1][3] = pos[i][1];
-        bonematrix[2][3] = pos[i][2];*/
-
         if ((pbones[i].parent == -1) && (lie == 0))
         {
-
-            /*ang[1]=0;
-            ang[0]=0;
-            ang[2]=-m_angles[1]*(Q_PI / 180);;
-
-            //AngleIMatrix(ang,bonematrix2);
-            static v4_t qq;
-            AngleQuaternion (ang,qq);
-            QuaternionMatrix( q[i], bonematrix );
-            QuaternionMatrix( qq, bonematrix2);
-            bonematrix[0][3] = pos[i][0];
-            bonematrix[1][3] = pos[i][1];
-            bonematrix[2][3] = pos[i][2];
-            //AngleIMatrix(ang,bonematrix);
-            //memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-            R_ConcatTransforms (bonematrix, bonematrix2, bonematrix3);
-
-            //AngleQuaternion (ang,q[i]);
-            //QuaternionMatrix( q[i], bonematrix2 );
-            ///memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-            //R_ConcatTransforms (bonematrix3, bonematrix2, bonematrix);
-            //bonematrix[0][3] = pos[i][0];
-            bonematrix[1][3] = pos[i][1];
-            bonematrix[2][3] = pos[i][2];
-            memcpy(g_bonetransform[i], bonematrix3, sizeof(float) * 12);
-            */
 
             if (lerendu == 0)
             {
@@ -1028,15 +773,11 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
                 ang[1] = 0;
                 ang[2] = -m_angles[1] * (Q_PI * 2 / 360);
 
-                // AngleIMatrix(ang,bonematrix2);
                 AngleQuaternion(ang, q[i]);
                 QuaternionMatrix(q[i], bonematrix);
                 bonematrix[0][3] = pos[i][0];
                 bonematrix[1][3] = pos[i][1];
                 bonematrix[2][3] = pos[i][2];
-
-                // memcpy(bonematrix3,bonematrix, sizeof(float) * 12);
-                // R_ConcatTransforms (bonematrix3, bonematrix2, bonematrix);
             }
 
             memcpy(g_bonetransform[i], bonematrix, sizeof(float) * 12);
@@ -1045,7 +786,6 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
         {
             if ((lie == 1) && (strcmp(pbones[i].name, "Bip01 R Hand") == 0))
             {
-                // R_ConcatTransforms (matrice_pere, bonematrix, g_bonetransform[i]);
                 memcpy(g_bonetransform[i], matrice_pere, sizeof(float) * 12);
             }
             else
@@ -1056,7 +796,6 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
         if (lie == 0)
         {
             if (strcmp(pbones[i].name, "Bip01 R Hand") == 0)
-            // if (pbones[i].name =="Bip01 R Hand")
             {
 
                 memcpy(matrice_pere, g_bonetransform[i], sizeof(float) * 12);
@@ -1077,15 +816,6 @@ void Model_MDL::SetUpBones(int qui, int lerendu)
             flash[1] = g_bonetransform[i][1][3];
             flash[2] = g_bonetransform[i][2][3];
         }
-        /*	if (strcmp(pbones[pbones[i].parent].name,"Bip01 R Hand")==0)
-            {
-
-                tete[0]=g_bonetransform[i][0][3] ;
-                tete[1]=g_bonetransform[i][1][3] ;
-                tete[2]=g_bonetransform[i][2][3] ;
-
-
-            }*/
     }
 }
 
@@ -1275,20 +1005,8 @@ void Model_MDL::Draw(int justelerendu, double lumiere[3])
         glRotatef(0, 1, 0, 0);
     }
 
-    /*else
-    {
-        glPushMatrix ();
-        glTranslatef (m_origin[0],  m_origin[1],  m_origin[2]);
-        glRotatef (-m_angles[1],  0, 0, 1);
-        glRotatef (0,  0, 1, 0);
-        glRotatef (0,  1, 0, 0);
-
-    }*/
-
     if ((justelerendu == 0) || (justelerendu == 2) || (justelerendu == 5))
     {
-        //}
-
         if (lie == 0)
         {
             m_sequence = seq1;
@@ -1305,9 +1023,6 @@ void Model_MDL::Draw(int justelerendu, double lumiere[3])
             SetUpBones(0, justelerendu);
         }
         SetupLighting();
-        /*if (lie==0){
-            glTranslatef (m_origin[0],  m_origin[1],  m_origin[2]);
-        }*/
         if (justelerendu == 0)
             return;
     }
@@ -1320,8 +1035,6 @@ void Model_MDL::Draw(int justelerendu, double lumiere[3])
             DrawPoints();
         }
     }
-    //	if (AfficheBoite) calculeboite( );
-    // glColor4f(1.0f,1.0f,1.0f,1.0f); // BART fix
     if (justelerendu != 0)
         glPopMatrix();
 }
@@ -1402,13 +1115,7 @@ void Model_MDL::DrawPoints()
 
         VectorTransform(pstudioverts[i], g_bonetransform[pvertbone[i]], g_pxformverts[i]);
     }
-    /*
-        for (i = 0; i < m_pmodel->numnorms; i++)
-        {
 
-
-        }
-    */
     //
     // clip and draw all triangles
     //
@@ -1466,9 +1173,6 @@ void Model_MDL::DrawPoints()
 
                 for (; i > 0; i--, ptricmds += 4)
                 {
-                    //					int _s = (int)g_chrome[ptricmds[1]][0]*s;
-                    //					int _t = (int)g_chrome[ptricmds[1]][1]*t;
-
                     // FIX: put these in as integer coords, not floats
                     glTexCoord2f(g_chrome[ptricmds[1]][0] * s, g_chrome[ptricmds[1]][1] * t);
 
@@ -1485,7 +1189,6 @@ void Model_MDL::DrawPoints()
         {
             while (i = *(ptricmds++))
             {
-                // glPolygonMode(GL_BACK,GL_FILL);
                 if (i < 0)
                 {
                     glBegin(GL_TRIANGLE_FAN);
@@ -1498,9 +1201,6 @@ void Model_MDL::DrawPoints()
 
                 for (; i > 0; i--, ptricmds += 4)
                 {
-                    // float _s = (float)ptricmds[2]*s;
-                    // float _t = (float)ptricmds[3]*t;
-
                     // FIX: put these in as integer coords, not floats
                     glTexCoord2f(ptricmds[2] * s, ptricmds[3] * t);
 
@@ -1510,8 +1210,6 @@ void Model_MDL::DrawPoints()
                     av = g_pxformverts[ptricmds[0]];
                     glVertex3f(av[0], av[1], av[2]);
                 }
-                // glPolygonMode(GL_FRONT,GL_FILL);
-
                 glEnd();
             }
         }
@@ -1520,7 +1218,6 @@ void Model_MDL::DrawPoints()
 
 void Model_MDL::UploadTexture(mstudiotexture_t *ptexture, byte *data, byte *pal)
 {
-    // unsigned *in, int inwidth, int inheight, unsigned *out,  int outwidth, int outheight;
     int i, j;
     int row1[256], row2[256], col1[256], col2[256];
     byte *pix1, *pix2, *pix3, *pix4;
@@ -1580,8 +1277,6 @@ void Model_MDL::UploadTexture(mstudiotexture_t *ptexture, byte *data, byte *pal)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // ptexture->width = outwidth;
-    // ptexture->height = outheight;
     ptexture->index = g_texnum;
     g_texnum++;
 
@@ -1728,8 +1423,7 @@ int Model_MDL::SetSequence2(const char *name, int qui)
     for (int i = 0; i < m_pstudiohdr->numseq; i++)
     {
         pseqdesc = (mstudioseqdesc_t *)((byte *)m_pstudiohdr + m_pstudiohdr->seqindex) + i;
-        // panim = GetAnim( pseqdesc );
-        // panim->offset
+
         if (strcmp(pseqdesc->label, name) == 0)
         {
             if (qui == 1)
@@ -1749,18 +1443,6 @@ int Model_MDL::SetSequence2(const char *name, int qui)
                 le_fps_ori_seq2 = pseqdesc->fps;
             }
             m_sequence = i;
-            // m_frame = 0;
-            // pseqdesc->animindex =1;
-            // m_blending[0]=8;
-            // SetBlending (0,90);
-            // m_pstudiohdr->numseqgroups =5;
-            // m_pstudiohdr->seqindex =5;
-            // pseqdesc->seqgroup =5;
-            // pseqdesc->blendtype [0]=1;
-            // pseqdesc->blendstart [1]=-90;
-            // pseqdesc->blendend [1]=90;
-            // SetBlending (0,90);
-            // SetBlending (1,90);
             break;
         }
     }
@@ -1958,15 +1640,6 @@ int Model_MDL::SetBodygroup(int iGroup, int iValue)
 
 int Model_MDL::SetSkin(int iValue)
 {
-    /*if (iValue < m_pstudiohdr->numskinfamilies)
-    {
-        return m_skinnum;
-    }
-
-    m_skinnum = iValue;
-
-    return iValue;*/
-
     if (!m_pstudiohdr)
         return 0;
 
@@ -2177,12 +1850,6 @@ void Model_MDL::QuaternionSlerp(const v4_t p, v4_t q, float t, v4_t qt)
 
 bool Model_MDL::raybox(vec3_t leminB, vec3_t lemaxB, vec3_t leorigin, vec3_t ledir, float *lecoord)
 {
-
-    /*int NUMDIM=	3;
-    int RIGHT=	0;
-    int LEFT=	1;
-    int MIDDLE=	2;*/
-
 #define NUMDIM 3
 #define RIGHT 0
 #define LEFT 1
@@ -2212,8 +1879,6 @@ bool Model_MDL::raybox(vec3_t leminB, vec3_t lemaxB, vec3_t leorigin, vec3_t led
     int whichPlane;
     double maxT[NUMDIM];
     double candidatePlane[NUMDIM];
-    // vec3_t maxT;
-    // vec3_t candidatePlane;
     /* Find candidate planes; this loop can be avoided if
     rays cast all from the eye(assume perpsective view) */
     for (i = 0; i < NUMDIM; i++)

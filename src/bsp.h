@@ -163,7 +163,6 @@ typedef struct miptex_s
 typedef struct
 {
     int planenum;
-    // short        children[2];    // negative numbers are -(leafs+1), not nodes
     short front;
     short back;
     short mins[3]; // for sphere culling

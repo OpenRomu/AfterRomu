@@ -23,19 +23,7 @@
 #include "texman.h"
 #include "exception.h"
 #include <fstream>
-// #include "son.h"
-// #include "PhysEnv.h"
 #include "glwin.h"
-
-/*#include <string>
-#include <stdio.h>
-#include <iostream.h>
-#include <stdlib.h>
-#include <stdio.h>
-*/
-/*Model_MDL leshommes[10];
-Model_MDL lesarmes[10];
-CSound* lessons[10];*/
 
 class AFlag
 {

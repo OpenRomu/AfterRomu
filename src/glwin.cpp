@@ -77,21 +77,6 @@ void GLWindow::create(int width, int height, int bpp, int hz, bool fullscreen)
     wc.lpszClassName = className;
     wc.hIconSm = LoadIcon(wc.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
-    /*
-        WNDCLASSEX wc = { sizeof(WNDCLASSEX),
-                        CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
-                          WindowProc,
-                          0L,
-                          0L,
-                          GetModuleHandle(NULL),
-                          NULL,
-                          NULL,
-                          NULL,
-                          NULL,
-                          className,
-                          NULL };
-
-    */
     RegisterClassEx(&wc);
     m_hinst = wc.hInstance;
 

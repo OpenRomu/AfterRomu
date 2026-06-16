@@ -7,30 +7,12 @@
 
 #include <windows.h>
 #include "stdafx.h"
-/*
-//#include <atlbase.h>     // Text conversion macros -- W2A, W2T, etc
- #include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxdisp.h>        // MFC Automation classes
-#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
-//#include "AMMimeUtils.h"		// MFC support for Internet Explorer 4 Common Controls
-*/
 #include "resource.h"
-// #include <afxinet.h>
 #include <winhttp.h>
-// #include <iostream>
-
 #include <stdlib.h>
-
-// #include <fstream>
 #include <stdio.h>
 #import <msxml4.dll>
 #include "xmlmessaging.h"
-// #import "c:\windows\system\MSXML.DLL" named_guids
-/*
-#import "msxml4.dll"
-using namespace MSXML2;
-*/
 #include "playerfile.h"
 
 CXmlMessaging::CXmlMessaging()
@@ -40,8 +22,6 @@ CXmlMessaging::CXmlMessaging()
 
     HRESULT hr = pDoc.CreateInstance("Msxml2.DOMDocument.4.0");
 
-    // hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
-    //        IID_IXMLDOMDocument2, (void**)&pDoc); // Check the return value, hr
     SUCCEEDED(hr) ? 0 : throw hr;
 
     pDoc->async = VARIANT_FALSE; // default - true,
@@ -95,11 +75,6 @@ void CXmlMessaging::Crypt(char *result, const char *method, const char *src)
 
 CXmlMessaging::~CXmlMessaging()
 {
-    //	pDoc->Release ();
-
-    // pDoc->Release ();
-
-    //	CoUninitialize();
 }
 
 int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_player, char *error_msg)
@@ -137,13 +112,9 @@ int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_playe
         sprintf(url, "LENUM=0&LESOFT=2&LENOM=%s&LEVERSION=100&LEMAIL=%s&LEPASS=%s", playername, playermail, pwd_player);
         Crypt(buffer, "nouveaujoueur", url);
 
-        // sprintf(  buffer,"%s/script/romustrike/nouveaujoueur.php3);
-
         if (XMLHttpRequest(buffer) == true)
         {
             Roots = pDoc->GetdocumentElement();
-
-            // Roots->get_text();
 
             HRESULT hr = Roots->get_childNodes(&NodeList);
 
@@ -178,27 +149,14 @@ int CXmlMessaging::NewPlayer(char *playername, char *playermail, char *pwd_playe
         }
         else
         {
-            //	pError->GeterrorCode(), &buffer, pError->Getline(), static_cast<const wchar_t*>(pError->Getreason())
-            //MSXML2::IXMLDOMParseErrorPtr pError = (LPCSTR)pDoc->parseError->Getreason();;
-            /*	sprintf(lbuffer, "erreur XML %s\n",(char *)pDoc->parseError->Getreason());
-                MessageBox (NULL,lbuffer ,TEXT("ROMUSTRIKE"),MB_OK);
-                */
             return 0;
         }
     }
     catch (_com_error &e)
     {
-
-        /*	WCHAR  * wszAddress;
-            sprintf(lbuffer,"%s erreur xml %s",e.ErrorMessage ,e.Description );
-            wcstombs(lbuffer,wszAddress,100 );
-
-            MessageBox (NULL,lbuffer ,TEXT("ROMUSTRIKE"),MB_OK);
-            */
         return 0;
     }
 
-    // CoUninitialize();
     return num_player;
 }
 
@@ -257,29 +215,6 @@ HRESULT CXmlMessaging::GetMap(maplist_t *MapList, playerfile_t *playerconfig)
             }
         } while (re);
         FindClose(hSearch);
-        /*return TRUE;
-
-
-            MapList->List[0].Name = (char*)malloc(6);
-            strcpy(MapList->List[0].Name,TEXT("italy"));
-            MapList->count++;
-
-            MapList->List[1].Name = (char*)malloc(10);
-            strcpy(MapList->List[1].Name,TEXT("chateau"));
-            MapList->count++;
-
-            MapList->List[2].Name = (char*)malloc(7);
-            strcpy(MapList->List[2].Name,TEXT("2rooms"));
-            MapList->count++;
-
-            MapList->List[3].Name = (char*)malloc(10);
-            strcpy(MapList->List[3].Name,TEXT("aztec"));
-            MapList->count++;
-
-            MapList->List[4].Name = (char*)malloc(10);
-            strcpy(MapList->List[4].Name,TEXT("train"));
-            MapList->count++;
-        */
     }
     else
     {
@@ -420,29 +355,6 @@ HRESULT CXmlMessaging::Get_Mp3(maplist_t *MapList, playerfile_t *playerconfig)
             }
         } while (re);
         FindClose(hSearch);
-        /*return TRUE;
-
-
-            MapList->List[0].Name = (char*)malloc(6);
-            strcpy(MapList->List[0].Name,TEXT("italy"));
-            MapList->count++;
-
-            MapList->List[1].Name = (char*)malloc(10);
-            strcpy(MapList->List[1].Name,TEXT("chateau"));
-            MapList->count++;
-
-            MapList->List[2].Name = (char*)malloc(7);
-            strcpy(MapList->List[2].Name,TEXT("2rooms"));
-            MapList->count++;
-
-            MapList->List[3].Name = (char*)malloc(10);
-            strcpy(MapList->List[3].Name,TEXT("aztec"));
-            MapList->count++;
-
-            MapList->List[4].Name = (char*)malloc(10);
-            strcpy(MapList->List[4].Name,TEXT("train"));
-            MapList->count++;
-        */
     }
     else
     {
@@ -1060,76 +972,6 @@ HRESULT CXmlMessaging::InfoJoueur(playerfile_t *playerconfig, char *serverchat, 
     BSTR bstrNodeText;
     BSTR bstrNodeTexta;
     char buffer[500];
-    //----------------------------------------------------------liste fichier
-    /*
-    HANDLE hSearch;
-    WIN32_FIND_DATA File;
-    bool re;
-
-    char rep[4][100];
-    sprintf(rep[0],"data/model/");
-    sprintf(rep[1],"data/weapons/");
-    sprintf(rep[2],"data/env/");
-    char fic[4][100];
-    sprintf(fic[0],"mdl");
-    sprintf(fic[1],"mdl");
-    sprintf(fic[2],"tga");
-
-    vector<md5_file> locaux;
-    vector<md5_file> distant;
-
-     char err_md5[900000];
-
-     //err_md5 << "start" << endl;
-
-    char f[200];
-
-    for (int o=1;o<2;o++)
-    {
-        char t[150];
-        sprintf(t,"%s/*.%s",rep[o],fic[o]);
-        hSearch=FindFirstFile(t, &File);
-
-        if (hSearch == INVALID_HANDLE_VALUE){
-            return FALSE;
-        }
-        re=TRUE;
-
-
-        do {
-            if (re)
-            {
-                md5_file tmps;
-
-        //	MapList->List[MapList->count].Name = (char*)malloc(strlen(File.cFileName)+1);
-            strcpy (tmps.file,File.cFileName);
-            sprintf(t,"%s%s",rep[o],tmps.file);
-        strcpy(tmps.MD5,"");
-    char tmpsmd5[100];
-
-
-            md5.GetMD5_new(t,tmpsmd5);
-
-                strcpy(tmps.MD5,tmpsmd5);
-
-
-            locaux.push_back(tmps);
-            sprintf(f,"insert into anti_cheat (file,md5) values ('%s','%s');\r\n",t,tmps.MD5);
-    //sprintf(f,"update map set bsp_md5='%s' where map='%s';\r\n",tmps.MD5,tmps.file);
-
-
-    strcat(err_md5,f);
-         re = FindNextFile(hSearch, &File);
-            }
-        } while (re);
-        FindClose(hSearch);
-        FILE *out=fopen("sql.txt","w");
-        fwrite(err_md5,sizeof(err_md5),1,out);
-        fclose(out);
-
-    }
-     */
-    //----------------------------------------------------------liste fichier
 
     strcpy(playerconfig->scroll,
            "*****************************Romustrike***Serveur Hors Service ou en Maintenance ou inactif a jamais.. "
@@ -1460,71 +1302,6 @@ long CXmlMessaging::exp10long(long num)
     return ris;
 }
 
-/*
-int CXmlMessaging::chartoint(char *dato)
-{
-int ris=0,cont=0;
-int i=len(dato);
-int ci=i;
-int molt[10];
-for(cont;cont<i;cont++)
-{
-molt[cont]=exp10(ci);
-ci--;
-}
-cont=0;
-for(cont;cont<i;cont++)
-{
-ris+=(dato[cont]-'0')*molt[cont];
-}
-return ris;
-}
-
-long CXmlMessaging::chartolong(char *dato)
-{
-long ris=0,cont=0;
-int i=len(dato);
-int ci=i;
-long molt[10];
-for(cont;cont<i;cont++)
-{
-molt[cont]=exp10long(ci);
-ci--;
-}
-cont=0;
-for(cont;cont<i;cont++)
-{
-ris+=(dato[cont]-'0')*molt[cont];
-}
-return ris;
-}
-
-*/
-/*
-void CXmlMessaging::dump_com_error(_com_error &e)
-{
-    //printf("Error\n");
-//	printf("\a\tCode = %08lx\n", e.Error());
-//	printf("\a\tCode meaning = %s", e.ErrorMessage());
-    _bstr_t bstrSource(e.Source());
-    _bstr_t bstrDescription(e.Description());
-//	printf("\a\tSource = %s\n", (LPCSTR) bstrSource);
-    //printf("\a\tDescription = %s\n", (LPCSTR) bstrDescription);
-
-char buf[200];
-sprintf(buf,"Code = %08lx , Code meaning = %s tSource = %s tDescription = %s\n",  e.Error(),e.ErrorMessage(),(LPCSTR)
-bstrSource,(LPCSTR) bstrDescription);
-//if (e.Error()!=E_Fail)
- //MessageBox(NULL, buf, "xml Exception occurred", MB_OK | MB_ICONERROR);
-static ofstream err_acces("log/access.log");
-
-err_acces << "ERREUR XML" << endl;
-err_acces << buf << endl;
-
-
-//
-}
-*/
 bool CXmlMessaging::XMLHttpRequest(char *url)
 {
     MSXML2::IXMLHTTPRequestPtr pIXMLHTTPRequest = NULL;

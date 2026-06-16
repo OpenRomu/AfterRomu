@@ -271,15 +271,8 @@ static bool check_collision(const face_t *f, collision_data &coldat, float radiu
         r = closest_on_poly(r, f);
     }
 
-    // t = intersect_sphere(r,-coldat.ndir,coldat.src,radius);
-    /*  vec3_t rprim=r*radius;
-      vec3_t ndirprim=coldat.ndir*radius;
-      vec3_t srcprim=coldat.src*radius;
-  */
     t = intersect_sphere(r, -coldat.ndir, coldat.src, radius);
 
-    // t = intersect_sphere(rprim,-ndirprim,srcprim,1.0f);
-    // t=t/radius.len();
     if (t >= 0.0f && t <= coldat.dir_len)
     { //
         if (!coldat.found || t < coldat.nearest)
@@ -337,15 +330,8 @@ static void check_collision_car(const face_t *f, collision_data &coldat, float r
         r = closest_on_poly(r, f);
     }
 
-    // t = intersect_sphere(r,-coldat.ndir,coldat.src,radius);
-    /*  vec3_t rprim=r*radius;
-      vec3_t ndirprim=coldat.ndir*radius;
-      vec3_t srcprim=coldat.src*radius;
-  */
     t = intersect_sphere(r, -coldat.ndir, coldat.src, radius);
 
-    // t = intersect_sphere(rprim,-ndirprim,srcprim,1.0f);
-    // t=t/radius.len();
     if (t >= 0.0f && t <= coldat.dir_len)
     {
         if (!coldat.found || t < coldat.nearest)
@@ -438,10 +424,7 @@ void world_t::cleanup()
     faces.clear();
     textures.clear();
     leaf_visibility.clear();
-    /*for(i = 0; i < visible_faces.size(); i++) {
-        visible_faces[i] = 0;
-    }
-*/
+
     visible_faces.clear();
 }
 
@@ -611,10 +594,7 @@ void world_t::advance_frame(float delta_f)
 }
 void world_t::render_face(const const face_t *f)
 {
-    /*if (textures[f->texture]->name == "sky")
-    {
-        return;
-    }*/
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     if (use_multi)
     { //
@@ -633,39 +613,11 @@ void world_t::render_face(const const face_t *f)
 
         if (f->lightmap)
         {
-
-            /*
-            glEnable(GL_TEXTURE_SHADER_NV);
-
-            glActiveTextureARB(GL_TEXTURE1_ARB);
-            f->lightmap->bind();
-
-            glEnable(GL_TEXTURE_2D);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            glTexEnvi(GL_TEXTURE_SHADER_NV, GL_SHADER_OPERATION_NV, GL_TEXTURE_2D);
-            */
-            /*
-            // stage 1
-            glActiveTextureARB(GL_TEXTURE1_ARB);
-            glDisable(GL_TEXTURE_2D);
-            glTexEnvi(GL_TEXTURE_SHADER_NV, GL_SHADER_OPERATION_NV, GL_DOT_PRODUCT_NV);
-            glTexEnvi(GL_TEXTURE_SHADER_NV, GL_PREVIOUS_TEXTURE_INPUT_NV, GL_TEXTURE0_ARB);
-
-            */
-
             glActiveTextureARB(GL_TEXTURE1_ARB);
             f->lightmap->bind();
             glEnable(GL_TEXTURE_2D);
         }
-        //		glDisable(GL_TEXTURE_2D);
-        // glEnable(GL_BLEND);
-        //		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-        /*
-                glDepthMask(GL_FALSE);
-                glDepthFunc(GL_EQUAL);
-          */
+
         if (f->styles[0] == 1) // bc optimis 16/05/08
         {
             glLineWidth(2.0);
@@ -733,16 +685,6 @@ vec3_t world_t::check_collisions(const vec3_t &src, const vec3_t &dir, int cutof
 
     coldat.ndir = coldat.dir / coldat.dir_len;
 
-    /*for(int i = 0; i < faces.size(); i++)
-    {
-        if(mark_faces->test(i))
-        {
-            face_t* f = faces[i];
-            check_collision(f, coldat);
-
-        }
-    }*/
-    // zero_dwords((void*) &colide_faces[0], colide_faces.size());
     int face_idx = 0;
 
     if (fill_colide_face && cutoff == 1)
@@ -754,24 +696,14 @@ vec3_t world_t::check_collisions(const vec3_t &src, const vec3_t &dir, int cutof
         while (f)
         {
             face_idx++;
-            /*if(face_idx==7)
-face_idx=7;*/
             bool ca_colide = check_collision(f, coldat, radius);
-            //	check_tir (f, coldat);
-            /*   if(face_idx==7)
-    face_idx=7;*/
             if (ca_colide && fill_colide_face)
             {
                 colide_faces->set(face_idx);
             }
-            //	char ee[100];
-            //	sprintf(ee,"faceidx;%i;bool;%b",face_idx,ca_colide);
-
-            //	p<<ee<<endl;
             f = f->next;
         }
     }
-    // p<<" end"<<endl;
 
     if (coldat.found)
     {
@@ -829,16 +761,6 @@ vec3_t world_t::check_collisions_yeux(const vec3_t &src, const vec3_t &dir, int 
     t.normalize();
     coldat.ndir = t;
 
-    /*for(int i = 0; i < faces.size(); i++)
-    {
-        if(mark_faces->test(i))
-        {
-            face_t* f = faces[i];
-            check_collision(f, coldat);
-
-        }
-    }*/
-    // zero_dwords((void*) &colide_faces[0], colide_faces.size());
     int face_idx = 0;
 
     if (fill_colide_face)
@@ -912,15 +834,6 @@ void world_t::check_collisions_bat(const vec3_t &src, vec3_t dir, collision_tir 
 
         coldat.ndir.normalize();
 
-        /*for(int i = 0; i < faces.size(); i++)
-        {
-            if(mark_faces->test(i))
-            {
-                face_t* f = faces[i];
-                check_collision(f, coldat);
-
-            }
-        }*/
         for (int i = 0; i < visible_faces.size(); i++)
         {
             face_t *f = visible_faces[i];
@@ -1033,14 +946,6 @@ void world_t::process_visible_faces_collide(const vec3_t &cam, const vec3_t &des
     mins[1] = cam[1] - 200;
     mins[2] = cam[2] - 200;
 
-    /*if (cam2[0]<mins[0]) {mins[0]=cam2[0];}
-    if (cam2[1]<mins[1]) {mins[0]=cam2[1];}
-    if (cam2[2]<mins[2]) {mins[0]=cam2[2];}
-
-    if (cam2[0]>maxs[0]) {maxs[0]=cam2[0];}
-    if (cam2[1]>maxs[1]) {maxs[0]=cam2[1];}
-    if (cam2[2]>maxs[2]) {maxs[0]=cam2[2];}*/
-
     // go thru leaf visibility list
     for (int i = 0; i < v.size(); i++)
     {
@@ -1090,17 +995,6 @@ void world_t::process_visible_faces_collide(const vec3_t &cam, const vec3_t &des
                     f->next = visible_faces[idx];
                     visible_faces[idx] = f;
                     rendered++;
-
-                    /*// chose lightmap style
-                    f->lightmap = f->lightmaps[0];
-                    if(current_style != 0) {
-                        for(int c = 0; c < MAX_LIGHTMAPS; c++) {
-                            if(f->styles[c] == current_style) {
-                                f->lightmap = f->lightmaps[c];
-                                break;
-                            }
-                        }
-                    }*/
                 }
             }
         }
@@ -1158,20 +1052,11 @@ void world_t::process_visible_faces_collide(const vec3_t &cam, const vec3_t &des
                     // don't render those already rendered
                     int face_idx = p++;
 
-                    /*int res=strncmp( textures[faces[face_idx]->texture]->name.c_str (), "!" , 1 );
-                    if (res==0)
-                        continue;*/
                     if (!mark_faces->test(face_idx))
                     {
 
                         // back face culling
                         face_t *f = faces[face_idx];
-                        /*float d = cam.dot(f->plane.normal)-f->plane.dist;
-                        if(f->side) {
-                            if(d>0) { continue; }
-                        } else {
-                            if(d<0) { continue; }
-                        }*/
 
                         // if (textures[f->texture]->name!="aaatrigger")
                         if (!(f->flags & TEX_SPECIAL))
@@ -1183,17 +1068,6 @@ void world_t::process_visible_faces_collide(const vec3_t &cam, const vec3_t &des
                             visible_faces[idx] = f;
                             rendered++;
                         }
-
-                        /*// chose lightmap style
-                        f->lightmap = f->lightmaps[0];
-                        if(current_style != 0) {
-                            for(int c = 0; c < MAX_LIGHTMAPS; c++) {
-                                if(f->styles[c] == current_style) {
-                                    f->lightmap = f->lightmaps[c];
-                                    break;
-                                }
-                            }
-                        }*/
                     }
                 }
             }
@@ -1314,18 +1188,6 @@ collision_tir world_t::check_tirs_rec_old(const vec3_t &src, const vec3_t &dir, 
             {
                 lecutoff--;
                 tmp = check_tirs_rec(src, dir * 0.5f, lecutoff);
-                /*				if (tmp.found==false)
-                                {
-                                //tmp.normal =vec3_t(0.0f,0.0f,0.0f);
-                                    vec3_t ttmp;
-                                    memcpy(&ttmp,&dir,sizeof(vec3_t));
-
-                                //ttmp.normalize ();
-                                tmp.normal =ttmp*-1.0f;
-                                tmp.pt=src;
-                                tmp.found=true;
-                                tmp.nearest=0;
-                                }*/
             }
             else
             {
@@ -1645,89 +1507,6 @@ void world_t::process_visible_faces(const Camera &c)
         }
     }
 
-    /*
-
-        // go thru les autres models
-         for(int ii = 1; ii < bsp->model_count ; ii++) {
-            if (bsp->models[ii].unused==-1)
-                continue;
-
-             const dmodel_t& model  = bsp->models [ii];
-
-            // discard leafs outside frustum
-            short min[3];
-            short max[3];
-            min[0]=model.mins[0];
-            min[1]=model.mins[1];
-            min[2]=model.mins[2];
-            max[0]=model.maxs[0];
-            max[1]=model.maxs[1];
-            max[2]=model.maxs[2];
-            if(!frustum_cull(min , max))
-            {
-                unsigned int p = model.firstface ;
-                //unsigned short* p = bsp->marksurfaces + short(model.firstface);
-                for(int x = 0; x < model.numfaces ; x++) {
-                    // don't render those already rendered
-                    int face_idx = p++;
-                    if(!mark_faces->test(face_idx)) {
-
-                           // back face culling
-                        face_t* f = faces[face_idx];
-                        float d = cam.dot(f->plane.normal)-f->plane.dist;
-                        if(f->side) {
-                            if(d>0) { continue; }
-                        } else {
-                            if(d<0) { continue; }
-                        }
-
-
-                        if (textures[f->texture]->name!="aaatrigger")
-                        {
-                            // mark face as visible
-                            mark_faces->set(face_idx);
-                            int idx = f->texture;
-                            f->next = visible_faces[idx];
-                            visible_faces[idx] = f;
-                            //rendered++;
-
-                            // chose lightmap style
-                            f->lightmap = f->lightmaps[0];
-                            if(current_style != 0) {
-                                for(int c = 0; c < MAX_LIGHTMAPS; c++) {
-                                    if(f->styles[c] == current_style) {
-                                        f->lightmap = f->lightmaps[c];
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-    */
-    /*		short min[3];
-            short max[3];
-
-         for(int ii = 1; ii < bsp->model_count ; ii++) {
-            min[0]=bsp->models[i].mins[0];
-            min[1]=bsp->models[i].mins[1];
-            min[2]=bsp->models[i].mins[2];
-            max[0]=bsp->models[i].maxs[0];
-            max[1]=bsp->models[i].maxs[1];
-            max[2]=bsp->models[i].maxs[2];
-
-             //if(!frustum_cull((short *)bsp->models[i].mins , (short *)bsp->models[i].maxs))
-             if(!frustum_cull(min , max))
-             {
-                render_model (ii);
-             }
-         }
-
-    */
-
     // rendered=bsp->num_entities  ;
 }
 void world_t::process_visible_faces_col(const vec3_t &cam)
@@ -1864,17 +1643,6 @@ void world_t::process_visible_faces3(const vec3_t &cam)
                 f->next = visible_faces[idx];
                 visible_faces[idx] = f;
                 rendered++;
-
-                // chose lightmap style
-                /*f->lightmap = f->lightmaps[0];
-                if(current_style != 0) {
-                    for(int c = 0; c < MAX_LIGHTMAPS; c++) {
-                        if(f->styles[c] == current_style) {
-                            f->lightmap = f->lightmaps[c];
-                            break;
-                        }
-                    }
-                }*/
             }
         }
     }
@@ -1961,10 +1729,6 @@ void world_t::drawBoxEx(const vec3_t pos)
     po[7][1] = bbmin[1];
     po[7][2] = bbmax[2];
 
-    /*	glDisable (GL_TEXTURE_2D);
-        glDisable (GL_CULL_FACE);
-        glDisable (GL_DEPTH_TEST);
-        */
     glColor4f(1, 0, 0, 1);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -2110,19 +1874,7 @@ bool world_t::DessineEntites(vec3_t pos)
 {
 
     bool resultat = false;
-    // ofstream o("entity.log");
-    /*rendered=0;
-            glDisable (GL_TEXTURE_2D);
-            glDisable (GL_CULL_FACE);
-            glDisable (GL_DEPTH_TEST);
-            glColor4f (1, 0, 0, 1);
-            glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);*/
 
-    // for(int x = 0; x < bsp->num_entities; x++) {
-    /////o << bsp->ValueForKey(&bsp->Lesentities[x],"classname") << endl;
-
-    // if
-    // ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x],"classname"),"info_player_start")==0)||(strcmp(bsp->ValueForKey(&bsp->Lesentities[x],"classname"),"info_player_deathmatch")==0))
     vec3_t po[8];
     short bbmin[3];
     short bbmax[3];
@@ -2137,43 +1889,7 @@ bool world_t::DessineEntites(vec3_t pos)
     bbmax2[2] = pos[2] + 30;
 
     for (int i = 0; i < pos_ladder.size(); i++)
-
     {
-
-        /*vec3_t ori;
-        int	v1, v2, v3;
-        char	*k;
-        //sscanf (k, "%d %d %d", &v1, &v2, &v3);
-        k=bsp->ValueForKey (&bsp->Lesentities[x], "origin");
-        //bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-        //o << k << endl;
-        v1 = v2 = v3 = 0;
-        sscanf (k, "%d %d %d", &v1, &v2, &v3);
-        ori[0] = v1;
-        ori[1] = v2;
-        ori[2] = v3;
-
-
-
-        //o << ori[0] << endl;
-        //o << ori[1] << endl;
-        //o << ori[2] << endl;
-        bsp->Lesentities[x].origin[0]=ori[0];
-        bsp->Lesentities[x].origin[1]=ori[1];
-        bsp->Lesentities[x].origin[2]=ori[2];
-
-        rendered++;
-        vec3_t po[7];
-        vec3_t bbmin;
-        bbmin[0]=bsp->Lesentities[x].origin[0]-50 ;
-        bbmin[1]=bsp->Lesentities[x].origin[1]-50;
-        bbmin[2]=bsp->Lesentities[x].origin[2]-50;
-
-        vec3_t bbmax;
-        bbmax[0]=bsp->Lesentities[x].origin[0]+50;
-        bbmax[1]=bsp->Lesentities[x].origin[1]+50;
-        bbmax[2]=bsp->Lesentities[x].origin[2]+50;*/
-
         bbmin[0] = bsp->models[pos_ladder[i]].origin[0] + bsp->models[pos_ladder[i]].mins[0];
         bbmin[1] = bsp->models[pos_ladder[i]].origin[1] + bsp->models[pos_ladder[i]].mins[1];
         bbmin[2] = bsp->models[pos_ladder[i]].origin[2] + bsp->models[pos_ladder[i]].mins[2];
@@ -2186,71 +1902,7 @@ bool world_t::DessineEntites(vec3_t pos)
             resultat = true;
             break;
         }
-        /*po[0][0] = bbmin[0];
-        po[0][1] = bbmax[1];
-        po[0][2] = bbmin[2];
-
-        po[1][0] = bbmin[0];
-        po[1][1] = bbmin[1];
-        po[1][2] = bbmin[2];
-
-        po[2][0] = bbmax[0];
-        po[2][1] = bbmax[1];
-        po[2][2] = bbmin[2];
-
-        po[3][0] = bbmax[0];
-        po[3][1] = bbmin[1];
-        po[3][2] = bbmin[2];
-
-        po[4][0] = bbmax[0];
-        po[4][1] = bbmax[1];
-        po[4][2] = bbmax[2];
-
-        po[5][0] = bbmax[0];
-        po[5][1] = bbmin[1];
-        po[5][2] = bbmax[2];
-
-        po[6][0] = bbmin[0];
-        po[6][1] = bbmax[1];
-        po[6][2] = bbmax[2];
-
-        po[7][0] = bbmin[0];
-        po[7][1] = bbmin[1];
-        po[7][2] = bbmax[2];
-
-
-
-
-
-        glBegin (GL_QUAD_STRIP);
-        for (int i = 0; i < 10; i++)
-            glVertex3fv (po[i & 7]);
-        glEnd ();
-
-        glBegin  (GL_QUAD_STRIP);
-        glVertex3fv (po[6]);
-        glVertex3fv (po[0]);
-        glVertex3fv (po[4]);
-        glVertex3fv (po[2]);
-        glEnd ();
-
-        glBegin  (GL_QUAD_STRIP);
-        glVertex3fv (po[1]);
-        glVertex3fv (po[7]);
-        glVertex3fv (po[3]);
-        glVertex3fv (po[5]);
-        glEnd ();*/
-
-        // glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     }
-    //}
-    /*glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    glEnable (GL_TEXTURE_2D);
-    glEnable (GL_CULL_FACE);
-    glEnable (GL_DEPTH_TEST);
-
-
-        glColor4f(1.0f,1.0f,1.0f,1.0f); // BART fix*/
 
     return resultat;
 }
@@ -2327,81 +1979,10 @@ void world_t::render_visible_faces(vec3_t &pos_light, bool is_light)
 
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL); //
-                                     // glEnable(GL_COLOR_MATERIAL);//glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,10);
-
-        //  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,10);
-        // glLightfv(GL_LIGHT1, GL_POSITION, pos_light);
-        // glLightfv(GL_LIGHT1, GL_POSITION, pos_light);
-        // glColor4f(0.9, 0.2, 0.2, 1.0);
-        //       glTranslatef(pos_light[0], pos_light[1], pos_light[2]);
-        //   glutSolidSphere(pos_light[0], pos_light[1], pos_light[2]);
     }
-
-    // glEnable(GL_LIGHTING);
-
-    /*
-
-            glEnable(GL_LIGHT0);
-        GLfloat ambientProperties[] = {1.0f, 1.0f, 1.0f, 1.0f};
-            GLfloat light_col0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-            GLfloat positionProperties[] = {0.0f, 0.0f, 100.0f, 0.0f};
-            glLightfv( GL_LIGHT0, GL_AMBIENT, ambientProperties);
-            glLightfv( GL_LIGHT0, GL_POSITION, positionProperties);
-
-                 glLightfv(GL_LIGHT0, GL_SPECULAR, light_col0 );
-                glLightfv(GL_LIGHT0, GL_DIFFUSE, light_col0 );
-
-
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, ambientProperties);
-    */
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // BART fix
 
-    // glClearColor(0.0f, 0.0f, 1.0f, 0.0f);						// Black Background
-    // glClearDepth(1.0f);											// Depth Buffer Setup
-    // glDepthFunc(GL_LEQUAL);										// Type Of Depth Testing
-    // glDepthMask(1);
-    // glEnable(GL_DEPTH_TEST);
-    //  Enable Depth Testing
-    // glEnable (GL_TEXTURE_2D);
-    // glEnable (GL_CULL_FACE);
-    // glDisable (GL_DEPTH_TEST);
-    // glEnable(GL_BLEND);
-    // glEnable(GL_DEPTH_FUNC);
-    // glDepthFunc(GL_LESS);//GL_LESS
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // glDisable(GL_DEPTH_FUNC);
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //  glEnable(GL_BLEND);
-
-    // texture settings
-
-    /*	if(islight)
-        {glEnable(GL_BLEND);
-        // depth buffer
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);//GL_LESS
-        glDepthMask(GL_TRUE);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        }
-        */
-    // nice perspective
-
-    /*glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-      glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glEnable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
-        glDepthFunc(GL_LESS);//GL_LESS
-        glDepthMask(GL_TRUE);*/
-
-    /*  glColor4f(1.0f,1.0f,1.0f,1.0f); // BART fix
-      glEnable(GL_BLEND);
-      glEnable(GL_TEXTURE_2D);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
-  */
     int face_idx = 0;
     lesfaces = 0;
     for (int i = 0; i < visible_faces.size(); i++)
@@ -2409,18 +1990,6 @@ void world_t::render_visible_faces(vec3_t &pos_light, bool is_light)
         face_t *f = visible_faces[i];
         if ((f) && (textures[f->texture]->name != "sky"))
         {
-            /*if  (textures[f->texture]->name.compare((string)"{")!=1)
-            {
-                glDepthMask(GL_TRUE);
-                //glEnable(GL_DEPTH_FUNC);
-            }
-            else
-            {
-                glDepthMask(GL_FALSE);
-                //glDisable(GL_DEPTH_FUNC);
-            }*/
-
-            // glDisable(GL_ALPHA_TEST);
             if (textures[f->texture]->name.compare((string) "{") == 1)
             {
                 glAlphaFunc(GL_GREATER, 0.3f);
@@ -2431,12 +2000,7 @@ void world_t::render_visible_faces(vec3_t &pos_light, bool is_light)
             {
                 face_idx++;
                 lesfaces = lesfaces + 1;
-                /*
-                if(!colide_faces->test(lesfaces))
-                   f->styles[0]=0;
-               else
-                   f->styles[0]=1;
-                 */
+
                 render_face(f);
                 f = f->next;
             }
@@ -2453,181 +2017,11 @@ void world_t::render_visible_faces(vec3_t &pos_light, bool is_light)
 
 void world_t::CheckCollision()
 {
-    /*
-    // plane data
-    int A, B, C;
-    vec3_t p1,p2,p3;
-    vec3_t pNormal;
-    vec3_t pOrigin;
-    vec3_t v1, v2;
 
-
-    // from package
-    vec3_t source = collision.sourcePoint;
-    vec3_t eRadius = collision.eRadius;
-    vec3_t velocity = collision.velocity;
-
-    // keep a copy of this as it's needed a few times
-    vec3_t normalizedVelocity = velocity;
-    normalizeVector(normalizedVelocity);
-
-    // intersection data
-    vec3_t sIPoint;    // sphere intersection point
-    vec3_t pIPoint;    // plane intersection point
-    vec3_t polyIPoint; // polygon intersection point
-
-    // how long is our velocity
-    double distanceToTravel = lengthOfVector(velocity);
-
-    double distToPlaneIntersection;
-    double distToEllipsoidIntersection;
-
-
-
-      for(int i = 0; i < visible_faces.size(); i++) {
-           face_t* f = visible_faces[i];
-           while(f) {
-
-
-    // loop through all faces in mesh
-   // for (int i=0; i<m_dwNumFaces; i++)
-   //  {
-
-
-
-        vec3_t p1=vec3_t(vt_array[f->first]);// / eRadius;
-        vec3_t p2=vec3_t(vt_array[f->first+1]);/// eRadius;
-        vec3_t p3=vec3_t(vt_array[f->first+2]);/// eRadius;
-
-       // A = vertexIndices[i*3];
-        //B = vertexIndices[i*3+1];
-        //C = vertexIndices[i*3+2];
-
-        // Get the data for the triangle in question and scale to ellipsoid space
-        /*p1=
-
-        p1[0] = m_pIndexedVertices[A][0] / eRadius[0];
-        p1[1] = m_pIndexedVertices[A][1] / eRadius[1];
-        p1[2] = m_pIndexedVertices[A][2] / eRadius[2];
-
-        p2[0] = m_pIndexedVertices[B][0] / eRadius[0];
-        p2[1] = m_pIndexedVertices[B][1] / eRadius[1];
-        p2[2] = m_pIndexedVertices[B][2] / eRadius[2];
-
-        p3[0] = m_pIndexedVertices[C][0] / eRadius[0];
-        p3[1] = m_pIndexedVertices[C][1] / eRadius[1];
-        p3[2] = m_pIndexedVertices[C][2] / eRadius[2];
-        */
-
-    // Make the plane containing this triangle.
-    // pOrigin = p1;
-    /*pOrigin=vec3_t(vt_array[f->first])/ eRadius;//bat
-
-    v1 = p2-p1;
-    v2 = p3-p1;
-
-
-    // You might not need this if you KNOW all your triangles are valid
-    if (true) { //!(isZeroVector(v1) || isZeroVector(v2))
-
-       // determine normal to plane containing polygon
-//     	pNormal = wedge(v1, v2);
- //   	normalizeVector(pNormal);
-       pNormal=f->plane.normal ;//bat
-
-
-       //ignore backfaces. What we cannot see we cannot collide with ;)
-   if (dot(pNormal, normalizedVelocity) <= 1.0f) {
-
-           // calculate sphere intersection point
-           sIPoint = source - pNormal;
-
-           // classify point to determine if ellipsoid span the plane
-           DWORD pClass = classifyPoint(sIPoint, pOrigin, pNormal);
-
-
-           // find the plane intersection point
-           if (pClass == PLANE_BACKSIDE) { // plane is embedded in ellipsoid
-
-               // find plane intersection point by shooting a ray from the
-               // sphere intersection point along the planes normal.
-               distToPlaneIntersection = intersectRayPlane(sIPoint, pNormal, pOrigin, pNormal);
-
-               // calculate plane intersection point
-               pIPoint[0] = sIPoint[0] + distToPlaneIntersection * pNormal[0];
-               pIPoint[1] = sIPoint[1] + distToPlaneIntersection * pNormal[1];
-               pIPoint[2] = sIPoint[2] + distToPlaneIntersection * pNormal[2];
-
-           }
-           else {
-
-               // shoot ray along the velocity vector
-               distToPlaneIntersection = intersectRayPlane(sIPoint, normalizedVelocity, pOrigin, pNormal);
-
-               // calculate plane intersection point
-               pIPoint[0] = sIPoint[0] + distToPlaneIntersection * normalizedVelocity[0];
-               pIPoint[1] = sIPoint[1] + distToPlaneIntersection * normalizedVelocity[1];
-               pIPoint[2] = sIPoint[2] + distToPlaneIntersection * normalizedVelocity[2];
-
-           }
-
-
-
-           // find polygon intersection point. By default we assume its equal to the
-           // plane intersection point
-
-           polyIPoint = pIPoint;
-           distToEllipsoidIntersection = distToPlaneIntersection;
-
-           if (!point_in_poly(pIPoint,f,eRadius )) { // CheckPointInTriangle(pIPoint,p1,p2,p3)if not in triangle
-
-               //polyIPoint = closestPointOnTriangle(p1, p2, p3, pIPoint);
-               polyIPoint = closest_on_poly(pIPoint,f,eRadius);
-
-               distToEllipsoidIntersection = intersectRaySphere(polyIPoint, -normalizedVelocity, source, 1.0f);
-
-               if (distToEllipsoidIntersection > 0) {
-               // calculate true sphere intersection point
-                   sIPoint[0] = polyIPoint[0] + distToEllipsoidIntersection * -normalizedVelocity[0];
-                   sIPoint[1] = polyIPoint[1] + distToEllipsoidIntersection * -normalizedVelocity[1];
-                   sIPoint[2] = polyIPoint[2] + distToEllipsoidIntersection * -normalizedVelocity[2];
-               }
-
-           }
-
-
-       // Here we do the error checking to see if we got ourself stuck last frame
-       if (CheckPointInSphere(polyIPoint, source, 1.0f))
-           collision.stuck = TRUE;
-
-
-       // Ok, now we might update the collision data if we hit something
-           if ((distToEllipsoidIntersection > 0) && (distToEllipsoidIntersection <= distanceToTravel)) {
-               if ((collision.foundCollision == FALSE) || (distToEllipsoidIntersection < collision.nearestDistance))  {
-
-                       // if we are hit we have a closest hit so far. We save the information
-                   collision.nearestDistance = distToEllipsoidIntersection;
-                       collision.nearestIntersectionPoint = sIPoint;
-                   collision.nearestPolygonIntersectionPoint = polyIPoint;
-                   collision.foundCollision = TRUE;
-           }
-           }
-
-   } // if not backface
-  } // if a valid plane
-
-   f = f->next;
-   }
-
-   }
-// for all faces
-   */
 }
 
 void world_t::decompress()
 {
-
-    // for (int zz=0;zz<bsp->model_count ;zz++){
 
     for (int i = 0; i < bsp->leaf_count; i++)
     {
@@ -2656,7 +2050,6 @@ void world_t::decompress()
 
         leaf_visibility.push_back(visible);
     }
-    //}
 }
 
 void world_t::load(const char *file, int gamma)
@@ -2683,8 +2076,6 @@ void world_t::load(const char *file, int gamma)
     colide_faces = new bitset(bsp->face_count);
 
     faces.resize(bsp->face_count); // for 1:1 index mapping
-
-    /// static ofstream o("lightmaps.log");
 
     // setup textures, faces and lightmaps...
     for (int i = 0; i < bsp->face_count; i++)
@@ -3022,20 +2413,6 @@ void world_t::ChangeGamma(unsigned char *image, int size, float factor)
         green = green + factor * 10.0f; // / 255.0f;
         blue = blue + factor * 10.0f;   // / 255.0f;
 
-        // Make sure the value isn't higher than the higher value.
-        /*        if(red > 1.0f && (temp = (1.0f / red)) < scale)
-                     scale = temp;
-                 if(green > 1.0f && (temp = (1.0f / green)) < scale)
-                     scale = temp;
-                 if(blue > 1.0f && (temp = (1.0f / blue)) < scale)
-                     scale = temp;
-
-                 // Get the scale for this pixel and multiply it by the pixel value
-                  scale *= 255.0f;
-                 red *= scale;
-                 green *= scale;
-                 blue *= scale;
-        */
         if (red > 255.0f)
             red = 255.0f;
 
@@ -3080,31 +2457,6 @@ bool world_t::LeJoueur_est_il_visible(const Camera &c, const vec3_t &pos)
     else
     {
         return true;
-        // apparemment le code ci dessous me renvoie toujours true
-        // comprends pas
-        // il est dans le frustrum mais est il aussi dans la leaf visibility
-
-        /*
-            int idx = find_leaf(pos);
-            int_vec& v = leaf_visibility[idx];
-
-            bool res =false;
-
-
-            // go thru leaf visibility list
-            for(int i = 0; i < v.size() ; i++)
-            {
-                if (BoxIntersectBox(bsp->leaves[v[i]].mins , bsp->leaves[v[i]].maxs,mins,maxs)!=OUTSIDE)
-                {
-                    res=true; //on a au moins une feuille visible dans laquelle se trouve notre gonze
-                    break;
-                }
-
-            }
-
-
-
-            return res;*/
     }
 }
 
@@ -3127,30 +2479,6 @@ void world_t::render_entvars(const Camera &c)
         for (ii = EntVar.size() - 1; ii >= 0; ii--)
         // for( ii = 0; ii <EntVar.size()  ; ii++)
         {
-
-            // v2=EntVar[ii].origin-cam;
-            // VectorSubtract(bsp->entvars[ent_index].origin, c.eye(), v2);
-            // dott =v1.dot(v2);
-
-            // is this entity outside the view frustum?
-
-            /*if (pass==0)
-            {
-                if (dott<=0)
-                    continue;
-            }
-            if (pass==1)
-            {
-                if (dott>0)
-                    continue;
-            }*/
-
-            // if (dott > 0.7660)  // greater than sin(50)?
-            //	continue;
-
-            // if ((EntVar[ii].rendermode==2) || (EntVar[ii].rendermode==5))
-            //	continue;
-
             if (EntVar[ii].brush_model_index <= 0)
                 continue;
 
@@ -3177,11 +2505,6 @@ void world_t::render_entvars(const Camera &c)
             glEnable(GL_BLEND); // Turn Blending On
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            /*		                glColor4f(entvars[ent_index].rendercolor[0],
-                                              entvars[ent_index].rendercolor[1],
-                                              entvars[ent_index].rendercolor[2],
-                                          entvars[ent_index].renderamt);
-            */
             glDisable(GL_ALPHA_TEST);
             if (EntVar[ii].rendermode == 4)
             {
@@ -3209,30 +2532,6 @@ void world_t::render_entvars(const Camera &c)
                 // is this NOT a special texture?
                 if (!(face->flags & TEX_SPECIAL))
                     d = cam.dot(face->plane.normal) - face->plane.dist;
-
-                /*if (face->side)
-                {
-
-                    if (d>0 ) { continue; }
-                }
-                else
-                {
-                    if (d<0 ) { continue; }
-
-                }*/
-
-                /* if  (textures[face->texture]->name.compare((string)"{")!=1)
-                {
-
-                    //glDepthMask(GL_TRUE);
-                    glEnable(GL_DEPTH_FUNC);
-                }
-                else
-                {
-                    glColor4f(0.0f,0.0f,1.0f,0.0f);
-                    //glDepthMask(GL_FALSE);
-                    glDisable(GL_DEPTH_FUNC);
-            } */
 
                 render_face(face);
             }

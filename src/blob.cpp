@@ -27,12 +27,6 @@ void blob::move(vec3_t dir)
         vec3_t tmpdir = dir;
 
         my_world->process_visible_faces_collide(pos, tmpdir);
-
-        // my_world->process_visible_faces3(curParticle->oldpos);
-
-        // tmpdir=tmpdir*10.0f;
-
-        //								my_world->process_visible_faces_collide(curParticle_old->pos,curParticle->pos-curParticle_old->pos);
         my_world->epsilon = 0.50f;
 
         my_world->collide = false;

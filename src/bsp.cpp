@@ -15,13 +15,9 @@
  */
 #include "stdafx.h"
 #include "bsp.h"
-// #include "bspfile.h"
 #include "exception.h"
 #include <string.h>
 #include <stdlib.h>
-// #include <fstream.h>
-
-// #include "cmdlib.h"
 
 /*
 ================
@@ -303,7 +299,6 @@ bool bsp_file_t::ParseEntity(void)
 {
     epair_t *e;
     entity_t *mapent;
-    //	ofstream o("log/entity.log");
 
     if (!GetToken(true))
         return false;
@@ -318,7 +313,7 @@ bool bsp_file_t::ParseEntity(void)
     mapent->epairs = false; // debug bat
 
     num_entities++;
-    //  o << num_entities << endl;
+
     do
     {
         if (!GetToken(true))
@@ -365,15 +360,12 @@ char *bsp_file_t::ValueForKey(entity_t *ent, char *key)
 
 {
     epair_t *ep;
-    //	epair_t *old_ep;
-    //	char toto[10];
-    // ent->epairs;
+
     for (ep = ent->epairs; ep; ep = ep->next)
     {
 
         if (!strcmp(ep->key, key))
             return ep->value;
-        // old_ep=ep;
     }
 
     return "";

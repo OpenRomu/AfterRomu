@@ -27,7 +27,6 @@
 #include "Model_MDL.h"
 #include "glwin.h"
 #include "font.h"
-// #include "world.h"
 #include "config.h"
 #include "romu.h"  //bat
 #include "chat.h"  //bat
@@ -35,7 +34,6 @@
 #include "panel.h" //bat
 #include "pings.h" //bat
 #include "mp3.h"
-// #include "NetConnect.h"
 #include "playerfile.h" //bat
 #include "geom.h"
 
@@ -58,21 +56,13 @@
 #include "ticker.h"
 #include "texman.h"
 #include "mark.h"
-
-// #include "physics.h"
 #include "bouton.h"
 #include "console.h"
 #include "input_box.h"
 #include "option_bouton.h"
-// #include <iostream>
-
-// #include "rigid.h"
 #include "MD5.h"
-/*#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-*/
 #include "blob.h"
+
 #define GAME_MSGID_WAVE 1
 #define GAME_MSGID_POSITION 2
 #define GAME_MSGID_MARK 3
@@ -169,28 +159,6 @@ struct GAMEMSG_MARK : public GAMEMSG_GENERIC
     vec3_t rot;
     int type_gre;
 };
-/*
-struct GAMEMSG_POSITION : public GAMEMSG_GENERIC
-{
-    vec3_t pos; // 4*3
-    vec3_t rot; // 4*3
-    vec3_t velocity; // 4*3
-    float ang_dos; // 4
-    float fps; // 4
-    BYTE id_model; // 1
-    BYTE id_arme;// 1
-    int seq_dep; // 4
-    float num_dep; // 4
-    int seq_act; // 4
-    float num_act; // 4
-    BYTE sens; // 1
-    BYTE killed; // 1
-    //total message = 12 +12 +12+ 4+ 4 +1+1+4+4+4+1+1
-    // 64 Octets !!!!
-
-
-};
-*/
 
 struct GAMEMSG_POSITION : public GAMEMSG_GENERIC
 {

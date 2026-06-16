@@ -3,27 +3,15 @@
  * core engine logic
  * XXX this file is way too big...
  */
-/*fdef _DEBUG
-
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-*/
-// #define _CRTDBG_MAP_ALLOC
-// #include <stdlib.h>
-// #include <crtdbg.h>
-// nclude <crtdbg.h>
 
 #define TIMEOUT 0x0100
 #define USE_SOCKCLOSE
 #define USE_SOCKREAD
 
 #include <windows.h>
-// #include <afx.h>
 #include "stdafx.h"
 
 #include "common.h"
-// #include "glu.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -32,7 +20,6 @@ static char THIS_FILE[] = __FILE__;
 #include "texture.h"
 #include "wad.h"
 #include "bsp.h"
-// #include "bspfile.h"
 #include "Shellapi.h"
 
 #include "exception.h"
@@ -43,13 +30,9 @@ static char THIS_FILE[] = __FILE__;
 #include "dxutil.h"
 #include <dxerr8.h>
 #include "matrix.h"
-// #include "xmlmessaging.h"
-    #include <math.h>
-// #include "dialog2.h"
+#include <math.h>
 #include <mmsystem.h>
 #include "rand.h"
-// #include <iostream>
-// #include <fstream>
 using namespace std;
 #include <stdio.h>
 #include <string>
@@ -59,7 +42,6 @@ using namespace std;
 #include "resource.h"
 #include "dsound.h"
 #include "dsutil.h"
-// #include  "mp3.h"
 /////////////////////////////sound bat///////////////////////////////////
 #include "vectormath.h"
 #include "particleSimple.h"
@@ -67,20 +49,16 @@ using namespace std;
 #include "particleBoom.h"
 #include "particleSmoke.h"
 #include "particleTorch.h"
-
 #include "grenadeSimple.h"
 #include "lazer.h"
 #include "grenadesmoke.h"
 #include "missile.h"
-
 #include "ticker.h"
 #include "texman.h"
 #include "bouton.h"
 #include "console.h"
 #include "option_bouton.h"
-
 #include "bubsock.h"
-
 #include "MD5.h"
 
 // static Model_MDL model;
@@ -147,273 +125,6 @@ typedef struct
 #define _WIN32_DCOM
 ///////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
-/*
-class collision_data {
-public:
-    collision_data() : found(false), nearest(-1.0f), dir_len(0.0f) {}
-
-    vec3_t src;
-    vec3_t dir;
-    vec3_t ndir;
-    float  dir_len;
-
-    bool found;
-    float nearest;
-    vec3_t nearest_poly;
-};
-*/
-
-//////////////////////////////////////////////////////////////
-
-/*////////////////////////////////////////////////////////////
-
-class collision_data {
-public:
-    collision_data() : found(false), nearest(-1.0f), dir_len(0.0f) {}
-
-    vec3_t src;
-    vec3_t dir;
-    vec3_t ndir;
-    float  dir_len;
-
-    bool found;
-    float nearest;
-    vec3_t nearest_poly;
-};
-
-////////////////////////////////////////////////////////////
-/*struct TCollisionPacket {
- vec3_t velocity;
- vec3_t sourcePoint;
- vec3_t eRadius;
- vec3_t lastSafePosition;
- bool stuck;
- bool foundCollision;
- double    nearestDistance; // nearest distance to hit
- vec3_t nearestIntersectionPoint; // on sphere
- vec3_t nearestPolygonIntersectionPoint; // on polygon
-};
-
-
-
-static bool
-point_in_poly(const vec3_t& p, const face_t* f,const vec3_t& scale)
-{
-    vec3_t v[32]; // BAD SHIT
-
-
-    for(int i = 0; i < f->count; i++) {
-        int c = f->first + i;
-        v[i] = p - (vec3_t(vt_array[c]) / scale);
-        v[i].normalize();
-    }
-
-    float total = 0.0f;
-    for(i = 0; i < f->count-1; i++) {
-        total += (float) acos(v[i].dot(v[i+1]));
-    }
-    total += (float) acos(v[f->count-1].dot(v[0]));
-
-    if(fabsf(total-6.28f)<epsilon) {
-        return true;
-    }
-
-    return false;
-}
-
-static vec3_t
-closest_on_line(const vec3_t& a, const vec3_t& b, const vec3_t& p)
-{
-    vec3_t c = p-a;
-    vec3_t v = b-a;
-    float d = v.len();
-    if(d) v/=d; // normalize avoiding len() again (nasty sqrt)
-    float t = v.dot(c);
-    if(t < 0.0f) return a;
-    if(t > d) return b;
-    return a+v*t;
-}
-
-static vec3_t
-closest_on_poly(const vec3_t& p, const face_t* f,const vec3_t& scale)
-{
-    vec3_t v[32];
-    float d[32];
-    for(int i = 0; i < f->count-1; i++) {
-        int c = f->first + i;
-        v[i] = closest_on_line((vec3_t(vt_array[c])/scale),
-                               (vec3_t(vt_array[c+1])/scale),
-                               p);
-        vec3_t t = p-v[i];
-        d[i] = t.len();
-    }
-    i = f->count-1;
-    v[i] = closest_on_line((vec3_t(vt_array[f->first + i])/scale),
-                           (vec3_t(vt_array[f->first])/scale),
-                           p);
-    vec3_t t = p-v[i];
-    d[i] = t.len();
-
-    float min = d[0];
-    vec3_t r = v[0];
-
-    for(i = 1; i < f->count; i++) {
-        if(d[i] < min) {
-            min = d[i];
-            r = v[i];
-        }
-    }
-
-    return r;
-}
-
-static float
-intersect(const vec3_t& r0, // s source
-          const vec3_t& rn, // n direction
-          const vec3_t& p0, // pt point sur la face
-          const vec3_t& pn) // n normal a la face
-{
-    float d = -pn.dot(p0);
-
-    float numer = pn.dot(r0) + d;
-    float denom = pn.dot(rn);
-
-    if(denom <= -0.1f || denom >= 0.1f) {
-        return -(numer/denom);
-    }
-    return -1.0f;
-}
-
-static float
-intersect_sphere(const vec3_t& r,
-                 const vec3_t& rv,
-                 const vec3_t& s,
-                 float sr)
-{
-    vec3_t q = s-r;
-    float c = q.len();
-    float v = q.dot(rv);
-    float d = sr*sr - (c*c-v*v);
-
-    if(d < 0.0f){
-        return -1.0f;
-    }
-
-    return v-sqrt(d);
-}
-
-static void
-check_collision(const face_t* f, collision_data& coldat)
-{
-    vec3_t ss(1,1,1);
-    vec3_t r;
-    vec3_t pt(vt_array[f->first]);
-    vec3_t n = f->p.normal();
-    float radius = 20.0f;
-    vec3_t s = coldat.src - n*radius;
-    float t = f->p.dist_to_point(s);
-
-    if(t > coldat.dir_len) {
-        //on arrive pas jusqu'a la collision avec la patate dir
-
-        return;
-    }
-    if(t < -2*radius) {
-        //la sphere a traverser ou est en dessous de la face
-        return;
-    }
-
-    if(t < 0.0f) {
-        t = intersect(s,n,pt,n);
-        r = s + n*t; // reaction retourne vers le haut pour choper le point sur le sol
-        if(!f->p.intersect(s,n*radius,pt,r)) return;
-    }
-    else {
-        t = intersect(s,coldat.ndir,pt,n);
-        r = s + coldat.ndir*t;
-        if(!f->p.intersect(s,coldat.dir,pt,r)) return;
-    }
-
-    if(!point_in_poly(r,f,ss)) {
-        r = closest_on_poly(r,f,ss);
-    }
-
-    t = intersect_sphere(r,-coldat.ndir,coldat.src,radius);
-    if(t >= 0.0f && t <= coldat.dir_len) {
-        if( !coldat.found || t <= coldat.nearest) { //
-            coldat.found = true;
-            coldat.nearest = t;
-            coldat.nearest_poly = r;
-        }
-    }
-    else
-    {
-    t=t;
-
-    }
-
-}
-
-static int cutoff = 0;
-
-vec3_t
-world_t::check_collisions(const vec3_t& src, const vec3_t& dir)
-{
-
-    if(++cutoff>5)
-    {
-
-        return src;
-    }
-
-
-    collision_data coldat;
-    coldat.src = src;
-    coldat.dir = dir;
-    coldat.dir_len = dir.len();
-
-    if(coldat.dir_len < epsilon) {
-
-        return src;
-    }
-
-    coldat.ndir = coldat.dir/coldat.dir_len;
-    for(int i = 0; i < visible_faces.size(); i++) {
-        face_t* f = visible_faces[i];
-        while(f) {
-            check_collision(f, coldat);
-            f = f->next;
-        }
-    }
-
-    if(coldat.found) {
-        vec3_t s = src;
-
-
-         if(coldat.nearest >= epsilon) {
-            s += coldat.ndir*(coldat.nearest-epsilon);
-        }
-
-        vec3_t dst = src+dir;
-        vec3_t n = s - coldat.nearest_poly;
-
-        n.normalize();
-        float t = intersect(dst,n,coldat.nearest_poly,n);
-
-        vec3_t newdst = dst + n*t;
-        vec3_t newdir = newdst - coldat.nearest_poly;
-
-        return check_collisions(s,newdir);
-
-    }
-
-    return src+(coldat.ndir*(coldat.dir_len-epsilon));
-}
-
-///////////////////////////////////////////////////////////////*/
-
-////////////////////////////////////////////////////////////////
 static world_t world;
 
 static matrix_t mm;
@@ -466,7 +177,6 @@ Engine::Engine()
         lessons[d] = NULL;
     }
     old_tchat = GetTickCount() + 5000;
-    // o.open("debug.log");
 
     m_bHaveConnectionSettingsFromLobby = FALSE;
     m_hLobbyClient = NULL;
@@ -513,8 +223,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    // delete(nouveau);
-
 }
 
 void Engine::resize()
@@ -526,20 +234,6 @@ void Engine::resize()
 
 void Engine::Run()
 {
-    /*float x =-259;
-    float y = 280;
-    float z = -89;
-
-    m_camera.move(x,y,z);
-    m_pivot.move(x,y,z);
-    m_pivot2.move(x,y,z);
-    m_pivot2.rotate(-90,0,90);
-    m_camera.rotate(-90,0,90);
-    m_pivot.rotate(-90,0,0);
-
-    chasse=true;
-
-    Joueur_Init();*/
 }
 
 void Engine::init()
@@ -547,7 +241,6 @@ void Engine::init()
 
     //	unsigned int Client;
 
-    // sockclose(Client);
     /*
      */
     lejoueur.clear();
@@ -556,9 +249,7 @@ void Engine::init()
 
     cycle = true;
 
-    // lespos=new vector<vec3_t>;
     lespos.clear();
-    // amoi=new vector<bool>;
     amoi.clear();
 
     FRIENDLY = 0;
@@ -567,30 +258,14 @@ void Engine::init()
     souris_inverse = 1;
     // dplay init
     HRESULT hr;
-    // Create IDirectPlay8Peer
 
-    // Init the helper class, now that g_pDP and g_pLobbiedApp are valid
-    // g_pNetConnectWizard->Init( m_pDP, FALSE );
-
-    // Init IDirectPlay8Peer
-    /*hr = m_pDP->Initialize( NULL,DirectPlayMessageHandler, 0 );
-
-*/
-    // o << "ConnectionsDlgOnOK" << endl;
     SAFE_RELEASE(m_pDeviceAddress);
     hr = CoCreateInstance(CLSID_DirectPlay8Address, NULL, CLSCTX_INPROC_SERVER, IID_IDirectPlay8Address,
                           (LPVOID *)&m_pDeviceAddress);
-    // if( FAILED(hr) )
-    //  return DXTRACE_ERR( TEXT("CoCreateInstance"), hr );
     // Create a host address
     SAFE_RELEASE(m_pHostAddress);
     hr = CoCreateInstance(CLSID_DirectPlay8Address, NULL, CLSCTX_INPROC_SERVER, IID_IDirectPlay8Address,
                           (LPVOID *)&m_pHostAddress);
-    // if( FAILED(hr) )
-    //   return DXTRACE_ERR( TEXT("CoCreateInstance"), hr );
-
-    //	hr = m_pDP->Initialize( NULL,dphdl, 0 );
-    //        ConnectionsDlgOnOK();
 
     m_xmlsession.mode(config.isdebug);
     msens = config.msens / 1000.0f;
@@ -603,9 +278,7 @@ void Engine::init()
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
-    // glColorMask(1,1,0,1);
     menu_mode = 1; // bat 06-06/2002
-    // menu_state=11;
     menu_state = 1100; // etat init
 
     // misc
@@ -618,14 +291,12 @@ void Engine::init()
     // texture settings
     glEnable(GL_TEXTURE_2D);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    // o << "glinitB" << endl;
 
     // depth buffer
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS); // GL_LESS
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR);
-    // o << "glinitc" << endl;
     //  nice perspective
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -633,47 +304,26 @@ void Engine::init()
     glCullFace(GL_FRONT);
     glEnable(GL_CULL_FACE);
 
-    //	glShadeModel(GL_FLAT);
-    // o << "glinitd" << endl;
-    // cyril
-    // lejoueur=new Aplayer[4];
-    // zero_dwords((void*) &lejoueur[0], lejoueur.size());
-
-    //	 lessons=new CSound[10];
-    // leseffets=new CSound[20];
-    // o << "mp3 new" << endl;
     mp3 = new Cmp3(m_pgraph);
 
     if (mp3)
     {
-        // o << "mp3 init" << endl;
-
         mp3->init(m_hwnd);
     }
-    // pWorld = new simulation_world(10.0f,10.0f,10.0f);
-
-    // o << "playerfile_t" << endl;
 
     m_playerfile = new playerfile_t;
-    // o << "m_font" << endl;
 
     m_font = new Font("data/env/font.tga");
     if (!m_font)
         throw out_of_memory();
-    // o << "Verify_Env" << endl;
-
-    // Verify_Env("logo1.tga");
-    //  o << "Romu init" << endl;
 
     m_romu = new Romu("data/env/logo1.tga");
     if (!m_romu)
         throw out_of_memory();
-    // o << "m_chat" << endl;
 
     m_chat = new Cchat(10.0f, 120.0f, 10.0f);
     if (!m_chat)
         throw out_of_memory();
-    // o << "m_chat clear" << endl;
 
     if (m_chat)
         m_chat->TAB.clear();
@@ -681,66 +331,35 @@ void Engine::init()
     m_phrase = new Cchat(350.0f, 60.0f, 5.0f);
     if (!m_phrase)
         throw out_of_memory();
-    // o << "m_phrase clear" << endl;
 
     if (m_phrase)
         m_phrase->TAB.clear();
 
-    // o << "m_cross" << endl;
 
     m_cross = new Cross("data/env/lescroix.bmp", "data/env/sniper.bmp", "data/env/noir.bmp");
     m_cross->position = config.viseur;
 
-    // o << "m_panel" << endl;
 
     m_panel = new Panel("data/env/ammog.bmp", "data/env/ammo.bmp", "data/env/smoke2.bmp", "data/env/vie.bmp",
                         "data/env/players.bmp", "data/env/lazer1.bmp");
-    // o << "pings" << endl;
     m_pings = new Pings(m_pDP);
-    // o << "marks" << endl;
     if (!(marks = new mMarkManager_t))
     {
         DXTRACE_ERR(TEXT("marks system"), hr);
     }
 
-    // o << "marksinit" << endl;
     marks->Init(geomNumMarks);
-    // o << "m_tex_impact" << endl;
     m_tex_impact = new texMan_t;
 
-    // o << "SetTexture" << endl;
     marks->SetTexture(m_tex_impact->Load("data/env/torch.tga"));
     marks->SetTexture_sang(m_tex_impact->Load("data/env/blood2.tga"));
     marks->SetTexture_trace(m_tex_impact->Load("data/env/hegrenade.tga"));
-    // o << "Image" << endl;
-
-    /*
-    CPhysEnv * nouveau= new CPhysEnv;
-    //	nouveau->AxeG =lejoueur[VRAI]->pos;
-        nouveau->AxeHaut =vec3_t(0.0f,0.0f,-1.0f);
-        nouveau->AxeDevant =vec3_t(0.0f,0.0f,1.0f);
-    lescar.push_back(nouveau);
-
-     nouveau->SetTexture(id_texture_jeep);
-    nouveau->SetWorld(&world);
-         nouveau->LoadData(vec3_t(0.0f,0.0f,1.0f));
-     */
-    // nouveau->SetPos(lejoueur[VRAI]->pos+vec3_t(0.0f,0.0f,100.0f));
-
-    // id_texture_jeep=0;
-    // cyril
-    /*for(int i = 0; i < NB_MAX; i++)
-        {
-        lejoueur[i]->init_particle();
-        }
-    */
 
     if (!(parts = new pParticleManager_t))
     {
         HRESULT hr = NULL;
         DXTRACE_ERR(TEXT("particle system"), hr);
     }
-    // o << "parts" << endl;
 
     m_tex = new texMan_t;
 
@@ -753,7 +372,6 @@ void Engine::init()
     parts->SetId(pTypeHeSmoke, m_tex->Load("data/env/smokehe.tga")); // smokehe
     /*-----------------------*/
     // parts2 pour les flash qui doievnt etre dans la matrice camera
-    //  o << "parts2" << endl;
     if (!(parts2 = new pParticleManager_t))
     {
         HRESULT hr = NULL;
@@ -765,14 +383,12 @@ void Engine::init()
     parts2->SetId(pTypeBoom, m_tex->Load("data/env/smoke.tga"));
     parts2->SetId(pTypeSmoke, m_tex->Load("data/env/smoke2.tga"));
     parts2->SetId(pTypeHeSmoke, m_tex->Load("data/env/smokehe.tga"));
-    // o << "grenades" << endl;
 
     if (!(grenades = new pGrenadeManager_t))
     {
 
         DXTRACE_ERR(TEXT("grenade system"), hr);
     }
-    // o << "grenadesok" << endl;
 
     grenades->SetGravity(vec3_t(0.0f, 0.0f, -100.0f)); // gravity
     grenades->SetId(pgTypeSimple, m_tex->Load("data/env/grenade.tga"));
@@ -781,19 +397,14 @@ void Engine::init()
     grenades->SetId(pgTypeLazer, m_tex->Load("data/env/lazer1.tga"));
     grenades->SetWorld(&world);
     grenades->SetEXPLODE(parts);
-    // grenades->SetPlayers(&lejoueur);
 
     /*-----------------*/
-    // my_blob.SetWorld(&world);
 
     sprintf(m_xmlsession.GServerName, "http://%s", config.server_xml);
 
     float x = 388;
     float y = 545;
     float z = -73;
-    /*float x =849;
-    float y = 1571;
-    float z = -84;*/
     m_camera.move(x, y, z);
     m_pivot.move(x, y, z);
     m_pivot2.move(x, y, z);
@@ -801,21 +412,13 @@ void Engine::init()
     m_camera.rotate(0, 0, 90);
     m_pivot.rotate(0, 0, 0);
 
-    //	chasse=true;
-    // o << "wglGetProcAddress" << endl;
 
     PROC swp = wglGetProcAddress("wglSwapIntervalEXT");
     if (swp)
     {
         typedef BOOL(WINAPI * swp_t)(int);
         swp_t s = (swp_t)swp;
-
-        /*if(config.vsync_off) {
-            s(0);
-        }
-        */
     }
-    // o << "enable_multitexture" << endl;
 
     if (world.use_multi)
     {
@@ -823,35 +426,23 @@ void Engine::init()
     }
 
     m_overlay = true;
-    // o << "load3d" << endl;
     load3d();
-    // o << "end load3d" << endl;
     // sound bat
 
     g_pSoundManager = new CSoundManager();
 
-    // o << "end g_pSoundManager" << endl;
 
     hr = g_pSoundManager->Initialize(m_hwnd, DSSCL_PRIORITY, 2, 22050, 16);
-    // o << "end Initialize" << endl;
 
     // Get the 3D listener, so we can control its params
     hr |= g_pSoundManager->Get3DListenerInterface(&g_pDSListener);
-    // o << "end Get3DListenerInterface" << endl;
 
     if (FAILED(hr))
     {
         DXTRACE_ERR(TEXT("Get3DListenerInterface"), hr);
-        // MessageBox( hDlg, "Error initializing DirectSound.  Sample will now exit.",
-        //                   "DirectSound Sample", MB_OK | MB_ICONERROR );
-        //  EndDialog( hDlg, IDABORT );
         return;
     }
 
-    // Get listener parameters
-    /*   g_dsListenerParams.dwSize = sizeof(DS3DLISTENER);
-       g_pDSListener->GetAllParameters( &g_dsListenerParams );
-       */
     // Get the 3D buffer parameters
     D3DVECTOR top;
     D3DVECTOR topo;
@@ -864,20 +455,9 @@ void Engine::init()
     g_pDSListener->SetOrientation(top.x, top.y, top.z, topo.x, topo.y, topo.z, DS3D_IMMEDIATE);
     g_pDSListener->SetRolloffFactor(5.0f, DS3D_IMMEDIATE);
 
-    // finsound bat
-    //	init_sound();
-    // o << "porte" << endl;
-
     init_porte();
-    // init_les_sons();
-    // o << "son" << endl;
 
     LoadLesSons();
-    // o << "finson" << endl;
-    //	playbackground(DSBPLAY_LOOPING);
-
-    // Image img;
-    //  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // ticker_t::Reset();
     vec3_t pos;
@@ -917,7 +497,6 @@ void Engine::init()
     int consolew = 575;
 
     Presentation->SetText(re);
-    // Presentation->SetText("ROMUSTRIKE   v137 %s ");
     /// 0
 
     Presentation->SetXY(consolex, 100, consolew, 200);
@@ -1434,7 +1013,6 @@ void Engine::init()
     input_partiedesc->SetXY(consolex - 50, 200, consolew, 200);
     input_partiedesc->SetFont(m_font);
     input_partiedesc->max_len = 100;
-    // input_partiedesc->text.length=20;
     input_partiedesc->visible = true;
     lesinput_box.push_back(input_partiedesc);
 
@@ -1445,7 +1023,6 @@ void Engine::init()
     input_pseudo_lan->SetXY(consolex - 50, 550, consolew, 200);
     input_pseudo_lan->SetFont(m_font);
     input_pseudo_lan->max_len = 20;
-    // input_partiedesc->text.length=20;
     input_pseudo_lan->visible = true;
     lesinput_box.push_back(input_pseudo_lan);
 
@@ -1456,7 +1033,6 @@ void Engine::init()
     input_ip_lan->SetXY(consolex - 50, 650, consolew, 200);
     input_ip_lan->SetFont(m_font);
     input_ip_lan->max_len = 100;
-    // input_partiedesc->text.length=20;
     input_ip_lan->visible = true;
     lesinput_box.push_back(input_ip_lan);
 
@@ -1467,30 +1043,8 @@ void Engine::init()
     input_tchat->SetXY(consolex - 100, 100, consolew, 200);
     input_tchat->SetFont(m_font);
     input_tchat->max_len = 100;
-    // input_partiedesc->text.length=20;
     input_ip_lan->visible = true;
     lesinput_box.push_back(input_tchat);
-
-    // 0
-    /*
-        for(int r=0;r<max_arme;r++)
-        {
-            bouton* option_armes=new console;
-            option_armes->SetXY(0,750+r*10);
-            //option_armes->SetFont(m_font);
-            option_armes->visible=true;
-            lesoptionsbouton.push_back(option_armes);
-        }
-    */
-
-    //------------------------------------------------------------------------------------------------------
-
-    // o << "end init" << endl;
-    // m_PhysEnv.LoadData(vec3_t(3478.0f,225.0f,-200.0f));
-
-    // m_PhysEnv.SetWorld(&world);
-
-    // nouveau= new Aplayer;
 }
 
 void Engine::init_sound()
@@ -1517,10 +1071,6 @@ void Engine::init_sound()
         // Sound must be PCM when using DSBCAPS_CTRL3D
         return;
     }
-
-    // guid3DAlgorithm = DS3DALG_HRTF_FULL;
-    // guid3DAlgorithm = DS3DALG_HRTF_LIGHT;
-    // guid3DAlgorithm = DS3DALG_NO_VIRTUALIZATION;
 
     // Load the wave file into a DirectSound buffer
     HRESULT hr = g_pSoundManager->Create(&g_pSound, strFileName, DSBCAPS_CTRL3D, DS3DALG_HRTF_FULL);
@@ -1555,10 +1105,7 @@ void Engine::init_sound()
 }
 void Engine::ChargeUnSon(char *strFileName, int id, float min, float max)
 {
-    // static TCHAR strFileName[MAX_PATH] = TEXT("data/awp-1.wav");
-
     CWaveFile waveFile;
-    // sprintf(strFileName,"%s",TEXT("data/Door5.wav"));
 
     waveFile.Open(strFileName, NULL, WAVEFILE_READ);
     WAVEFORMATEX *pwfx = waveFile.GetFormat();
@@ -1579,10 +1126,6 @@ void Engine::ChargeUnSon(char *strFileName, int id, float min, float max)
         // Sound must be PCM when using DSBCAPS_CTRL3D
         return;
     }
-
-    // guid3DAlgorithm = DS3DALG_HRTF_FULL;
-    // guid3DAlgorithm = DS3DALG_HRTF_LIGHT;
-    // guid3DAlgorithm = DS3DALG_NO_VIRTUALIZATION;
 
     // Load the wave file into a DirectSound buffer
     HRESULT hr =
@@ -1635,10 +1178,6 @@ void Engine::init_les_sons()
         return;
     }
 
-    // guid3DAlgorithm = DS3DALG_HRTF_FULL;
-    // guid3DAlgorithm = DS3DALG_HRTF_LIGHT;
-    // guid3DAlgorithm = DS3DALG_NO_VIRTUALIZATION;
-
     // Load the wave file into a DirectSound buffer
     HRESULT hr = g_pSoundManager->Create(&lessons[0], strFileName, DSBCAPS_CTRL3D, DS3DALG_HRTF_FULL);
     if (FAILED(hr) || hr == DS_NO_VIRTUALIZATION)
@@ -1667,16 +1206,11 @@ void Engine::init_les_sons()
     dir.x = 0.5f;
 
     pos.x = 0;
-
-    // SetBackSoundProperties(&pos,&dir);
 }
 
 void Engine::init_porte()
 {
-    // static TCHAR strFileName[MAX_PATH] = TEXT("data/weapons/aug-1.wav");
     static TCHAR strFileName[MAX_PATH] = TEXT("data/sound/Door5.wav");
-
-    // static TCHAR strFileName[MAX_PATH] = TEXT("data/sound/Door5.wav");
 
     CWaveFile waveFile;
 
@@ -1699,10 +1233,6 @@ void Engine::init_porte()
         return;
     }
 
-    // guid3DAlgorithm = DS3DALG_HRTF_FULL;
-    // guid3DAlgorithm = DS3DALG_HRTF_LIGHT;
-    // guid3DAlgorithm = DS3DALG_NO_VIRTUALIZATION;
-
     // Load the wave file into a DirectSound buffer
     HRESULT hr = g_pSoundManager->Create(&g_pSporte, strFileName, DSBCAPS_CTRL3D, DS3DALG_HRTF_FULL);
     if (FAILED(hr) || hr == DS_NO_VIRTUALIZATION)
@@ -1717,9 +1247,8 @@ void Engine::init_porte()
         DXTRACE_ERR(TEXT("Get3DBufferInterface"), hr);
         return;
     }
-
-    //	SetBackSoundProperties(&pos,&dir);
 }
+
 HRESULT
 Engine::playbackground(DWORD flags)
 {
@@ -1732,6 +1261,7 @@ Engine::playbackground(DWORD flags)
 
     return hr;
 }
+
 HRESULT
 Engine::ouvertureporte()
 {
@@ -1800,9 +1330,6 @@ Engine::end_orto()
 
 void Engine::display_screen(float delta)
 {
-
-    //	static std::ofstream o("log/engine.log");
-
     float xd = m_width / 4.0f;
     // float yd =   m_height /4.0f;
     float yd = m_height * 0.25f;
@@ -1810,7 +1337,6 @@ void Engine::display_screen(float delta)
     begin_orto();
 
     static char c[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@_.0123456789";
-    // char s[1];
 
     float lenghto;
 
@@ -1820,65 +1346,16 @@ void Engine::display_screen(float delta)
 
     char buffer[200];
 
-    /*--------------debug automate-------*/
-
-    /*--------------debug automate-------*/
-
-    //
-    //	glDisable(GL_BLEND);
-    // glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-    // glColor4f(1.0f,0.3f,1.0f,0.5f);
-    /*for (int aa=0;aa<5;aa++)
-    {
-        float ax=xd+aa*lenght;
-        float ay=yd*3+aa*lenght;
-
-    GlQuad(ax,ay,ax+10,ay-10);
-//	m_font->print(xd+aa*lenght,yd*3+aa*lenght, "e");
-
-    }*/
-
     glDisable(GL_DEPTH_TEST);
 
     //
     glEnable(GL_BLEND);
-    /* glBegin(GL_QUADS);
-         glVertex3f(xd*0.5, yd*0.5 , -0.2f);
-         glVertex3f(xd*3.5, yd*0.5, -0.2f);
-         glVertex3f(xd*3.5, yd*3.5-20, -0.2f);
-         glVertex3f(xd*0.5, yd*3.5-20, -0.2f);
-     glEnd();*/
-
-    //	glColor4f(0.0f,0.4f,0.0f,0.4f);
-    // glColor3f(0.0f,0.4f,0.0f);
-    /* glBegin(GL_QUADS);
-         glVertex3f(xd, yd,  1.1f);
-         glVertex3f(xd*3, yd,  1.1f);
-         glVertex3f(xd*3, yd*3-20,  1.1f);
-         glVertex3f(xd, yd*3-20,  1.1f);
-     glEnd();
- */
-
-    // glColor3f(0.0f,0.6f,0.0f);
-    /*glBegin(GL_QUADS);
-        glVertex3f(xd, yd*3-20, -0.1f);
-        glVertex3f(xd*3, yd*3-20, -0.1f);
-        glVertex3f(xd*3, yd*3, -0.1f);
-        glVertex3f(xd, yd*3, -0.1f);
-    glEnd();*/
-    //	GlQuad(xd,yd*3-20,xd*3, yd*3);
-
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //  glColor3f(0.5f,0.5f,0.5f);
-    //   m_font->print(xd+4, yd+4, gl_info.vendor());
-    //   m_font->print(xd+4, yd+4+16, gl_info.renderer());
 
     //----------------------------------------------------------------------------------
     //				AUTOMATE MENU
     //----------------------------------------------------------------------------------
 
     //----------------------PAGE PRINCIPALE------------------------------------------------------------
-    // glDisable(GL_BLEND);
     for (int da = 0; da < lesoptionsbouton.size(); da++)
     {
         lesoptionsbouton[da]->visible = (menu_state == 151);
@@ -1926,45 +1403,21 @@ void Engine::display_screen(float delta)
         lesconsoles[12]->SetText(men);
     }
 
-    if (menu_mode)
-    {
-        /*char buf[100];
-        sprintf(buf,"ROMUSTRIKE   v%i",m_xmlsession.Version_Soft);
-        int d=strlen(buf);
-        glColor3f(0.3f, 0.3f,0.3f);
-        m_font->print(xd*2-8*d+3, yd*3+lenght*2+3, buf);
-        glColor3f(1.0f, 1.0f,1.0f);
-        m_font->print(xd*2-8*d, yd*3+lenght*2, buf);
 
-        sprintf(buf,"%s",config.server_xml);
-        d=strlen(buf);
-        glColor3f(0.5f, 0.5f,0.5f);
-        m_font->print(xd*2-8*d+3, yd*3+lenght*2+3-16, buf);
-        */
-    }
     if ((menu_state == 51))
-    { // join session  enum
-        //	glColor3f(1.0f, 1.0f,0.0f);
-        //	glDisable(GL_BLEND);
-        //
-
+    {
         char str[200]; // vs2005 debug
         sprintf(str, "MAP : %s*attente joueurs ...*joueurs : %i", m_cur_map, g_lNumberOfActivePlayers);
         lesconsoles[12]->SetText(str);
 
         if ((lesbtn[14]->m_mouseclick))
-        { // quit
-
-            //	 m_pDP->Close(0);
-
-            // bConnectSuccess=FALSE;
+        {
+            // quit
             if (!lan_mode)
                 menu_state = 1;
             else
                 menu_state = 990;
 
-            // m_pDP->Close(0);
-            // HRESULT hr=m_pDP->TerminateSession(NULL,0,0);
             if (m_playerfile)
             {
                 if (!lan_mode)
@@ -1973,9 +1426,7 @@ void Engine::display_screen(float delta)
             }
 
             m_pDP->Close(0);
-            // HRESULT hr=m_pDP->TerminateSession(NULL,0,0);
 
-            // m_chat->addtext("map cleanup",2);
             strcpy(lesinput_box[5]->text.text, "");
 
             world.cleanup();
@@ -1992,21 +1443,8 @@ void Engine::display_screen(float delta)
             ouvertureporte(); // 05/12/2002
         }
     }
-    else if (menu_state == 1111)
-    {
-
-        /*m_serverid=m_xmlsession.DevenirServer (m_playerfile,m_cur_map);
-        bConnectSuccess =true;
-        m_bHostPlayer = TRUE;
-        menu_state=51;
-        */
-    }
     else if (menu_state == 110)
     { // join session  enum
-        //	glColor3f(1.0f, 1.0f,0.0f);
-        //	glDisable(GL_BLEND);
-        //
-        //	glColor4f(0.0f,0.3f,1.0f,0.5f);
 
         if (m_input.xpos > xd && lesbtn[15]->m_mouseclick)
         { // quit
@@ -2021,19 +1459,13 @@ void Engine::display_screen(float delta)
                 m_pDP->CancelAsyncOperation(m_hEnumAsyncOp, 0);
             }
         }
-        /*	glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glColor3f(1.0f, 1.0f,0.0f);
-            */
         SessionsDlgExpireOldHostEnums();
 
         SessionsDlgDisplayEnumList(xd, yd, m_input.xpos, m_input.ypos);
 
-        // lesconsoles[12]->SetText( "Recherche Session...");
 
         char r[300];
         strcpy(r, "Recherche de session*Veuillez patientez...**Entrez un mot de passe*pour les parties privees*");
-        // m_font->print(xd*1-60, yd*0.9f, "Entre le mot de passe si besoin:");
         lesconsoles[4]->SetText(r);
     }
 
@@ -2057,16 +1489,12 @@ void Engine::display_screen(float delta)
                         m_xmlsession.GServerName);
 
                 lesconsoles.at(2)->SetText(bufff);
-                // active_input=2;
                 prev = GetTickCount();
             }
             else
             {
                 if (S_OK == m_xmlsession.InfoJoueur(m_playerfile, config.server_tchat, MAC))
                 {
-                    /*	char File_name[127]="village.exe";
-                        char URL[127]="/vbstrike/map/village.exe";
-                */
                     is_op = m_playerfile->is_op;
 
                     lesconsoles[2]->SetText(m_playerfile->panel_joueur);
@@ -2115,14 +1543,7 @@ void Engine::display_screen(float delta)
     {
 
         //			Joueur_Creation ("21212",4544455454);
-        //	g_lNumberOfActivePlayers++;
         menu_state = 10;
-        /*
-        glColor3f(1.0f, 1.0f,1.0f);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        m_font->print(xd+4, yd*3-18, "RomuStrike -chargement-" );
-        */
         lesconsoles[12]->SetText("RomuStrike -chargement-");
 
         if (m_romu)
@@ -2177,19 +1598,6 @@ void Engine::display_screen(float delta)
         {
             menu_state = 9;
         }
-        /*	glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glColor3f(1.0f, 1.0f,0.0f);
-
-            if (m_playerfile)
-            {
-                m_font->print(xd+15, yd*2.3, m_playerfile->msg1 );
-                m_font->print(xd+15, yd*2.1, m_playerfile->msg2 );
-                m_font->print(xd+15, yd*1.9, m_playerfile->msg3 );
-                m_font->print(xd+15, yd*1.7, m_playerfile->msg4 );
-            }
-
-        */
         if (lesbtn[26]->m_mouseclick)
         {
             menu_state = 350;
@@ -2315,7 +1723,6 @@ void Engine::display_screen(float delta)
 
         if (mp3)
         {
-            //				Download_Mp3 (m_xmlsession.GServerName,m_playerfile->player_mp3 );
             mp3->stop();
             if (config.music_on)
                 mp3->load(m_playerfile->player_mp3);
@@ -2361,23 +1768,6 @@ void Engine::display_screen(float delta)
                 // HRESULT hr = g_pDP->Initialize(NULL, DirectPlayMessageHandler, 0 );
                 if (SessionsDlgCreateGame() == S_OK)
                 {
-                    /*	if (lejoueur.size()>0)
-                        {
-                            vec3_t ret= world.RenvoiePosition(lejoueur[VRAI]->id_modele);
-                            m_pivot.move( ret);
-                        }
-                        if (m_playerfile)
-                            m_serverid=m_xmlsession.DevenirServer (m_playerfile,m_cur_map,( CFT_ON |
-                       (TEAM_ON<<1)),m_dwMaxPlayers);
-
-
-
-                        if (m_playerfile)
-                            idpartie=m_xmlsession.JoinServer(m_playerfile,m_serverid);
-
-                        killed=0;
-                        killer=0;
-        */
                     menu_state = 51;
                 }
                 else
@@ -2450,8 +1840,6 @@ void Engine::display_screen(float delta)
                 else
                 {
 
-                    // Download_Map(m_cur_host,m_cur_map);
-                    // m_font->print(xd+4, yd*3-18, "Connection serveur mp3");
                     sprintf(distant_file, "romustrike/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
                     sprintf(local_file, "data/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
                     sprintf(m_cur_host, "%s", Mp3List.List[curmp3id].host);
@@ -2465,26 +1853,7 @@ void Engine::display_screen(float delta)
                     lesconsoles[12]->SetText(dow);
                 }
 
-                /*if (Verify_Mp3 (m_playerfile->player_mp3 ))
-                {
-
-                    menu_state=0;
-                    ouvertureporte(); //05/12/2002
-
-                    mp3->load(m_playerfile->player_mp3 );
-
-                }
-                else
-                {
-                    char dow[100];
-                    sprintf(dow,"Downloading %s",m_playerfile->player_mp3 );
-                    m_font->print(xd+4, yd*3-18, dow);
-                    menu_state=2001;
-
-                }
-                */
                 menu_state = 0;
-                // ouvertureporte(); //05/12/2002
             }
             else
             {
@@ -2565,7 +1934,6 @@ void Engine::display_screen(float delta)
                 x1 = xd * 0.6f;
                 y1 = yd * 2.6f;
                 w1 = xd * 3 - x1;
-                // h1= -(yd*1.85)+y1 ;
 
                 float pos_y_mouse;
                 pos_y_mouse = m_height - m_input.ypos;
@@ -2931,17 +2299,6 @@ void Engine::display_screen(float delta)
                             m_romu->init();
                     }
                 }
-                /*if (menu_state==13)
-                {
-                 if (!m_input.left_button)
-                        {
-
-                        menu_state=14;
-                        m_romu->init();
-                        }
-
-                }
-                else */
 
                 else if (menu_state == 8)
                 { // sortie de new player
@@ -3036,10 +2393,6 @@ void Engine::display_screen(float delta)
                 else if (menu_state == 151)
                 { // sortie de new player
 
-                    /*			glEnable(GL_BLEND);
-                                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                                glColor3f(1.0f, 1.0f,0.0f);
-                    */
                     char str[100];
 
                     if (m_dwMaxPlayers != 0)
@@ -3056,12 +2409,6 @@ void Engine::display_screen(float delta)
                     }
                     else
                         lesinput_box[5]->visible = false;
-
-                    //	m_font->print(xd*3+20, yd*3-35+10, "+");
-                    //	m_font->print(xd*3+20, yd*3-35-10, "-");
-
-                    //	glColor3f(1.0f, 0.0f,1.0f);
-                    ///		m_font->print(xd+40, yd+150, str );
 
                     glColor4f(0.0f, 0.3f, 1.0f, 0.5f);
 
@@ -3616,17 +2963,6 @@ void Engine::download_task()
                 /****************************/
                 //	// o << "connect" << endl;
                 port = 80;
-                // CString str;
-                // str.Format(_T("char %c ", c)
-
-                // Install the status callback function.
-                /*
-                   WINHTTP_STATUS_CALLBACK isCallback =
-                    WinHttpSetStatusCallback( hOpen,
-                    (WINHTTP_STATUS_CALLBACK)Engine::Juggler,
-                         WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
-                         NULL);
- */
 
                 WCHAR lphost[100];
                 DXUtil_ConvertAnsiStringToWide(lphost, m_cur_host);
@@ -3646,9 +2982,6 @@ void Engine::download_task()
                     /* OPEN HTTP REQUEST */
                     /*********************/
 
-                    // flags = INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE;
-                    // if (! stricmp(url_scheme, "https"))
-                    //     flags |= INTERNET_FLAG_SECURE;
                     WCHAR lp_distant_file[100];
                     DXUtil_ConvertAnsiStringToWide(lp_distant_file, distant_file);
                     //
@@ -3926,14 +3259,6 @@ void Engine::download_task_old()
                 // str.Format(_T("char %c ", c)
 
                 // Install the status callback function.
-                /*
-                   WINHTTP_STATUS_CALLBACK isCallback =
-                    WinHttpSetStatusCallback( hOpen,
-                    (WINHTTP_STATUS_CALLBACK)Engine::Juggler,
-                         WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
-                         NULL);
- */
-
                 WCHAR lphost[100];
                 DXUtil_ConvertAnsiStringToWide(lphost, m_cur_host);
                 hConnect = WinHttpConnect(hOpen, (LPCWSTR)lphost, INTERNET_DEFAULT_HTTP_PORT, NULL); //(LPCWSTR) lphost
@@ -4296,62 +3621,11 @@ void Engine::handle_input_main()
             m_chat->addtext("RomuChat Active", 2);
         else
             m_chat->addtext("RomuChat Desactive", 2);
-        // lejoueur[VRAI]->mort=true;
-
-        /*	*/
-        // Joueur_Creation ("21212",4544455454);
-        //	g_lNumberOfActivePlayers++;
-        //	lejoueur[g_lNumberOfActivePlayers-1]->pos=lejoueur[VRAI]->pos+vec3_t(0.0f,-35.0f,-20.0f);
-
-        // lejoueur[g_lNumberOfActivePlayers-1]->is_car=true;
-        /*lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeG=lejoueur[VRAI]->pos+vec3_t(0.0f,-35.0f,+20.0f);
-        lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeDevant=vec3_t(0.0f,1.0f,0.0f);
-        lejoueur[g_lNumberOfActivePlayers-1]->m_PhysEnv.AxeHaut=vec3_t(0.0f,0.0f,1.0f);
-        */
     }
     relkeys[VK_F4] = (m_input.keys[VK_F4]);
-    /*if((m_input.keys[VK_F11]) && !(relkeys[VK_F11]))
-            {
-                if(time_acceleration!=1.0f)
-                    time_acceleration=1.0f;
-                else
-                    time_acceleration=0.0f;
-                    */
-    /*mode_storm=!mode_storm;
-    storm_off=mode_storm;
-
-
-}
-relkeys[VK_F11]=(m_input.keys[VK_F11]);
-*/
 
     if ((m_input.keys[VK_F2]) && !(relkeys[VK_F2]))
     {
-
-        /*
-        char model[100];
-        char tmp[100];
-        if(m_chat)
-        {
-        m_chat->addtext("-----------");
-        for(int r=0;r<lejoueur.size();r++)
-        {
-            DWORD ms=get_lagg(lejoueur[r]->ID);
-            model2str(lejoueur[r]->id_modele,  model);
-            if (lejoueur[r]->mort)
-            {
-            sprintf(tmp, " %i %s %s  (%dms) mort",(r+1),lejoueur[r]->playername,model,ms);
-            }
-            else
-            {
-
-            sprintf(tmp, " %i %s %s  (%dms) vie",(r+1),lejoueur[r]->playername,model,ms);
-            }
-
-            m_chat->addtext(tmp);
-        }
-        m_chat->addtext("-----------");
-        }*/
         if (m_pings->tps > 1.0f)
             m_pings->tps = 0.0f;
         else
@@ -4410,22 +3684,11 @@ relkeys[VK_F11]=(m_input.keys[VK_F11]);
         }
         else
         {
-
-            // Download_Map(m_cur_host,m_cur_map);
-            // m_font->print(xd+4, yd*3-18, "Connection serveur mp3");
             sprintf(distant_file, "/romustrike/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
             sprintf(local_file, "data/mp3/%s.mp3", Mp3List.List[curmp3id].Name);
             sprintf(m_cur_host, "%s", Mp3List.List[curmp3id].host);
             downloading = INET_CONNECT;
             type_download = 1;
-
-            // menu_state=2052;
-
-            /*char dow[100];
-               sprintf(dow,"Downloading %s",m_playerfile->player_mp3 );
-               m_font->print(xd+4, yd*3-18, dow);
-               menu_state=2001;
-               */
         }
         m_xmlsession.set_mp3(m_playerfile, Mp3List.List[curmp3id].id);
     }
@@ -4440,11 +3703,8 @@ void Engine::input_text_key()
 {
     char cs[] = " ";
 
-    // 65 91for(int c = 65; c < 91; c++)
-    //
     if ((strlen(lesinput_box[active_input]->text.text) < lesinput_box[active_input]->max_len))
     {
-        // for(int c = 65; c < 91; c++)
         for (int c = 65; c < 91; c++)
         {
             if ((m_input.keys[c]) && !(relkeys[c]))
@@ -4498,16 +3758,6 @@ void Engine::input_text_key()
                 relkeys[acs[cpt]] = (m_input.keys[acs[cpt]]);
             }
         }
-
-        /*
-        if((strlen(lesinput_box[active_input]->text.text)<lesinput_box[active_input]->max_len) &&
-        (m_input.keys[VK_DECIMAL]) && !(relkeys[VK_DECIMAL]))
-        {
-            strcat(lesinput_box[active_input]->text.text,".");
-        }
-        relkeys[VK_DECIMAL]=(m_input.keys[VK_DECIMAL]);
-
-        */
     }
     if ((strlen(lesinput_box[active_input]->text.text) > 0) && (m_input.keys[VK_BACK]) && !(relkeys[VK_BACK]))
     {
@@ -4612,7 +3862,7 @@ void Engine::handle_input(float delta)
 
     relkeys[VK_F7] = (m_input.keys[VK_F7]);
 
-    if (lejoueur[VRAI]->is_car) // lejoueur[VRAI]->is_car
+    if (lejoueur[VRAI]->is_car)
     {
         bool av = m_input.keys[config.keys[0]];
         bool ar = m_input.keys[config.keys[1]];
@@ -4710,18 +3960,6 @@ void Engine::handle_input(float delta)
             dir_blob[0] = -20.0f;
         }
         relkeys[VK_NUMPAD6] = (m_input.keys[VK_NUMPAD6]);
-
-        /*if(dir_blob[2]!=0.0f || dir_blob[0]!=0.0f)
-                my_blob.move(dir_blob);
-        */
-
-        /*	if((m_input.keys[VK_MULTIPLY]) && !(relkeys[VK_MULTIPLY])) {
-                    my_blob.ping();
-                }
-                relkeys[VK_MULTIPLY]=(m_input.keys[VK_MULTIPLY]);
-
-
-        */
 
         if ((m_input.keys['1']) && !(relkeys['1']))
         {
@@ -4863,23 +4101,8 @@ void Engine::handle_input(float delta)
             lejoueur[VRAI]->yeux[1] = -89;
             lejoueur[VRAI]->yeux[2] = 36;
         }
-        /*else
-        {
-        g_camera_suivi=lejoueur[VRAI]->ID;
-        }
-        */
     }
     relkeys[config.keys[11]] = (m_input.keys[config.keys[11]]);
-
-    /*if((m_input.keys['5']) && !(relkeys['5']))
-    {
-        lejoueur[VRAI]->tir=true;
-    }
-    else
-    {
-        lejoueur[VRAI]->tir=false;
-    }
-    relkeys['5']=(m_input.keys['5']);*/
 
     if (!lejoueur[VRAI]->is_car)
     {
@@ -4951,8 +4174,6 @@ void Engine::handle_input(float delta)
 
         char ch[20];
         strcpy(ch, TEXT("jump"));
-        // if( (strcmp(lejoueur[VRAI]->dep ,ch)!=0) || (strcmp(lejoueur[VRAI]->dep ,ch)==0 &&
-        // lejoueur[VRAI]->modele.AniActFini==true))
 
         if (lejoueur[VRAI]->can_jump == true)
         {
@@ -4983,12 +4204,10 @@ void Engine::handle_input(float delta)
                 {
 
                     strcpy(lejoueur[VRAI]->dep, TEXT("idle1"));
-                    // lejoueur[VRAI]->dep="idle1";
                 }
                 else
                 {
                     strcpy(lejoueur[VRAI]->dep, TEXT("run"));
-                    // lejoueur[VRAI]->dep="run";
                 }
 
                 if (m_input.keys[96])
@@ -5021,8 +4240,6 @@ void Engine::handle_input(float delta)
 
         if ((m_input.keys[config.keys[4]]) && !relkeys[config.keys[4]])
         {
-
-            // if (strcmp(lejoueur[VRAI]->dep ,ch)!=0)
             if (lejoueur[VRAI]->can_jump == true)
             {
                 strcpy(lejoueur[VRAI]->dep, TEXT("jump"));
@@ -5035,7 +4252,6 @@ void Engine::handle_input(float delta)
                 lejoueur[VRAI]->saut = true;
                 lejoueur[VRAI]->sens = 1;
                 lejoueur[VRAI]->modele.fps1 = 0.0f;
-                // relkeys[config.keys[4]]=true;
             }
         }
         relkeys[config.keys[4]] = (m_input.keys[config.keys[4]]);
@@ -5075,31 +4291,6 @@ void Engine::handle_input(float delta)
     }
     relkeys[VK_ESCAPE] = (m_input.keys[VK_ESCAPE]);
 
-    /*if((m_input.keys['P']) && !(relkeys['P']))
-    {
-        lejoueur[VRAI]->affecte_arme (lesarmes,lejoueur[VRAI]->id_weapon +1,max_arme);
-        lejoueur[VRAI]->affecte_sound (lessons[lejoueur[VRAI]->arme.id_son] );
-
-    }*/
-
-    /*static float save_msens = 0.0f;
-    if((m_input.keys['Z']) && !(relkeys['Z'])) {
-        if(save_msens == 0.0f) {
-            save_msens = msens;
-        }
-        znear += 0.1;
-        set_znear();
-        msens *= 0.99f; // slightly decrease mouse sens
-    }
-    if((m_input.keys['X']) && !(relkeys['X'])) {
-        if(save_msens != 0.0f) {
-            znear = 1.0;
-            set_znear();
-            msens = save_msens;
-            save_msens = 0.0f;
-        }
-    }*/
-
     if ((m_input.right_button) && !(BTN_DROIT))
     {
         if ((lejoueur[VRAI]->arme.scope > 0))
@@ -5118,8 +4309,6 @@ void Engine::handle_input(float delta)
     if ((SCOPE_ETA) && (lejoueur[VRAI]->arme.scope > 0) && (exterieur == false) && !lejoueur[VRAI]->mort)
     {
 
-        // for(int j = 0; j < 10; j++)
-        // if (znear<=10)
         if ((world.znear < lejoueur[VRAI]->arme.cur_scope) || (world.znear > lejoueur[VRAI]->arme.cur_scope))
         {
             if (save_msens == 0.0f)
@@ -5143,20 +4332,6 @@ void Engine::handle_input(float delta)
                     msens /= 0.92f;
                 }
             }
-
-            // msens *= lejoueur[VRAI]->arme.scope*0.92f; // slightly decrease mouse sens
-            // msens *= (float)(9.9f/lejoueur[VRAI]->arme.scope); // slightly decrease mouse sens
-
-            /*if(save_msens == 0.0f) {
-                save_msens = msens;
-            }
-            world.znear += 0.5;
-            //znear +=(float)(1/lejoueur[VRAI]->arme.scope);
-            world.set_znear();
-
-             msens *= 0.92f; // slightly decrease mouse sens
-        //	msens *= (float)(9.9f/lejoueur[VRAI]->arme.scope); // slightly decrease mouse sens
-            */
         }
         sniper = true;
     }
@@ -5206,8 +4381,6 @@ void Engine::handle_input(float delta)
     // pour l'arme
     if (m_playerfile)
     {
-        // maximun_arme= floor(m_playerfile->score/10)+3; // tous les 10 point nvl arme
-        // f(pts) = INT(LN(pts*1,5*1,5*1,5/10)/LN(1,5)+1)
         int sc = m_playerfile->score;
 
         float coef = 1.4f;
@@ -5229,7 +4402,6 @@ void Engine::handle_input(float delta)
     if (config.isdebug || lan_mode)
         maximun_arme = max_arme;
 
-    // maximun_arme=max_arme;
     if (!(lejoueur[VRAI]->tir) && (lejoueur[VRAI]->occupe == false) &&
         ((m_input.is_wheeling && m_input.wheel > 0) || (m_input.keys[config.keys[10]] && !relkeys[config.keys[10]])))
     {
@@ -5268,9 +4440,8 @@ void Engine::handle_input(float delta)
     {
         lejoueur[VRAI]->reload_arme();
     }
-
-    // unlockequipe();
 }
+
 void Engine::Change_arme(bool plus)
 {
 
@@ -5313,15 +4484,10 @@ void Engine::Change_arme(bool plus)
 
 void Engine::migratehost()
 {
-    //	m_serverid=m_xmlsession.DevenirServer (m_playerfile,m_cur_map);
-    // bConnectSuccess =true;
-    // m_bHostPlayer = TRUE;
-    // menu_state=1111;
     if (m_playerfile && !lan_mode)
         m_serverid = m_xmlsession.DevenirServer(
             m_playerfile, m_cur_map, (CFT_ON | (TEAM_ON << 1) | (SNIPER_ON << 2)), m_dwMaxPlayers, cle_tournois, round,
             cur_md5, lesinput_box[6]->text.text, strlen(lesinput_box[5]->text.text) > 0, les_armes_autorisees); //
-    // bConnectSuccess =true;
     m_bHostPlayer = TRUE;
     menu_state = 51;
     if (m_chat)
@@ -5360,11 +4526,6 @@ void Engine::overlay()
         m_pings->visible = true;
     }
 
-    // m_cross->print(m_width,m_height);
-
-    // sprintf(tmp, "menu_state %i",menu_state);
-    // m_font->print(0, 132, tmp);
-
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_FUNC);
 }
@@ -5402,15 +4563,6 @@ void Engine::HandleEvent(void)
 
 void Engine::AffichePanel(float delta)
 {
-    // lockequipe();
-
-    /*begin_orto();
-    glDisable(GL_DEPTH_FUNC);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-*/
-    // m_chat->draw(delta,m_height);
-
     m_panel->print(m_width, m_height, lejoueur[VRAI]->arme.munition, lejoueur[VRAI]->vie, g_lNumberOfActivePlayers,
                    lejoueur[VRAI]->arme.name);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -5423,7 +4575,6 @@ void Engine::AffichePanel(float delta)
     m_font->taille = t;
     if (DisplayGamma)
     {
-        //	glColor4f(1.0f,0.0f,0.0f,1.0f);
         char str[20];
         sprintf(str, "Gamma = %d", config.GAMMA);
         m_font->print(20, m_height / 2, str);
@@ -5431,13 +4582,10 @@ void Engine::AffichePanel(float delta)
 
     glDepthMask(1);
 
-    /*glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_FUNC);
-
-    end_orto();*/
-    // unlockequipe();
 }
+
 static float letick;
+
 static void anim()
 {
 
@@ -5457,17 +4605,13 @@ void Engine::frame()
     static vec3_t pos_leaf(0.0f, 0.0f, 0.0f);
     static vec3_t dir_apres_coll(0.0f, 0.0f, 0.0f);
 
-    // parts->SystemNew(new   pSystemBoom_t,vec3_t(0.0f,0.0f,0.0f), 1);
-
     float delta = 0.0f;
     frameTime.Frame();
-    // delta = (frameTime.GetDelta()+delta)/2.0f;
     delta = frameTime.GetDelta();
 
     if (delta > 5.1f)
         delta = 5.1f;
 
-    // delta=0.001f*time_acceleration;
     delta = delta * time_acceleration;
 
     if (mode_storm)
@@ -5498,25 +4642,6 @@ void Engine::frame()
         }
     }
 
-    /*
-int rr=1;
-    for(int pause=0;pause<1000;pause++) // expres pour ramer
-    {
-        rr++;
-    for(int pausae=0;pausae<10000;pausae++) // expres pour ramer
-    {
-        rr++;
-        rr=rr;
-
-    }
-    }
-*/
-
-    //	delta=0.01f;
-
-    /*	if (delta<0.002f)
-            delta=0.002f;
-    */
     vec3_t dst_cam;
 
     m_panel->frame(delta);
@@ -5529,13 +4654,6 @@ int rr=1;
         m_tchat = m_tchat - delta;
 
     anim();
-
-    /*begin_orto();
-
-    if(m_romu)
-    m_romu->print( 0, 0,m_width,m_height,letick); // fond
-
-    end_orto();*/
 
     speed = (GetTickCount() - old_tick) / 5.0f;
     if ((GetTickCount() - old_tick) > lagg_ms)
@@ -5594,8 +4712,6 @@ int rr=1;
                             CFT_envoi_message(4);
                         }
                     }
-
-                    //	lejoueur[VRAI]->mort=true;
                 }
             }
 
@@ -5740,10 +4856,6 @@ int rr=1;
     if ((GetTickCount() - old_tchat) > 20000) //
     {
         old_tchat = GetTickCount();
-        /*
-                if(g_lNumberOfActivePlayers>1)
-                    lejoueur[1]->play_sound();
-        */
         envoi_who(); // envoie socket
     }
 
@@ -5755,8 +4867,8 @@ int rr=1;
     speed = 200.0f * delta * cours;
 
     handle_input_main();
-    //	download_task();
     download_task_new();
+
     if (CFT_ON || TEAM_ON)
     {
         //** CFT pour initialiser la partie
@@ -5849,14 +4961,11 @@ int rr=1;
                 // si il est en l'air on reprend la velocity precedente
                 if (lejoueur[VRAI]->can_jump == false)
                 {
-                    // dir=dir_apres_coll;
                     dir = dir;
-                    // pos=pos_apres_coll;
                 }
                 dir_apres_coll = dir;
                 world.process_visible_faces_collide(pos, dir);
                 dir[2] = 1.0f;
-                // dir[2]=-1.0f*delta;
                 world.epsilon = 0.3f;
                 world.radius = 23.0f;
                 world.collide = false;
@@ -5876,7 +4985,6 @@ int rr=1;
                         lejoueur[VRAI]->pulse = 0.0f;
 
                 dir[2] = (-6.0f + lejoueur[VRAI]->pulse) * delta * 60.0f;
-                // dir[2]= ( lejoueur[VRAI]->pulse  )*delta*60.0f  ;
 
                 bool JeSuisSurUneEchelle = world.DessineEntites(pos);
 
@@ -6037,12 +5145,7 @@ int rr=1;
 
                 if (!world_is_loaded || (!exterieur && !lejoueur[VRAI]->mort))
                 {
-                    //	world.radius=10.0f;
 
-                    //	yeux
-                    //=lejoueur[VRAI]->m_PhysEnv.AxeG-lejoueur[VRAI]->m_PhysEnv.AxeDevant*10.0f;//lejoueur[VRAI]->m_PhysEnv.AxeHaut
-                    //+ 	pos_tmp	=lejoueur[VRAI]->m_PhysEnv.AxeG;
-                    //
                 }
                 else
                 {
@@ -6093,13 +5196,6 @@ int rr=1;
                 yeux[2] = yeux[2] + earth_quake * 15.0f;
                 flash[1] = flash[1] - earth_quake * 10.0f;
 
-                /*	if (lejoueur[VRAI]->is_car)
-                    {
-                        yeux=lejoueur[VRAI]->voiture->AxeG-lejoueur[VRAI]->voiture->AxeDevant*3.0f+lejoueur[VRAI]->voiture->AxeHaut*5.0f;
-                        flash
-                   =lejoueur[VRAI]->voiture->AxeG+lejoueur[VRAI]->voiture->AxeDevant*10.0f-lejoueur[VRAI]->voiture->AxeHaut*15.0f;
-                    }
-                    */
                 gluLookAt(yeux[0], yeux[1], yeux[2], flash[0], flash[1], flash[2], 0, 0, 1);
                 glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
 
@@ -6119,13 +5215,10 @@ int rr=1;
                 if (world_is_loaded && (respawn_time <= 0))
                 { // on  relache lasouris respawn
 
-                    //	ETA_SCOPE=false;
 
                     init_player(VRAI);
                     pos_apres_coll = lejoueur[VRAI]->pos;
                     dir_apres_coll = dir;
-
-                    // exterieur=false;
                 }
                 else
                 {
@@ -6181,7 +5274,6 @@ int rr=1;
                     ee.y = rr[1];
                     ee.z = rr[2];
                     id_suivi = j;
-                    // g_pDSListener->SetPosition (  ee.x,  ee.y,  ee.z,DS3D_IMMEDIATE);
                 }
             }
 
@@ -6211,21 +5303,14 @@ int rr=1;
             if (col_tir.found)
                 dst3 = col_tir.pt;
 
-            //				dst3= dst2;
             vec3_t dir_c = (dst2 - dst3);
-            //				dir_c.normalize();
             dst4 = (dst3 + dir_c * delta * 0.33f);
 
-            //	dst4=dst5;
-            // dst5.normalize ();
             vec3_t tmp = dst2 - dst4;
             if (tmp.len() > 150.0f)
                 dst_cam = dst4;
             else
                 dst_cam = m_camera.eye();
-
-            //	else
-            //	dst_cam=m_camera.eye ();
 
             vec3_t r = dstf - vue_cam;
 
@@ -6236,19 +5321,12 @@ int rr=1;
             m_camera.cam.load_identity();
             m_camera.load();
 
-            //	 		gluLookAt(dst_cam[0] ,dst_cam[1] ,dst_cam[2]
-            //,dstf[0]-vue_cam[0],dstf[1]-vue_cam[1],dstf[2]-vue_cam[2],0,0,1); //orient ,pos,norm
             gluLookAt(dst_cam[0], dst_cam[1], dst_cam[2], vue_cam[0], vue_cam[1], vue_cam[2], 0, 0,
                       1); // orient ,pos,norm
 
             glGetFloatv(GL_MODELVIEW_MATRIX, m_camera.cam.m);
-            //	m_camera.move(dst_cam[0],dst_cam[1],dst_cam[2]);
             m_camera.move(dst_cam);
             yeux = m_camera.eye();
-
-            // m_camera.rotate_delta(rotation);
-            // m_camera.transform();
-            // m_camera.load();
 
             lejoueur[VRAI]->fps = letick;
 
@@ -6280,12 +5358,10 @@ int rr=1;
             grenades->Frame(delta, &lespos, &amoi, &lesposjoueur, g_dpnidLocalPlayer, &lesid_joueur, &lejoueur);
             unlockequipe(); //----------------------------------------------LOCK
         }
-        //	world.DessineSkyBox(lejoueur[VRAI]->pos);
         vec3_t tt;
 
         VectorCopy(m_camera.eye(), tt);
 
-        //	/world.render_skyfaces(old_pos+vec3_t(20.0f,20.0f,20.0f));
         if (!mode_storm && world_is_loaded && !config.isdebug)
             world.render_skyfaces(tt);
         if (world_is_loaded && !menu_mode)
@@ -6294,25 +5370,11 @@ int rr=1;
             world.render_visible_faces(yeux, storm_off); // g_lNumberOfActivePlayers-1
             world.advance_frame(delta);
         }
-        // world.render_entvars(m_camera);
 
-
-        // my_blob.render();
-        /*	for (int yy=0;yy<lescar.size();yy++)
-       {
-           lescar[yy]->Simulate(delta*3.8f,true);//
-
-
-               lescar[yy]->RenderWorld() ;		// DRAW THE SIMULATION
-               //	pos=m_PhysEnv->AxeG;
-           //lescar[yy]->RenderFake(lescar[yy]->AxeG,lescar[yy]->AxeHaut,lescar[yy]->AxeDevant);
-   }
-         */
         lockequipe(); //----------------------------------------------LOCK
 
         static Camera camera2; // MOUARF ENCORE UN GLOBAL DANS NOTRE FACE
         camera2 = (Camera)m_camera;
-        // long letick=GetTickCount();
         int nb_vi = 0;
 
         for (int ga = 0; ga < lespos.size(); ga++)
@@ -6333,7 +5395,6 @@ int rr=1;
                 for (int g = 0; g < lespos.size(); g++) // mauvaise boucle sur le grenade explosion
                 {
                     vec3_t explode;
-                    //	vec3_t * pexplode;
 
                     explode = lespos[g];
                     if (VRAI == j)
@@ -6588,9 +5649,6 @@ int rr=1;
                     lapos.x = flash[0];
                     lapos.y = flash[1];
                     lapos.z = flash[2];
-                    /*lapos.x =lejoueur[j]->pos [0];
-                    lapos.y =lejoueur[j]->pos [2];
-                    lapos.z =lejoueur[j]->pos [1];*/
                 }
                 if (((j != VRAI) && (lejoueur[j]->arme.id_son != lejoueur[VRAI]->arme.id_son)))
                 {
@@ -6601,21 +5659,10 @@ int rr=1;
                     v.z = 0.0f;
 
                     lejoueur[j]->playersound->Positionne3Dbuffer(&lapos, &v);
-
-                    // lejoueur[j]->reload->Positionne3Dbuffer(&lapos,&lapos);
-                    // lejoueur[j]->meurt->Positionne3Dbuffer(&lapos,&lapos);
-                    //
                 }
             }
         }
-        /*	char e[555];
-            sprintf(e,"visible %d",nb_vi);
 
-                m_chat->addtext(e);
-        */
-        //	if(lejoueur[VRAI]->is_car)
-        //		lejoueur[VRAI]->velocity=(lejoueur[VRAI]->m_PhysEnv.AxeG-old_pos)/lejoueur[VRAI]->fps;
-        //	else
         if (!lejoueur[VRAI]->mort)
             lejoueur[VRAI]->velocity = (lejoueur[VRAI]->pos - old_pos) / lejoueur[VRAI]->fps;
 
@@ -6648,14 +5695,7 @@ int rr=1;
         lapos.x = son[0];
         lapos.y = son[1];
         lapos.z = son[2];
-        /*		lapos.x = lejoueur[VRAI]->pos [0];
-                lapos.y = lejoueur[VRAI]->pos [2];
-                lapos.z = lejoueur[VRAI]->pos [1];;
-                lapos.x = lejoueur[VRAI]->pos [0];
-                lapos.y = lejoueur[VRAI]->pos [2];
-            */
-        // lapos.z =son[1];;
-        // g_dsListenerParams.vPosition =lapos;
+
         D3DVECTOR Vel;
         Vel.x = 0.0f;
         Vel.y = 0.0f;
@@ -6663,87 +5703,16 @@ int rr=1;
 
         if (!lejoueur[VRAI]->mort)
         {
-            //	g_pDSListener->GetAllParameters( &g_dsListenerParams );
-            /*	lapos.x=0.0f;
-        lapos.y=0.0f;
-        lapos.z=0.0f;
-*/
-
-            // memcpy( &g_dsListenerParams.vPosition, &lapos, sizeof(D3DVECTOR) );
-            //	memcpy( &g_dsListenerParams.vVelocity, &Vel, sizeof(D3DVECTOR) );
-            // c3_t lapos=m_camera.eye();
-
             if (old_pos[0] != lejoueur[VRAI]->pos[0] || old_pos[1] != lejoueur[VRAI]->pos[1] ||
                 old_pos[2] != lejoueur[VRAI]->pos[2])
             {
 
                 g_pDSListener->SetPosition(lapos.x, lapos.y, lapos.z, DS3D_IMMEDIATE);
             }
-            // g_pDSListener->SetVelocity ((float) lapos[0],(float) lapos[2],(float) lapos[1],DS3D_IMMEDIATE);
             D3DVECTOR vOrientFront;
             D3DVECTOR vOrientTop;
-            /*
-            D3DVECTOR vv;
-            float a=(m_pivot.yaw()+float(-blend*3))*float(__PI/180);
-            float b=3*m_pivot2.pitch()*(__PI/180);
-
-            vv.x=0.0f;
-            vv.y=0.0f;
-            vv.z=1.0f;
-
-            vOrientFront.x = vv.z*cosf(a) + vv.x*sinf(a);
-            vOrientFront.y=vv.y;
-            vOrientFront.z = -vv.z*sinf(a) + vv.x*cosf(a);
-
-            vv.x=0.0f;
-            vv.y=1.0f;
-            vv.z=0.0f;
-
-            vOrientTop.x = vv.x ;
-            vOrientTop.y = vv.z*sinf(b) + vv.y*cosf(b);
-            vOrientTop.z=  vv.z*cosf(b) - vv.y*sinf(b)  ;
-
-             */
 
             t.normalize();
-            /*
-                vOrientFront.x=t[0];
-                vOrientFront.y=t[1];
-            vOrientFront.z=t[2];
-
-                vOrientFront.x=1;
-                vOrientFront.y=0;
-            vOrientFront.z=0;
-
-                vOrientTop.x=0.0f;
-                vOrientTop.y=-1.0f;
-                vOrientTop.z=0.0f;
-
-
-                    memcpy( &g_dsListenerParams.vOrientTop, &vOrientTop, sizeof(D3DVECTOR) );
-
-                    memcpy( &g_dsListenerParams.vOrientFront, &vOrientFront, sizeof(D3DVECTOR) );
-                    */
-            /*
-                    g_dsListenerParams.vVelocity.x = 0.0f;
-                g_dsListenerParams.vVelocity.y = 0.0f;
-                g_dsListenerParams.vVelocity.z = 0.0f;
-
-                g_dsListenerParams.vOrientTop.x	= 0.0f;
-                g_dsListenerParams.vOrientTop.y	= 0.0f;
-                g_dsListenerParams.vOrientTop.z	= 0.0f;
-
-                g_dsListenerParams.vOrientFront.x	= 0.0f;
-                g_dsListenerParams.vOrientFront.y	= 0.0f;
-                g_dsListenerParams.vOrientFront.z	= 0.0f;
-
-                *//*
-		g_dsListenerParams.flDopplerFactor = 1.0f;
-		g_dsListenerParams.flDistanceFactor = 1.0f;
-		g_dsListenerParams.flRolloffFactor = 0.05f;
-
-		g_pDSListener->SetAllParameters( &g_dsListenerParams, DS3D_IMMEDIATE );
- */
         }
 
         //******************************************************************
@@ -6780,34 +5749,24 @@ int rr=1;
         {
 
             DecaleArme();
-            // lejoueur[VRAI]->playersound->Positionne3Dbuffer(&lapos,&Vel);
 
-            /*lejoueur[VRAI]->reload->Positionne3Dbuffer(&lapos,&Vel);
-            lejoueur[VRAI]->meurt->Positionne3Dbuffer(&lapos,&Vel);
-            */
             if (!strcmp(lejoueur[VRAI]->arme.name, "grenade") || !strcmp(lejoueur[VRAI]->arme.name, "c4") ||
                 !strcmp(lejoueur[VRAI]->arme.name, "fumigene") || !strcmp(lejoueur[VRAI]->arme.name, "plasma")) //
             {
                 bool ok = false;
 
-                //	JoueUnSon (son_grenade);
-                // grenades->SystemNew(new   pGrenSystemSimple_t , lejoueur[VRAI]->pos,(flash2), 1);
                 vec3_t pos_gre = lejoueur[VRAI]->pos;
                 vec3_t dir_gre = flash;
 
                 if (world_is_loaded && !strcmp(lejoueur[VRAI]->arme.name, "c4"))
                 {
                     collision_tir col_mur;
-                    /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
-                    // world.process_visible_faces3(lejoueur[VRAI]->pos);
                     world.process_visible_faces_collide(lejoueur[VRAI]->pos, flash2);
 
                     col_mur = world.check_tirs_rec(lejoueur[VRAI]->pos, flash2 * 100.0f, 5);
                     if (col_mur.found)
                     {
                         collision_tir col_enface;
-                        /*col_tir=myworld->check_tirs(part->pos,(part->pos-part->pold));*/
-                        //	world.process_visible_faces3(lejoueur[VRAI]->pos);
                         world.process_visible_faces_collide(col_mur.pt + col_mur.normal, col_mur.normal);
 
                         col_enface = world.check_tirs_rec(col_mur.pt, col_mur.normal * 2000.0f, 5);
@@ -6848,18 +5807,12 @@ int rr=1;
                             flash2[2] = flash2[2] + 0.1f;
                             if (exterieur)
                             {
-                                // grenades->SystemNew(new   pGrenSystemMissile_t , lejoueur[VRAI]->pos,(flash2),
-                                // 1,true);
-
                                 grenades->SystemNew(new pGrenSystemMissile_t, fl, (flash2), 1, g_dpnidLocalPlayer);
                                 ok = true;
                             }
                             else
                             {
                                 grenades->SystemNew(new pGrenSystemMissile_t, fl, (flash2), 1, g_dpnidLocalPlayer);
-
-                                // grenades->SystemNew(new   pGrenSystemSmoke_t , fl,(flash2), 1,g_dpnidLocalPlayer);
-
                                 ok = true;
                             }
                         }
@@ -6880,8 +5833,6 @@ int rr=1;
             }
             else
             {
-
-                //	world.process_visible_faces(m_camera);
                 collision_tir col_tir;
                 if (world_is_loaded)
                     col_tir = world.check_tirs(yeux, boi - yeux);
@@ -6905,8 +5856,6 @@ int rr=1;
                     //plus bonne
                     if ((col_tir.found == true) && !(id_joueur == VRAI))
                     {
-                        // world.drawBoxEx (col_tir.pt);
-
                         n = col_tir.normal * -1.00f;
 
                         if (type_mark == 1)
@@ -6914,7 +5863,6 @@ int rr=1;
 
                         marks->AddMark(n, col_tir.pt, 0);
                         parts->SystemNew(new pSystemBoom_t, col_tir.pt, 1);
-                        // col_tir=world.check_tirs(yeux,boi-yeux);
                     }
                     else
                     {
@@ -6941,27 +5889,11 @@ int rr=1;
                         parts2->SystemNew(new pSystemBurst_t, lejoueur[VRAI]->vue.StudioCalcAttachments(true),
                                           1); // particle canon
                     }
-                    //	marks->AddMark( lejoueur[VRAI]->vue.StudioCalcAttachments ()-col_tir.pt,col_tir.pt , 20);
                 }
-                // parts->SystemNew(new   pSystemBoom_t,flash2, 1); // particle canon
             }
         }
 
-        /*if ((lejoueur[VRAI]->tir) && (lejoueur[VRAI]->is_car) && release_tir_car)
-        {
-            //	vec3_t rr=lejoueur[VRAI]->m_PhysEnv->AxeDevant+lejoueur[VRAI]->m_PhysEnv->AxeHaut/4.0f;
-    //			rr.normalize();
-        //		rr=rr*0.7f;
-            //	grenades->SystemNew(new   pGrenSystemMissile_t , lejoueur[VRAI]->m_PhysEnv->AxeG, rr,
-    1,g_dpnidLocalPlayer);
-            //	envoi_Grenade ( lejoueur[VRAI]->m_PhysEnv->AxeG,rr,1);
-        }
-
-        release_tir_car=!lejoueur[VRAI]->tir;
-        */
         lejoueur[VRAI]->tir = false;
-
-        // world.drawBoxEx (lejoueur[VRAI]->pos);
 
         //******** CFT FRAME c le plus gros
         if ((CFT_ON == true) && (CFT_eta == 2))
@@ -7015,8 +5947,6 @@ int rr=1;
                     CFT_eta = 0;
                     CFT_nouvelle_partie();
 
-                    // pos_apres_coll=lejoueur[VRAI]->pos;
-                    // dir_apres_coll=dir;
                 }
             }
             else
@@ -7029,47 +5959,26 @@ int rr=1;
                     CFT_eta = 0;
                     CFT_nouvelle_partie();
 
-                    // pos_apres_coll=lejoueur[VRAI]->pos;
-                    // dir_apres_coll=dir;
+
                 }
             }
         }
         //** CFT fin du gros morceau dans frame****************************************/
 
-        /*
-
-
-
-
-
-
-
-             */
-        //	glEnable(GL_BLEND);
-        //	marks->Render ();
-
-        //	glDisable(GL_BLEND);
         if (world_is_loaded)
             world.render_entvarsInvi(m_camera);
-        //	world.DessineSkyBox(lejoueur[VRAI]->pos);
-
-        // world.render_entvarsInvi(m_camera);
     }
 
     begin_orto();
 
     glEnable(GL_DEPTH_FUNC);
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
 
     if (!storm_off && mode_storm)
         glClearColor(0.6f, 0.5f, 0.5f, 1.0f);
     else
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    //    glClearDepth(1.0f);
     glDisable(GL_DEPTH_TEST);
 
     if (g_lNumberOfActivePlayers > 0)
@@ -7077,11 +5986,6 @@ int rr=1;
 
         AfficheCroix();
     }
-
-    /*
-glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-*/
 
     if ((m_overlay) || (config.isdebug))
     {
@@ -7097,9 +6001,6 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     if (!menu_mode)
         AffichePanel(delta);
-    /*
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    */
 
     if (g_lNumberOfActivePlayers > 0)
     {
@@ -7172,12 +6073,6 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //-----------------------------------------
     for (int dao = 0; dao < lesoptionsbouton.size(); dao++)
     {
-        // lesoptionsbouton[dao]->visible=true;
-        // lesoptionsbouton[dao]->actif=active_input==da;
-        /*if (lesoptionsbouton[dao]->le_btn.m_mouseclick)
-            active_input=dao;
-            */
-
         lesoptionsbouton[dao]->frame(m_input.xpos, m_input.ypos, m_width, m_height, m_input.left_button, config.isdebug,
                                      delta);
     }
@@ -7251,13 +6146,6 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
             if (lejoueur[i]->ID == idplayer)
             {
 
-                /*				 ret->seq_dep=0;
-                                 ret->seq_act=0;
-                                 */
-                /*				 ret->num_act=0;
-                                 ret->num_dep=0;
-                */
-
                 lejoueur[i]->is_car = false;
                 // (!lejoueur[i]->is_car)
                 //
@@ -7276,13 +6164,6 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
                 lejoueur[i]->pos = dst;
 
                 lejoueur[i]->velocity = vel;
-
-                /*
-                    else
-                    {
-
-                    }
-*/
                 lejoueur[i]->rot[0] = shortint_to_float(ret->rot[0]);
                 lejoueur[i]->rot[1] = shortint_to_float(ret->rot[1]);
                 lejoueur[i]->rot[2] = shortint_to_float(ret->rot[2]);
@@ -7307,17 +6188,6 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
                 }
                 lejoueur[i]->mort = est_mort;
                 lejoueur[i]->is_car = ret->is_dead & 2;
-
-                // lejoueur[i]->Last_pos();
-
-                /*lejoueur[i]->m_PhysEnv.AxeDevant[0]=shortint_to_float ( ret->car_devant[0]);
-                lejoueur[i]->m_PhysEnv.AxeDevant[1]=shortint_to_float ( ret->car_devant[1]);
-                lejoueur[i]->m_PhysEnv.AxeDevant[2]=shortint_to_float ( ret->car_devant[2]);
-
-                lejoueur[i]->m_PhysEnv.AxeHaut[0]=shortint_to_float ( ret->car_haut[0]);
-                lejoueur[i]->m_PhysEnv.AxeHaut[1]=shortint_to_float ( ret->car_haut[1]);
-                lejoueur[i]->m_PhysEnv.AxeHaut[2]=shortint_to_float ( ret->car_haut[2]);
-            */
             }
         }
     }
@@ -7325,48 +6195,6 @@ HRESULT Engine::colle_position(DPNID idplayer, GAMEMSG_POSITION *ret)
 
     return S_OK;
 }
-/*HRESULT Engine::colle_position(DPNID idplayer,vec3_t  pos,vec3_t  rot,float  ang_dos,float fps,int id_model,int
-id_arme,char * dep ,char * act,int sens)
-{
-//reception
-
-        for(int i = 0; i < NB_MAX; i++)
-        {
-            if (lejoueur[i]->etat==true)
-            {
-                if (lejoueur[i]->ID==idplayer)
-                {
-
-                    lejoueur[i]->pos=pos;
-                    lejoueur[i]->rot=rot;
-                    lejoueur[i]->modele.ang_dos=ang_dos;
-                    lejoueur[i]->fps=fps;
-
-                    if (lejoueur[i]->id_modele!=id_model)
-                    {
-                        lejoueur[i]->affecte_modele (leshommes,id_model,100);
-                            strcpy(lejoueur[i]->str_dep,"");
-                            strcpy(lejoueur[i]->str_act,"");
-
-                    }
-
-                    if (lejoueur[i]->id_weapon!=id_arme)
-                    {
-                        lejoueur[i]->affecte_arme (lesarmes,id_arme,100);
-
-                    }
-
-                    lejoueur[i]->sens =sens;
-                    strcpy(lejoueur[i]->dep,dep);
-                    strcpy(lejoueur[i]->action,act);
-
-
-                }
-            }
-        }
-         return S_OK;
-
-}*/
 
 void Engine::SetBackSoundProperties(D3DVECTOR *pvPosition, D3DVECTOR *pvVelocity)
 {
@@ -7407,26 +6235,7 @@ HRESULT Engine::envoi_position()
             msgWave.velocity[1] = float_to_shortint(lejoueur[VRAI]->velocity[1]);
             msgWave.velocity[2] = float_to_shortint(lejoueur[VRAI]->velocity[2]);
         }
-        else
-        {
 
-
-
-            /*		msgWave.pos[0] =float_to_shortint(lejoueur[VRAI]->voiture->AxeG[0]);
-                    msgWave.pos[1] =float_to_shortint(lejoueur[VRAI]->voiture->AxeG[1]);
-                    msgWave.pos[2] =float_to_shortint(lejoueur[VRAI]->voiture->AxeG[2]);
-            */
-        }
-
-        /*	msgWave.car_haut[0] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeHaut[0]);
-            msgWave.car_haut[1] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeHaut[1]);
-            msgWave.car_haut[2] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeHaut[2]);
-
-            msgWave.car_devant[0] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeDevant[0]);
-            msgWave.car_devant[1] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeDevant[1]);
-            msgWave.car_devant[2] =float_to_shortint(lejoueur[VRAI]->m_PhysEnv.AxeDevant[2]);
-
-    */
         msgWave.ang_dos = float_to_shortint(lejoueur[VRAI]->modele.ang_dos * 10.0f);
         msgWave.fps = float_to_shortint(letick);
         msgWave.id_model = lejoueur[VRAI]->id_modele;
@@ -7439,26 +6248,6 @@ HRESULT Engine::envoi_position()
         msgWave.killed = lejoueur[VRAI]->killed;
         msgWave.sens = lejoueur[VRAI]->sens;
         msgWave.is_dead = lejoueur[VRAI]->mort | (lejoueur[VRAI]->is_car << 1);
-
-        //	colle_position (0,msgWave);
-
-        /*msgWave.pos =lejoueur[VRAI]->pos;
-        msgWave.rot =lejoueur[VRAI]->rot;
-        msgWave.velocity =lejoueur[VRAI]->velocity;
-        msgWave.ang_dos =lejoueur[VRAI]->modele.ang_dos;
-        msgWave.fps=letick;
-        msgWave.id_model=lejoueur[VRAI]->id_modele ;
-        msgWave.id_arme = lejoueur[VRAI]->id_weapon ;
-        msgWave.seq_dep  = lejoueur[VRAI]->modele.seq1  ;
-        msgWave.num_dep  = lejoueur[VRAI]->modele.fps1   ;
-        msgWave.seq_act  = lejoueur[VRAI]->modele.seq2  ;
-        msgWave.num_act  = lejoueur[VRAI]->modele.fps2  ;
-        msgWave.killed  = lejoueur[VRAI]->killed  ;
-        msgWave.sens = lejoueur[VRAI]->sens ;
-
-*/
-
-        // lejoueur[VRAI]->rot[1]=m_pivot.yaw ();
 
         DPN_BUFFER_DESC bufferDesc;
         bufferDesc.dwBufferSize = sizeof(GAMEMSG_POSITION);
@@ -7527,24 +6316,7 @@ HRESULT WINAPI Engine::MessageHandler(PVOID pvUserContext, DWORD dwMessageId, PV
     DPNMSG_RETURN_BUFFER *pdpMsgReturnBuffer;
 
     DPNMSG_INDICATE_CONNECT *pdpMsgIndicateConnect;
-    //   dpmsg(dwMessageId);
 
-    /*switch(dwMessageId)
-    {
-    case:
-
-        break;
-    }
-    */
-    /*   char t[100];
-       if (dwMessageId!=4294901777)
-          {
-           sprintf(t,"%u",dwMessageId);
-
-    if (m_chat)   m_chat->addtext(t);
-       }
-
-        */
     switch (dwMessageId)
     {
     case DPN_MSGID_ENUM_HOSTS_RESPONSE: {
@@ -7822,12 +6594,8 @@ HRESULT WINAPI Engine::MessageHandler(PVOID pvUserContext, DWORD dwMessageId, PV
 
         PDPNMSG_CONNECT_COMPLETE pdpnmsgConnectComplete = reinterpret_cast<PDPNMSG_CONNECT_COMPLETE>(pMsgBuffer);
 
-        // SetDpnidLocal(pConnectCompleteMsg->dpnidLocal);
 
         m_hrConnectComplete = pConnectCompleteMsg->hResultCode;
-
-        // if (pConnectCompleteMsg->hResultCode!= -2146073472 &&
-        // pConnectCompleteMsg->hResultCode!=DPNERR_PLAYERNOTREACHABLE )
 
         if (SUCCEEDED(pdpnmsgConnectComplete->hResultCode))
         {
@@ -8298,7 +7066,6 @@ HRESULT Engine::SessionsDlgCreateGame()
 
 HRESULT Engine::SessionsDlgDisplayEnumList(long xd, long yd, int x, int y)
 {
-    /* HWND           hWndListBox   = GetDlgItem( hDlg, IDC_GAMES_LIST );*/
     DPHostEnumInfo *pDPHostEnumSelected = NULL;
     GUID guidSelectedInstance;
     BOOL bFindSelectedGUID;
@@ -8313,56 +7080,20 @@ HRESULT Engine::SessionsDlgDisplayEnumList(long xd, long yd, int x, int y)
     EnterCriticalSection(&m_csHostEnum);
 
     // Only update the display list if it has changed since last time
-    /*if( !m_bEnumListChanged )
-    {
-        LeaveCriticalSection( &m_csHostEnum );
-        return S_OK;
-    }
-*/
     m_bEnumListChanged = FALSE;
 
     bFindSelectedGUID = FALSE;
     bFoundSelectedGUID = FALSE;
 
-    // Try to keep the same session selected unless it goes away or
-    // there is no real session currently selected
-    /*nItemSelected = (int)SendMessage( hWndListBox, LB_GETCURSEL, 0, 0 );
-    if( nItemSelected != LB_ERR )
-    {
-        pDPHostEnumSelected = (DPHostEnumInfo*) SendMessage( hWndListBox, LB_GETITEMDATA,
-                                                             nItemSelected, 0 );
-        if( pDPHostEnumSelected != NULL && pDPHostEnumSelected->bValid )
-        {
-            guidSelectedInstance = pDPHostEnumSelected->pAppDesc->guidInstance;
-            bFindSelectedGUID = TRUE;
-        }
-    }
-
-    // Tell listbox not to redraw itself since the contents are going to change
-    SendMessage( hWndListBox, WM_SETREDRAW, FALSE, 0 );
-*/
     /*// Test to see if any sessions exist in the linked list
      */
     DPHostEnumInfo *pDPHostEnum = m_DPHostEnumHead.pNext;
-    /*
-      while ( pDPHostEnum != &m_DPHostEnumHead )
-      {
-          if( pDPHostEnum->bValid )
-              break;
-          pDPHostEnum = pDPHostEnum->pNext;
-      }
-  */
+
     // If there are any sessions in list,
     // then add them to the listbox
     if (pDPHostEnum != &m_DPHostEnumHead)
     {
         // Clear the contents from the list box and enable the join button
-        /*SendMessage( hWndListBox, LB_RESETCONTENT, 0, 0 );
-
-        // Enable the join button only if not already connecting to a game
-        if( !m_bConnecting )
-            EnableWindow( GetDlgItem( hDlg, IDC_JOIN ), TRUE );
-*/
         pDPHostEnum = m_DPHostEnumHead.pNext;
         numb = 0;
 
@@ -8457,10 +7188,6 @@ HRESULT Engine::SessionsDlgDisplayEnumList(long xd, long yd, int x, int y)
                 glColor3f(1.0f, 1.0f, 0.0f);
                 m_font->print(xd, yd + 100 + numb * 20, szSessionTemp);
 
-                /* int nIndex = (int)SendMessage( hWndListBox, LB_ADDSTRING, 0,
-                                                (LPARAM)pDPHostEnum->szSession );*/
-                /* SendMessage( hWndListBox, LB_SETITEMDATA, nIndex, (LPARAM)pDPHostEnum );
-                 */
                 if (bFindSelectedGUID)
                 {
                     // Look for the session the was selected before
@@ -8474,20 +7201,8 @@ HRESULT Engine::SessionsDlgDisplayEnumList(long xd, long yd, int x, int y)
 
             pDPHostEnum = pDPHostEnum->pNext;
         }
-        /*
-                if( !bFindSelectedGUID || !bFoundSelectedGUID )
-                    SendMessage( hWndListBox, LB_SETCURSEL, 0, 0 );*/
-    }
-    /*else
-    {
-        // There are no active session, so just reset the listbox
-        SessionsDlgInitListbox( hDlg );
     }
 
-    // Tell listbox to redraw itself now since the contents have changed
-    SendMessage( hWndListBox, WM_SETREDRAW, TRUE, 0 );
-    InvalidateRect( hWndListBox, NULL, FALSE );
-*/
     LeaveCriticalSection(&m_csHostEnum);
 
     return S_OK;
@@ -8819,51 +7534,7 @@ bool Engine::dezip(char *file)
         return false;
     }
 }
-/*
-bool
-Engine::dezip(TCHAR * file)
-{
 
- CZipArchive zip;
-    // get the path of the executable
-    TCHAR szBuff[_MAX_PATH];
-    char path[150];
-    ::GetCurrentDirectory(150,path);
-    sprintf(szBuff,"%s",file);  //,path %s\\
-    _T("C:\\Temp\\test.zip")
-    CZipString szDest;
-
-
-    // ...
-    // add some code here to get additional information from the user
-    // such as the destination directory or a password, if needed
-    bool toto=zip.Open(file);
-    // zipOpenReadOnly mode is necessary for self extract archives
-    for (int i = 0; i < 4; i++)
-    {
-        CZipFileHeader info;
-        if(zip.GetFileInfo(info,i))
-        {
-            char filename[50];
-            CZipString filename_czip;
-            filename_czip=info.GetFileName();
-
-            if(filename_czip.Find(".bmp"))
-                zip.ExtractFile(i, _T("c:\\Temp"));
-            if(filename_czip.Find(".bmp"))
-                zip.ExtractFile(i, _T("c:\\Temp"));
-
-        }
-
-    }
-
-
-    zip.Close();
-
-    return 0;
-}
-
-*/
 bool Engine::Verify_Map(char *file)
 {
     bool existe;
@@ -8952,70 +7623,6 @@ bool Engine::Verify_Mp3(char *file)
     }
 }
 
-/*
-void Engine::Download_Map(char* host,char * file)
-{
-
-        char distant_file [100];
-        sprintf(distant_file,"/romustrike/map/%s.exe",file);
-        char local_file[100];
-        sprintf(local_file,"%s.exe",file);
-        m_xmlsession.download(host,distant_file,local_file );
-        dezip(local_file);
-
-}
-
-void Engine::Download_Mp3(char* host,char * file )
-{
-    char distant_file [100];
-    sprintf(distant_file,"/romustrike/mp3/%s.mp3",file);
-    char local_file[100];
-    sprintf(local_file,"data/mp3/%s.mp3",file);
-
-    m_xmlsession.download(config.server_xml,distant_file,local_file );
-
-
-}
-*/
-
-/*
-void
-Engine::Verify_Env(char * file)
-{
-    FILE *output_file;
-
-    char chemin[100];
-    sprintf(chemin,"data/env/%s",file);
-
-    //verifie lexistence
-    //si ok exit
-    output_file=fopen(chemin,"rb");
-    if (output_file == NULL)
-    {
-
-    //	MessageBox (m_hwnd,TEXT("Attention download de la map. Cela va prendre quelques secondes
-..."),TEXT("ROMUSTRIKE"),MB_OK);
-        //sinon dwlolad
-        //dezip
-        //exit
-        char distant_file [100];
-        sprintf(distant_file,"/romustrike/env/%s",file);
-        char local_file[100];
-        sprintf(local_file,"data/env/%s",file);
-
-        m_xmlsession.download("romu.soft.free.fr",distant_file,local_file );
-
-
-    }
-    else
-    {
-        fclose(output_file);
-    }
-
-
-
-}
-*/
 void Engine::load_map(char *map)
 {
     m_chat->addtext("load map", 2);
@@ -9180,15 +7787,9 @@ void Engine::load3d()
 
     //**CFT load des objets dans engine.load3d
     lesobjets[0].Load("data/model/flag.mdl");
-    // o << "cft 1" << endl;
     lesobjets[1].Load("data/model/flag.mdl");
-    // o << "cft 2" << endl;
     lesobjets[2].Load("data/model/base.mdl");
-    // o << "cft 3" << endl;
     lesobjets[3].Load("data/model/base.mdl");
-    // o << "cft 4" << endl;
-    //**
-    // o << "cft load" << endl;
     leshommes[0].Load("data/model/rosetti.mdl");
     leshommes[0].lie = 0;
     leshommes[1].Load("data/model/spaceboy.mdl");
@@ -9230,30 +7831,8 @@ void Engine::load3d()
     leshommes[13].Load("data/model/operateur.mdl"); // operateur.mdl
     leshommes[13].lie = 0;
 
-    // o << "homme load" << endl;
-
-    // leshommes[1].Load("data/model/rosetti.mdl");
-    // leshommes[1].lie=0;
-
-    /*        leshommes[2].Load("data/model/space.mdl");
-            leshommes[2].lie=0;
-
-            leshommes[3].Load("data/model/kakashi.mdl");
-            leshommes[3].lie=0;
-
-            leshommes[4].Load("data/model/michel.mdl");
-            leshommes[4].lie=0;
-
-            leshommes[5].Load("data/model/mib.mdl");
-            leshommes[5].lie=0;
-    //ajout
-    */
     max_modele = 14;
-    /*
-        file,lie,type,scope,balles,puissance,id_son,fps_weapon,multi
 
-
-        */
     T_armes liste_armes[max_arme] = {
         {"deagle", 1, "_onehanded", 0, 10, 10, 0, -1.0f, -1.0f, 1.0f, true},
         {"mp5", 1, "_mp5", 0, 20, 10, 3, 30.0f, 10.0f, 2.0f, true},
@@ -9275,36 +7854,6 @@ void Engine::load3d()
         {"awp2", 1, "_rifle", 20, 10, 110, 41, -1.0f, -1.0f, 1.0f, false},
 
     };
-    /*
-    T_armes liste_armes[max_arme]=
-    {
-            {"deagle",		1,	"_onehanded",	0,	10,	10,	0,	-1.0f,	-1.0f,	1.0f,true},
-            {"mp5",			1,	"_mp5",			0,	20,	10,	3,	30.0f,	10.0f,	2.0f,true},
-            {"smokegrenade",	1,	"_hegrenade",	0,	5,	0,	26,	-1.0f,	8.0f,	1.5f,true},
-            {"silencieux",		1,	"_onehanded",	0,	10,	10,	2,	-1.0f,	-1.0f,	1.5f,false},
-            {"xm1014",		1,	"_m249",		0,	5,	40,	8,	-1.0f,  -1.0f,	1.0f,false},
-            {"mac10",		1,	"_onehanded",	0,	20,	5,	1,	40.0f,	10.0f,	2.5f,true},
-            {"hegrenade",	1,	"_hegrenade",	0,	5,	0,	26,	-1.0f,	8.0f,	1.5f,false},
-            {"m249",		1,	"_m249",		0,	40,	10,	9,	30.0f,	10.0f,	2.0f,false},
-            {"plasma",		1,	"_m249",		0,	3,	0,	28,	22.0f,	22.0f,	3.0f,true},
-            {"ak47",		1,	"_mp5",			0,	15,	15,	4,	30.0f,	5.0f,	1.5f,true},
-            {"c4",			1,	"_c4",			0,	5,	0,	38,	-1.0f,	8.0f,	1.5f,true},
-            {"famas",		1,	"_carbine",		0,	30,	20,	39,	22.0f,	8.0f,	1.5f,true},
-            {"sg552",		1,	"_rifle",		10,	20,	20,	6,	30.0f,	10.0f,	1.5f,true},
-            {"m4a1",		1,	"_rifle",		10,	20,	20,	5,	30.0f,	5.0f,	1.5f,true},
-            {"awp",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,true},
-            {"ump45",		1,	"_carbine",		0,	30,	20,	40,	30.0f,	8.0f,	2.0f,false},
-            {"m4a2",		1,	"_rifle",		10,	20,	20,	5,	30.0f,	5.0f,	1.0f,false},
-            {"awp1",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,false},
-            {"awp2",			1,	"_rifle",		20,	10,	100,5,	-1.0f,	-1.0f,	1.0f,false},
-            {"awp3",			1,	"_rifle",		20,	10,	100,7,	-1.0f,	-1.0f,	1.0f,false}
-
-
-    };
-    */
-
-    //{"xm1014.mdl",		1,	"_m249",		0,	5,	40,	8,	-1.0f,-1.0f,	1.0f},
-    // o << "arme sr" << endl;
 
     int offs;
     int offsy;
@@ -9357,298 +7906,6 @@ void Engine::load3d()
         lesarmes[ar + max_arme].multi = liste_armes[ar].multi;
         offsy++;
     }
-    // o << "end load" << endl;
-    /*
-    lesarmes[0].Load("data/weapons/p_deagle.mdl");
-    lesarmes[0].lie =1;
-    lesarmes[0].type ="_onehanded";
-    lesarmes[0].scope=0;
-    lesarmes[0].balles=10;
-    lesarmes[0].puissance=10;
-    lesarmes[0].id_son =0;
-    lesarmes[0].fps_weapon =-1;
-
-    lesarmes[1].Load("data/weapons/p_mac10.mdl");
-    lesarmes[1].lie =1;
-    lesarmes[1].type ="_onehanded";
-    lesarmes[1].scope=0;
-    lesarmes[1].balles=20;
-    lesarmes[1].puissance=5;
-    lesarmes[1].id_son =1;
-    lesarmes[1].fps_weapon =40;
-
-    lesarmes[2].Load("data/weapons/p_aug.mdl");
-    lesarmes[2].lie =1;
-    lesarmes[2].type ="_carbine";
-    lesarmes[2].scope=5;
-    lesarmes[2].balles=10;
-    lesarmes[2].puissance=10;
-    lesarmes[2].id_son =2;
-    lesarmes[2].fps_weapon =30;
-
-    lesarmes[3].Load("data/weapons/p_mp5.mdl");
-    lesarmes[3].lie =1;
-    lesarmes[3].type ="_mp5";
-    lesarmes[3].scope=0;
-    lesarmes[3].balles=20;
-    lesarmes[3].puissance=10;
-    lesarmes[3].id_son =3;
-    lesarmes[3].fps_weapon =30;
-
-    lesarmes[4].Load("data/weapons/p_ak47.mdl");
-    lesarmes[4].lie =1;
-    lesarmes[4].type ="_mp5";
-    lesarmes[4].scope=0;
-    lesarmes[4].balles=15;
-    lesarmes[4].puissance=15;
-    lesarmes[4].id_son =4;
-    lesarmes[4].fps_weapon =30;
-
-    lesarmes[5].Load("data/weapons/p_m4a1.mdl");
-    lesarmes[5].lie =1;
-    lesarmes[5].type ="_rifle";
-    lesarmes[5].scope =10;
-    lesarmes[5].balles=20;
-    lesarmes[5].puissance=20;
-    lesarmes[5].id_son =5;
-    lesarmes[5].fps_weapon =30;
-
-    lesarmes[6].Load("data/weapons/p_sg552.mdl");
-    lesarmes[6].lie =1;
-    lesarmes[6].type ="_rifle";
-    lesarmes[6].scope =10;
-    lesarmes[6].balles=20;
-    lesarmes[6].puissance=20;
-    lesarmes[6].id_son =6;
-    lesarmes[6].fps_weapon =30;
-
-    lesarmes[7].Load("data/weapons/p_awp.mdl");
-    lesarmes[7].lie =1;
-    lesarmes[7].type ="_rifle";
-    lesarmes[7].scope =20;
-    lesarmes[7].balles=5;
-    lesarmes[7].puissance=100;
-    lesarmes[7].id_son =7;
-    lesarmes[7].fps_weapon =-1;
-
-    lesarmes[8].Load("data/weapons/p_xm1014.mdl");
-    lesarmes[8].lie =1;
-    lesarmes[8].type ="_m249";
-    lesarmes[8].scope =0;
-    lesarmes[8].balles=5;
-    lesarmes[8].puissance=40;
-    lesarmes[8].id_son =8;
-    lesarmes[8].fps_weapon =15;
-
-    lesarmes[9].Load("data/weapons/p_m249.mdl");
-    lesarmes[9].lie =1;
-    lesarmes[9].type ="_m249";
-    lesarmes[9].scope =0;
-    lesarmes[9].balles=40;
-    lesarmes[9].puissance=10;
-    lesarmes[9].id_son =9;
-    lesarmes[9].fps_weapon =30;
-
-    lesarmes[10].Load("data/weapons/p_hegrenade.mdl");
-    lesarmes[10].lie =1;
-    lesarmes[10].type ="_hegrenade";
-    lesarmes[10].scope =0;
-    lesarmes[10].balles=5;
-    lesarmes[10].puissance=0;
-    lesarmes[10].id_son =26;
-    lesarmes[10].fps_weapon =-1;
-
-    //lesarmes[11].Load("data/weapons/p_aug.mdl");
-    lesarmes[11].Load("data/weapons/p_plasma.mdl");
-    lesarmes[11].lie =1;
-    lesarmes[11].type ="_m249";
-    lesarmes[11].scope =0;
-    lesarmes[11].balles=3;
-    lesarmes[11].puissance=0;
-    lesarmes[11].id_son =28;
-    lesarmes[11].fps_weapon =22;
-
-    lesarmes[12].Load("data/weapons/p_hegrenade.mdl");
-    lesarmes[12].lie =1;
-    lesarmes[12].type ="_hegrenade";
-    lesarmes[12].scope =0;
-    lesarmes[12].balles=5;
-    lesarmes[12].puissance=0;
-    lesarmes[12].id_son =26;
-    lesarmes[12].fps_weapon =-1;
-
-    lesarmes[13].Load("data/weapons/p_c4.mdl");
-    lesarmes[13].lie =1;
-    lesarmes[13].type ="_c4";
-    lesarmes[13].scope =0;
-    lesarmes[13].balles=5;
-    lesarmes[13].puissance=0;
-    lesarmes[13].id_son =38;
-    lesarmes[13].fps_weapon =-1;
-
-    lesarmes[14].Load("data/weapons/p_famas.mdl");
-    lesarmes[14].lie =1;
-    lesarmes[14].type ="_carbine";
-    lesarmes[14].scope =0;
-    lesarmes[14].balles=30;
-    lesarmes[14].puissance=0;
-    lesarmes[14].id_son =39;
-    lesarmes[14].fps_weapon =22;
-
-
-
-    lesarmes[15].Load("data/weapons/v_deagle.mdl");
-    lesarmes[15].lie =1;
-    lesarmes[15].type ="_onehanded";
-    lesarmes[15].scope=0;
-    lesarmes[15].balles=10;
-    lesarmes[15].puissance=1;
-    lesarmes[15].id_son =0;
-    lesarmes[15].fps_weapon =-1;
-    lesarmes[15].multi  =1.0f;
-
-    lesarmes[16].Load("data/weapons/v_mac10.mdl");
-    lesarmes[16].lie =1;
-    lesarmes[16].type ="_onehanded";
-    lesarmes[16].scope=0;
-    lesarmes[16].balles=20;
-    lesarmes[16].puissance=2;
-    lesarmes[16].id_son =1;
-    lesarmes[16].fps_weapon =10;
-    lesarmes[16].multi  =2.5f;
-
-    lesarmes[17].Load("data/weapons/v_aug.mdl");
-    lesarmes[17].lie =1;
-    lesarmes[17].type ="_carbine";
-    lesarmes[17].scope=5;
-    lesarmes[17].balles=10;
-    lesarmes[17].puissance=2;
-    lesarmes[17].id_son =2;
-    lesarmes[17].fps_weapon =10;
-    lesarmes[17].multi  =1.5f;
-
-    lesarmes[18].Load("data/weapons/v_mp5.mdl");
-    lesarmes[18].lie =1;
-    lesarmes[18].type ="_mp5";
-    lesarmes[18].scope=0;
-    lesarmes[18].balles=20;
-    lesarmes[18].puissance=3;
-    lesarmes[18].id_son =4;
-    lesarmes[18].fps_weapon =10;
-    lesarmes[18].multi  =2.0f;
-
-    lesarmes[19].Load("data/weapons/v_ak47.mdl");
-    lesarmes[19].lie =1;
-    lesarmes[19].type ="_mp5";
-    lesarmes[19].scope=0;
-    lesarmes[19].balles=15;
-    lesarmes[19].puissance=2;
-    lesarmes[19].id_son =4;
-    lesarmes[19].fps_weapon =5;
-    lesarmes[19].multi  =1.5f;
-
-    lesarmes[20].Load("data/weapons/v_m4a1.mdl");
-    lesarmes[20].lie =1;
-    lesarmes[20].type ="_rifle";
-    lesarmes[20].scope =10;
-    lesarmes[20].balles=20;
-    lesarmes[20].puissance=4;
-    lesarmes[20].id_son =5;
-    lesarmes[20].fps_weapon =5;
-    lesarmes[20].multi  =1.5f;
-
-    lesarmes[21].Load("data/weapons/v_sg552.mdl");
-    lesarmes[21].lie =1;
-    lesarmes[21].type ="_rifle";
-    lesarmes[21].scope =10;
-    lesarmes[21].balles=20;
-    lesarmes[21].puissance=2;
-    lesarmes[21].id_son =6;
-    lesarmes[21].fps_weapon =10;
-    lesarmes[21].multi  =1.5f;
-
-    lesarmes[22].Load("data/weapons/v_awp.mdl");
-    lesarmes[22].lie =1;
-    lesarmes[22].type ="_rifle";
-    lesarmes[22].scope =20;
-    lesarmes[22].balles=5;
-    lesarmes[22].puissance=1;
-    lesarmes[22].id_son =7;
-    lesarmes[22].fps_weapon =-1;
-    lesarmes[22].multi  =1.0f;
-
-    lesarmes[23].Load("data/weapons/v_xm1014.mdl");
-    lesarmes[23].lie =1;
-    lesarmes[23].type ="_xm1014";
-    lesarmes[23].scope =0;
-    lesarmes[23].balles=10;
-    lesarmes[23].puissance=1;
-    lesarmes[23].id_son =8;
-    lesarmes[23].fps_weapon =-1;
-    lesarmes[23].multi  =1.0f;
-
-    lesarmes[24].Load("data/weapons/v_m249.mdl");
-    lesarmes[24].lie =1;
-    lesarmes[24].type ="_m249";
-    lesarmes[24].scope =0;
-    lesarmes[24].balles=40;
-    lesarmes[24].puissance=2;
-    lesarmes[24].id_son =9;
-    lesarmes[24].fps_weapon =10;
-    lesarmes[24].multi  =2.0f;
-
-    lesarmes[25].Load("data/weapons/v_hegrenade.mdl");
-    lesarmes[25].lie =1;
-    lesarmes[25].type ="_hegrenade";
-    lesarmes[25].scope =0;
-    lesarmes[25].balles=40;
-    lesarmes[25].puissance=2;
-    lesarmes[25].id_son =26;
-    lesarmes[25].fps_weapon =8;
-    lesarmes[25].multi  =1.5f;
-
-//	lesarmes[23].Load("data/weapons/v_aug.mdl");
-    lesarmes[26].Load("data/weapons/v_plasma.mdl");
-    lesarmes[26].lie =1;
-    lesarmes[26].type ="_m249";
-    lesarmes[26].scope =0;
-    lesarmes[26].balles=3;
-    lesarmes[26].puissance=0;
-    lesarmes[26].id_son =28;
-    lesarmes[26].fps_weapon =22;
-    lesarmes[26].multi  =3.0f;
-
-
-    lesarmes[27].Load("data/weapons/v_hegrenade.mdl");
-    lesarmes[27].lie =1;
-    lesarmes[27].type ="_hegrenade";
-    lesarmes[27].scope =0;
-    lesarmes[27].balles=40;
-    lesarmes[27].puissance=2;
-    lesarmes[27].id_son =26;
-    lesarmes[27].fps_weapon =8;
-    lesarmes[27].multi  =1.5f;
-
-    lesarmes[28].Load("data/weapons/v_c4.mdl");
-    lesarmes[28].lie =1;
-    lesarmes[28].type ="_c4";
-    lesarmes[28].scope =0;
-    lesarmes[28].balles=40;
-    lesarmes[28].puissance=2;
-    lesarmes[28].id_son =38;
-    lesarmes[28].fps_weapon =8;
-    lesarmes[28].multi  =1.5f;
-
-    lesarmes[29].Load("data/weapons/v_famas.mdl");
-    lesarmes[29].lie =1;
-    lesarmes[29].type ="_carbine";
-    lesarmes[29].scope =0;
-    lesarmes[29].balles=40;
-    lesarmes[29].puissance=2;
-    lesarmes[29].id_son =39;
-    lesarmes[29].fps_weapon =8;
-    lesarmes[29].multi  =1.5f;
-*/
 }
 
 //-----------------------------------------------------------------------------
@@ -9701,10 +7958,6 @@ vec3_t world_t::collideWithWorld(const vec3_t &position, const vec3_t &velocity)
     collision.velocity = velocity;
     collision.sourcePoint = position;
     collision.eRadius = ellipsoidRadius;
-
-    /*collision.foundCollision = FALSE;
-    collision.stuck = FALSE;
-    collision.nearestDistance = -1;	*/
 
     // list de face
 
@@ -10003,24 +8256,6 @@ HRESULT Engine::colle_Mark(DPNID idplayer, GAMEMSG_MARK *ret)
 
                 lejoueur[j]->playersound->Positionne3Dbuffer(&lapos, &dd);
                 lejoueur[j]->playersound->Play(0, 0);
-
-                // on posi le son du ricochet sur le mur
-                /*if (lejoueur[j]->ricosound->IsSoundPlaying()==TRUE)
-                {
-                        lejoueur[j]->ricosound->Reset();
-                }
-                lejoueur[j]->ricosound->Play( 0, 0);
-                /*lejoueur[j]->id_rico++;
-                if (lejoueur[j]->id_rico>4)
-                        lejoueur[j]->id_rico=0;*/
-                // lejoueur[j]->affecte_ricochet(lessons[10] );
-                /*lapos.x =ret->pos[0];
-                lapos.z =ret->pos[1];
-                lapos.y =ret->pos[2];
-                /*pos.x =lejoueur[j]->pos[0];
-                lapos.y =lejoueur[j]->pos[2];
-                lapos.z =lejoueur[j]->pos[1];*/
-                // lejoueur[j]->ricosound->Positionne3Dbuffer(&lapos,&lapos);
             }
         }
         unlockequipe(); //----------------------------------------------LOCK
@@ -10037,8 +8272,6 @@ HRESULT Engine::colle_Mark(DPNID idplayer, GAMEMSG_MARK *ret)
             JoueUnSon(56 + rnds, ret->pos);
         }
     }
-
-    //	grenades->SystemNew(new   pGrenSystemMissile_t ,  ret->flash,e,0,idplayer);
 
     parts->SystemNew(new pSystemBurst_t, ret->flash, 1);
 
@@ -10071,21 +8304,6 @@ HRESULT Engine::colle_Grenade(DPNID idplayer, GAMEMSG_MARK *ret)
 
     unlockequipe(); //----------------------------------------------LOCK
 
-    // lejoueur[VRAI]->playersound->Play( 0, 0);
-    /*
-
-                int type_gre=0;
-                if (!strcmp(lejoueur[VRAI]->arme.name,"hegrenade"))//lejoueur[VRAI]->id_weapon==11
-                    type_gre=1;
-                else
-                    if (!strcmp(lejoueur[VRAI]->arme.name,"plasma")) //12
-                        type_gre=2;
-                    else
-                        if (!strcmp(lejoueur[VRAI]->arme.name,"smokegrenade"))
-                            type_gre=3;
-
-
-    */
     if (ret->type_gre == 1)
     {
 
@@ -10170,20 +8388,6 @@ HRESULT Engine::envoi_chat(char *text)
 {
     if (g_lNumberOfActivePlayers > 1)
     {
-        /*       // Send a message to all of the players
-               GAMEMSG_GENERIC msgWave;
-               msgWave.dwType = GAME_MSGID_WAVE;
-               strcpy(msgWave.chattext,text);
-               DPN_BUFFER_DESC bufferDesc;
-               bufferDesc.dwBufferSize = sizeof(GAMEMSG_GENERIC);
-               bufferDesc.pBufferData  = (BYTE*) &msgWave;
-
-               DPNHANDLE hAsync;
-               m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1,
-                              0, NULL, &hAsync, DPNSEND_NOLOOPBACK | DPNSEND_NOCOMPLETE | DPNSEND_PRIORITY_LOW );
-
-       */
-
         GAMEMSG_CHAT msgChat;
         msgChat.dwType = GAME_MSGID_WAVE;
 
@@ -10216,16 +8420,6 @@ HRESULT Engine::Confirme_Tue(DPNID dpnidPlayer, float dans_la_tete)
         msgWave.dwType = GAME_MSGID_CONFIRME;
         msgWave.ID_du_joueur_touche = dpnidPlayer; // id du tueur
 
-        /*
-        if ((rndo==1) || (TEAM_ON))
-        g_camera_suivi=dpnidPlayer;
-        else
-        g_camera_suivi=lejoueur[VRAI]->ID;
-        */
-
-        //	g_camera_suivi=dpnidPlayer;
-        // g_camera_suivi=lejoueur[VRAI]->ID;
-        // exterieur=true;
         msgWave.fps = dans_la_tete;
         DPN_BUFFER_DESC bufferDesc;
         bufferDesc.dwBufferSize = sizeof(GAMEMSG_CONF_TUE);
@@ -10504,9 +8698,6 @@ vec3_t Engine::collision_joueur(vec3_t src, vec3_t dir)
                 retv = src + vec3_t(random_t::RandomRange(-5.0f, 5.0f), random_t::RandomRange(-5.0f, 5.0f), 0.0f);
             else
                 retv = src;
-
-            //	float t=intersect_sphere (src,dirn,lejoueur[j]->pos,15.0f);
-            //	if (t>0.0f)
         }
     }
     unlockequipe(); //----------------------------------------------LOCK
@@ -10542,17 +8733,12 @@ int Engine::check_impact(vec3_t src, vec3_t dest, vec3_t pos_mur)
                 {
                     dist_joueur = fabs(sqrt(pow(src[0] - lejoueur[j]->modele.pos_touche[0], 2) +
                                             pow(src[1] - lejoueur[j]->modele.pos_touche[1], 2)));
-                    //	dist_joueur=
-                    //abs(sqrt(pow(dest[0]-lejoueur[j]->modele.pos_touche[0],2)+pow(dest[1]-lejoueur[j]->modele.pos_touche[1],2)+pow(dest[2]-lejoueur[j]->modele.pos_touche[2],2)));
 
-                    // if (mini.len()> lejoueur[j]->modele.pos_touche.len())
                     if (dist_joueur < dist_mur)
                     {
                         id_mini = j;
-                        // mini=lejoueur[j]->modele.pos_touche;
                         dist_mur = dist_joueur;
                     }
-                    // envoi_Tir (lejoueur[j]->ID,lejoueur[j]->modele.pos_touche,10);
                 }
             }
         }
@@ -10605,20 +8791,13 @@ int Engine::check_impact(vec3_t src, vec3_t dest, vec3_t pos_mur)
 
 void world_t::InitSkyBox()
 {
-
-    // std::ofstream o("log/skybox.log");
-
     char *k;
     SkyRange = bsp->FloatForKey(&bsp->Lesentities[0], "MaxRange");
-    // SkyRange=SkyRange;
-    //  o << SkyRange << endl;
 
     k = bsp->ValueForKey(&bsp->Lesentities[0], "skyname");
-    // o << k << endl;
 
     char ligne[30];
     Image img, img2, img3, img4, img5, img6;
-    // char skys[6][3]={"ft","bk","lf","rt","up","dn"};
     // devant
     sprintf(ligne, "%s%s%s\0", TEXT("data\\env\\"), k, TEXT("ft.tga"));
     // o << ligne << endl;
@@ -10693,29 +8872,14 @@ void world_t::InitSkyBox()
     if ((dist[0] >= dist[1]) && (dist[0] >= dist[2]))
     {
         SkyTaille = dist[0];
-        /*BspMax[1]=BspMax[1]+(dist[0]-dist[1])/2;
-        BspMin[1]=BspMin[1]-(dist[0]-dist[1])/2;
-
-        BspMax[2]=BspMax[2]+(dist[0]-dist[2])/2;
-        BspMin[2]=BspMin[2]-(dist[0]-dist[2])/2;*/
     }
     else if ((dist[1] >= dist[0]) && (dist[1] >= dist[2]))
     {
         SkyTaille = dist[1];
-        /*BspMax[0]=BspMax[0]+(dist[1]-dist[0])/2;
-        BspMin[0]=BspMin[0]-(dist[1]-dist[0])/2;
-
-        BspMax[2]=BspMax[2]+(dist[1]-dist[2])/2;
-        BspMin[2]=BspMin[2]-(dist[1]-dist[2])/2;*/
     }
     else
     {
         SkyTaille = dist[2];
-        /*BspMax[0]=BspMax[0]+(dist[2]-dist[0])/2;
-        BspMin[0]=BspMin[0]-(dist[2]-dist[0])/2;
-
-        BspMax[1]=BspMax[1]+(dist[2]-dist[1])/2;
-        BspMin[1]=BspMin[1]-(dist[2]-dist[1])/2;*/
     }
 }
 
@@ -10736,106 +8900,7 @@ void world_t::DessineSkyBox(vec3_t pos)
     y = 0.0f;
     z = 0.0f;
     int SKYtaille = SkyTaille + 1000;
-    /*x=pos[0];
-    y=pos[1];
-    z=pos[2];*/
-    /*x=SkyOri[0];
-    y=SkyOri[2];
-    z=SkyOri[1];*/
 
-    /*glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-    //SKYcam->PositionCamera(x,y,z);
-    //SKYtex[i]->AppliquerTexture();
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-
-    // face arriere
-        glTexCoord2i(-1,0);glVertex3f(BspMax[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMin[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(0,1);glVertex3f(BspMin[0],BspMax[1],BspMin[2]);
-        glTexCoord2i(-1,1);glVertex3f(BspMax[0],BspMax[1],BspMin[2]);
-    glEnd();
-
-        i++;
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-    // face droite
-        glTexCoord2i(0,1);glVertex3f(BspMin[0],BspMax[1],BspMin[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMin[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(1,0);glVertex3f(BspMin[0],BspMin[1],BspMax[2]);
-        glTexCoord2i(1,1);glVertex3f(BspMin[0],BspMax[1],BspMax[2]);
-    glEnd();
-
-        i++;
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-    // face avant
-        glTexCoord2i(0,1);glVertex3f(BspMin[0],BspMax[1],BspMax[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMin[0],BspMin[1],BspMax[2]);
-        glTexCoord2i(1,0);glVertex3f(BspMax[0],BspMin[1],BspMax[2]);
-        glTexCoord2i(1,1);glVertex3f(BspMax[0],BspMax[1],BspMax[2]);
-    glEnd();
-
-        i++;
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-    // face gauche
-        glTexCoord2i(-1,0);glVertex3f(BspMax[0],BspMin[1],BspMax[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMax[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(0,1);glVertex3f(BspMax[0],BspMax[1],BspMin[2]);
-        glTexCoord2i(-1,1);glVertex3f(BspMax[0],BspMax[1],BspMax[2]);
-    glEnd();
-
-        i++;
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-    // face dessus
-        glTexCoord2i(0,1);glVertex3f(BspMax[0],BspMax[1],BspMin[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMin[0],BspMax[1],BspMin[2]);
-        glTexCoord2i(1,0);glVertex3f(BspMin[0],BspMax[1],BspMax[2]);
-        glTexCoord2i(1,1);glVertex3f(BspMax[0],BspMax[1],BspMax[2]);
-    glEnd();
-
-        i++;
-    TexturesSky[i]->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-
-    glBegin(GL_QUADS);
-    // face dessous
-        glTexCoord2i(1,0);glVertex3f(BspMin[0],BspMin[1],BspMax[2]);
-        glTexCoord2i(0,0);glVertex3f(BspMin[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(0,-1);glVertex3f(BspMax[0],BspMin[1],BspMin[2]);
-        glTexCoord2i(1,-1);glVertex3f(BspMax[0],BspMin[1],BspMax[2]);
-    glEnd();
-    */
     // glDepthMask(1);
     TexturesSky[i]->bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -10963,29 +9028,9 @@ void world_t::InitPositions()
     pos_armor.clear();
     pos_ladder.clear();
 
-    /* debug vs2005
-        zero_dwords((void*) &pos_gign[0], pos_gign.size());
-        zero_dwords((void*) &pos_terro[0], pos_terro.size());
-        zero_dwords((void*) &pos_armor[0], pos_armor.size());
-        zero_dwords((void*) &pos_ladder[0], pos_ladder.size());
-    */
-
     for (int xx = 0; xx < bsp->model_count; xx++)
     {
         bsp->models[xx].unused = 0;
-
-        /*for(int c = 0; c < bsp->models [xx].numfaces; c++)
-        {
-            //render_face(faces[m->firstface + c]);
-            if (textures[faces[ bsp->models [xx].firstface + c]->texture]->name == "{feuillage")
-                // o << xx << "COOL" <<endl;
-
-        }*/
-
-        /*if (textures[f->texture]->name == "sky")
-    {
-        return;
-    }*/
     }
 
     vec3_t ori;
@@ -10994,13 +9039,9 @@ void world_t::InitPositions()
 
     for (int x = 0; x < bsp->num_entities; x++)
     {
-        /////o << bsp->ValueForKey(&bsp->Lesentities[x],"classname") << endl;
-
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_gign") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -11013,8 +9054,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_terro") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -11027,8 +9066,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_gign_rec") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -11041,8 +9078,6 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "flag_terro_rec") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -11055,23 +9090,17 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "info_player_start") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
             ori[1] = v2;
             ori[2] = v3;
             pos_gign.push_back(ori);
-
-            // o << k << "gign" <<endl;
         }
 
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "info_player_deathmatch") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
@@ -11084,32 +9113,24 @@ void world_t::InitPositions()
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "armoury_entity") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "origin");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             v1 = v2 = v3 = 0;
             sscanf(k, "%d %d %d", &v1, &v2, &v3);
             ori[0] = v1;
             ori[1] = v2;
             ori[2] = v3;
             pos_armor.push_back(ori);
-            // o << k << "armor" <<endl;
         }
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "func_ladder") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "model");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            //// o << k << endl;
             int kk = 0;
             sscanf(k, "*%d", &kk);
             pos_ladder.push_back(kk);
-            // o << kk << "ladder" <<endl;
         }
 
         if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[x], "classname"), "func_breakable") == 0))
         {
             k = bsp->ValueForKey(&bsp->Lesentities[x], "model");
-            // bsp->GetVectorForKey(&bsp->Lesentities[x],"origin",ori);
-            // o << k << endl;
             int kk = 0;
             sscanf(k, "*%d", &kk);
             bsp->models[kk].unused = -1;
@@ -11308,19 +9329,12 @@ void Engine::xmlsocket(char *xml)
                 strcpy(out_msg, "");
 
                 m_xmlsession.GetScroll_tchat(xml, out_msg);
-
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
-
                 m_romu->tchat_scroll(out_msg);
             }
 
             if (type == GAME_TCHAT_PINGS)
             {
                 strcpy(m_txt_tchat, "");
-
-                // m_xmlsession.GetPings_tchat(xml,m_txt_tchat) ;
-
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
             }
             if (type == GAME_TCHAT_KILL && !mode_op)
             {
@@ -11329,7 +9343,6 @@ void Engine::xmlsocket(char *xml)
                 menu_mode = true;
                 is_kikked = true;
                 m_chat->addtext("tu a ete vire par un admin", 2);
-                // JoueUnSon (son_breath,lejoueur[VRAI]->pos);
             }
             if (type == GAME_STORM_START)
             {
@@ -11447,10 +9460,6 @@ HRESULT Engine::envoi_who(void)
                 default:
                     sprintf(title, "Etat %i", menu_state);
                     break;
-                    // case 2:
-                    // sprintf(title,"ouverture session");
-
-                    // break;
                 }
 
                 sprintf(chaine, "<who><pseudo>%s</pseudo><site>%s</site><score>%i</score></who>\0",
@@ -11554,14 +9563,9 @@ HRESULT Engine::envoi_msg_ops(char *msg)
 
 void world_t::LoadEntVars(void)
 {
-    // std::ofstream o("log/entvars.log");
-    // std::ofstream oo("log/entvars2.log");
     EntVar.clear();
     EntVarInvi.clear();
-    /*
-    zero_dwords((void*) &EntVar[0], EntVar.size());
-    zero_dwords((void*) &EntVarInvi[0], EntVarInvi.size());
-*/
+
     int pass = 0;
     int ent_index = 0;
     char *value;
@@ -11598,12 +9602,6 @@ void world_t::LoadEntVars(void)
                     continue;
                 }
 
-                /*value = bsp->ValueForKey(&bsp->Lesentities[ent_index], "rendermode");
-                if (!value[0])
-                {
-                    continue;
-                }*/
-
                 // on essaie de prendre que les modeles dont l'origine est a zero
                 // on regarde si y a une origin
                 if ((strcmp(bsp->ValueForKey(&bsp->Lesentities[ent_index], "skin"), "-1") == 0))
@@ -11614,19 +9612,6 @@ void world_t::LoadEntVars(void)
                 }
                 if (!value[0])
                     continue;
-
-                /*value = bsp->ValueForKey(&bsp->Lesentities[ent_index], "origin");
-                if (!value[0])
-                    continue;
-
-                o<<"debut"<<value<<endl;
-                sscanf(value, "%f %f %f", &enttmp[0].origin[0],
-                &enttmp[0].origin[1],
-                &enttmp[0].origin[2]);*/
-
-                // si c un model dont l'origine n'est pas a 0,0,0 on le vire
-                // if ((enttmp[0].origin[0]=!0.0f) || (enttmp[0].origin[1]=!0.0f) || (enttmp[0].origin[2]=!0.0f))
-                // continue;
 
                 // ok c bien un model avec une origine a 0,0,0
                 // par contre on regarde si c la premiere ou deuxieme passe
@@ -11651,10 +9636,6 @@ void world_t::LoadEntVars(void)
                 if (!(((pass == 0) && (enttmp[0].renderamt == 1.0f)) || ((pass == 1) && (enttmp[0].renderamt != 1.0f))))
                     continue;
 
-                /*			value = bsp->ValueForKey(&bsp->Lesentities[ent_index], "classname");
-                            if (value[0])
-                            {
-                            */
                 strcpy(enttmp[0].classname, value);
                 //}
 
@@ -11706,8 +9687,6 @@ void world_t::LoadEntVars(void)
                 if (value[0])
                 {
                     sscanf(value, "%d", &enttmp[0].rendermode);
-                    /*if (enttmp[0].rendermode==4)
-                        enttmp[0].renderamt = 0.5f;*/
                 }
 
                 value = bsp->ValueForKey(&bsp->Lesentities[ent_index], "rendercolor");
@@ -11737,11 +9716,6 @@ void world_t::LoadEntVars(void)
                         enttmp[0].origin[0] = (model->mins[0] + model->maxs[0]) / 2.0f;
                         enttmp[0].origin[1] = (model->mins[1] + model->maxs[1]) / 2.0f;
                         enttmp[0].origin[2] = (model->mins[2] + model->maxs[2]) / 2.0f;
-                        /*int idx=find_leaf(model->mins);
-                        enttmp[0].leaf_visibility_idx_min=idx;
-                        idx=find_leaf(model->maxs);
-                        enttmp[0].leaf_visibility_idx_max=idx;
-                        */
                     }
                     else
                     {
@@ -11758,7 +9732,6 @@ void world_t::LoadEntVars(void)
                 }
                 else
                 {
-                    //	enttmp[0].rendermode=2;
                     EntVar.push_back(enttmp[0]);
                 }
             }
@@ -11787,12 +9760,6 @@ void world_t::render_skyfaces(vec3_t cam)
     // of the skyfaces (even the ones that aren't possibly visible)...
 
     sky_flag = SKY_FRONT | SKY_BACK | SKY_LEFT | SKY_RIGHT | SKY_UP | SKY_DOWN;
-
-    /*
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-*/
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -11941,8 +9908,6 @@ void Engine::CFT_init_les_flags()
     CmpCS.pos_ini = world.flag_gign_rec;
     CmpCS.modele.SetSkin(2);
 
-    // FlagCS.eta_depart();
-
     FlagTR.affecte_modele(lesobjets, 1, 4);
     FlagTR.Team = 1; // terro
     FlagTR.pos_ini = world.flag_terro;
@@ -12027,10 +9992,7 @@ void Engine::CFT_nouvelle_partie()
         CmpTR.pos_cur = CmpTR.pos_ini;
         CmpCS.pos_cur = CmpCS.pos_ini;
     }
-    /*
-        lejoueur[VRAI]->pos=world.RenvoiePosition(est_gign(lejoueur[VRAI]->id_modele));
-        m_pivot.move( lejoueur[VRAI]->pos);
-        */
+
     init_player(VRAI);
 }
 
@@ -12047,7 +10009,6 @@ void Engine::CFT_affiche_message(int r, char *mess)
         model2str(lejoueur[r]->id_modele, model);
         CFT_renvoie_lib_team(lejoueur[r]->QuelTeam, team);
         sprintf(tmp, "%s %s", team, lejoueur[r]->playername);
-        // sprintf(tmp, "Le %s %s %s",model,lejoueur[r]->playername,mess);
         m_chat->addtext(tmp, 2);
         m_chat->addtext(mess, 2);
     }
@@ -12112,8 +10073,6 @@ HRESULT Engine::CFT_envoi_message(int quoi)
 
         DPNHANDLE hAsync;
 
-        // m_pDP->SendTo( DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1,100, NULL , &hAsync, DPNSEND_NOLOOPBACK |
-        // DPNSEND_NOCOMPLETE | DPNSEND_PRIORITY_LOW );
         m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1, 0, NULL, &hAsync, DPNSEND_GUARANTEED);
     }
 
@@ -12141,8 +10100,6 @@ HRESULT Engine::CFT_HOST_envoi_recapitulatif()
 
         DPNHANDLE hAsync;
 
-        // m_pDP->SendTo( DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1,100, NULL , &hAsync, DPNSEND_NOLOOPBACK |
-        // DPNSEND_NOCOMPLETE | DPNSEND_PRIORITY_LOW );
         m_pDP->SendTo(DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1, 0, NULL, &hAsync, DPNSEND_GUARANTEED);
     }
 
@@ -12168,7 +10125,6 @@ HRESULT Engine::CFT_recoit_message(DPNID idplayer, GAMEMSG_CFT *ret)
 
             for (int j = 0; j < g_lNumberOfActivePlayers; j++)
             {
-                // if (lejoueur[j]->etat==true && lejoueur[j]->mort==false && lejoueur[j]->killed==ret->killed )
                 if ((lejoueur[j]->etat == true) && (lejoueur[j]->ID == idplayer))
                 {
 
@@ -12318,9 +10274,6 @@ void Engine::RESET()
         marks = 0;
     }
 
-    // delete(lespos);
-    // delete(amoi);
-
     if (mp3)
         delete (mp3);
     if (parts)
@@ -12374,8 +10327,6 @@ void Engine::RESET()
             SAFE_DELETE(lesoptionsbouton[dae]);
     }
 
-    // delete [] leseffets;
-
     SAFE_DELETE(g_pSporte);
 
     SAFE_RELEASE(g_pDSListener);
@@ -12387,9 +10338,6 @@ void Engine::RESET()
     DeleteCriticalSection(&m_csTeam);
     CloseHandle(m_hConnectCompleteEvent);
     CloseHandle(m_hLobbyConnectionEvent);
-
-    //	g_pNetConnectWizard->Shutdown();
-    //	SAFE_DELETE( g_pNetConnectWizard );
 
     SAFE_RELEASE(m_pDeviceAddress);
     SAFE_RELEASE(m_pHostAddress);
@@ -12427,15 +10375,7 @@ void Engine::RESET()
         delete m_cross;
         m_cross = 0;
     }
-    /*if(m_panel) {
-            delete m_panel;
-            m_panel = 0;
-        }
-    */
-    // cyril
-    // delete [] lejoueur;
 
-    // lescar.clear();
     lejoueur.clear();
 
     for (int j = 0; j < max_modele; j++)

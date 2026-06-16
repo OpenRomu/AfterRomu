@@ -35,15 +35,16 @@ void pGrenSystemMissile_t::Die(void)
 {
     spawnTime = -1.0f;
 }
+
 // vertex arrays?
 void pGrenSystemMissile_t::Render(vec3_t &x, vec3_t &y)
 {
     vec3_t pts[4];
     vec3_t mx = -x;
     vec3_t my = -y;
+
     glDepthMask(0);
 
-    //   glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(-1.0f, -2.0f);

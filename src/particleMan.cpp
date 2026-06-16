@@ -93,24 +93,6 @@ void pParticleManager_t::Frame(float &frametime)
 
         if (!(ok = curr->Frame(frametime, gravity)))
             SystemDelete(curr);
-        /* if (ok)
-         {
-              pPart_t *part = 0;
-
-             for (part = curr->GetAlive()->next; part != curr->GetAlive();part = part->next)
-               {
-
-                   collision_tir col_tir;
-                   col_tir=pworld.check_tirs(part->pos,(part->pos-part->pold));
-                   if (col_tir.found=true)
-                   {
-                       curr->Collide(part, col_tir->n);
-                   }
-             }
-
-         }
-
-         */
 
         curr = n;
     }
@@ -131,15 +113,6 @@ void pParticleManager_t::Render(void)
     y[0] = tmat[4];
     y[1] = tmat[5];
     y[2] = tmat[6];
-
-    /* x[0]=1;
-     x[1]=0;
-     x[2]=0;
-      y[0]=0;
-     y[1]=0;
-     y[2]=1;
-  */
-    // glDisable(GL_DEPTH_FUNC);
 
     glEnable(GL_BLEND);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
