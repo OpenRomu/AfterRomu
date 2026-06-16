@@ -9925,57 +9925,6 @@ void Engine::CFT_init_les_flags()
     CmpTR.modele.SetSkin(1);
 }
 
-vec3_t world_t::RenvoiePositionFlag(int team, int quoi)
-{
-    //** CFT renvoie les positions de la base ou du flag en fonction de lequipe
-    // team
-    // 0 = cs
-    // 1 = terro
-
-    // quoi
-    // 0=drapeau
-    // 1=camp
-    vec3_t ret = vec3_t(0.0f, 0.0f, 0.0f);
-
-    if (!got_flag)
-    {
-
-        if (team == 0)
-        {
-            if (pos_gign.size() > quoi)
-            {
-                ret = pos_gign[quoi];
-            }
-            else
-            {
-                ret = vec3_t(0.0f, 0.0f, 0.0f);
-            }
-        }
-        else
-        {
-            if (pos_terro.size() > quoi)
-            {
-                ret = pos_terro[quoi];
-            }
-            else
-            {
-                ret = vec3_t(0.0f, 0.0f, 0.0f);
-            }
-        }
-    }
-    else
-    {
-        if (team == 0)
-
-            ret = flag_gign;
-
-        else
-            ret = flag_terro;
-    }
-
-    return (ret);
-}
-
 void Engine::CFT_nouvelle_partie()
 {
     //** CFT init la partie
