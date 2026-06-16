@@ -123,7 +123,7 @@ typedef struct
 #define _WIN32_DCOM
 ///////////////////////////////////////////////////////
 
-static world_t world;
+world_t world;
 
 static matrix_t mm;
 static matrix_t mm2;
@@ -9571,93 +9571,6 @@ void Engine::DecaleArme()
     static int ping = 1;
     ping = ping * -1;
     SetCursorPos(p.x + 5 * ping, p.y - 5);
-}
-
-void Engine::CFT_init_les_flags()
-{
-    //** CFT init des classes flags declares dans engine.h
-    FlagCS.affecte_modele(lesobjets, 0, 4);
-    FlagCS.Team = 0; // gign
-    FlagCS.pos_ini = world.flag_gign;
-    FlagCS.affecte_son_init(lessons[35]);
-    FlagCS.affecte_son_attrape(lessons[36]);
-    FlagCS.affecte_son_gagne(lessons[37]);
-    FlagCS.type = 1;
-    FlagCS.modele.SetSkin(1);
-
-    CmpCS.type = 0;
-    CmpCS.affecte_modele(lesobjets, 2, 4);
-    CmpCS.Team = 0; // gign
-    CmpCS.pos_ini = world.flag_gign_rec;
-    CmpCS.modele.SetSkin(2);
-
-    FlagTR.affecte_modele(lesobjets, 1, 4);
-    FlagTR.Team = 1; // terro
-    FlagTR.pos_ini = world.flag_terro;
-
-    FlagTR.affecte_son_init(lessons[35]);
-    FlagTR.affecte_son_attrape(lessons[36]);
-    FlagTR.affecte_son_gagne(lessons[37]);
-    FlagTR.type = 1;
-    FlagTR.modele.SetSkin(2);
-
-    CmpTR.affecte_modele(lesobjets, 3, 4);
-    CmpTR.Team = 1; // terro
-    CmpTR.pos_ini = world.flag_terro_rec;
-    CmpTR.type = 0;
-    CmpTR.modele.SetSkin(1);
-}
-
-void Engine::CFT_nouvelle_partie()
-{
-    //** CFT init la partie
-    if (m_chat)
-    {
-
-        m_chat->addtext("NOUVELLE PARTIE", 2);
-    }
-
-    if (CFT_ON)
-    {
-        FlagTR.eta_depart();
-        FlagCS.eta_depart();
-        CmpTR.pos_cur = CmpTR.pos_ini;
-        CmpCS.pos_cur = CmpCS.pos_ini;
-    }
-
-    init_player(VRAI);
-}
-
-void Engine::CFT_renvoie_lib_team(int lateam, char *msg)
-{
-
-    if (lateam == 0)
-        strcpy(msg, "GIGN\0");
-    else
-        strcpy(msg, "TERRO\0");
-}
-
-void Engine::CFT_replace_flag(DPNID idplayer)
-{
-    //** CFT replace le flag apres la mort du joueur
-
-    if (FlagTR.ID == idplayer)
-    {
-        if (m_chat)
-        {
-
-            m_chat->addtext("-->Le Flag des TERRO est replace", 2);
-        }
-        FlagTR.eta_depart();
-    }
-    else
-    {
-        if (FlagCS.ID == idplayer)
-        {
-            m_chat->addtext("-->Le Flag des COUNTER est replace", 2);
-            FlagCS.eta_depart();
-        }
-    }
 }
 
 void Engine::RESET()
