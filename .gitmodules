@@ -1,6 +1,13 @@
-[submodule "directx8"]
+[submodule "3rdparty/spdlog"]
+	path = 3rdparty/spdlog
+	url = https://github.com/gabime/spdlog.git
+	branch = v2.x
+[submodule "3rdparty/fmt"]
+	path = 3rdparty/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "3rdparty/directx8"]
 	path = 3rdparty/directx8
-	url = git@github.com:edgeforce/directx8.git
-[submodule "freeglut"]
+	url = https://github.com/edgeforce/directx8.git
+[submodule "3rdparty/freeglut"]
 	path = 3rdparty/freeglut
-	url = git@github.com:freeglut/freeglut.git
+	url = https://github.com/freeglut/freeglut.git

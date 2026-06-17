@@ -46,28 +46,29 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include</ExternalIncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include;$(SolutionDir)3rdparty\spdlog\include;$(SolutionDir)3rdparty\fmt\include</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)3rdparty\freeglut\build\lib\Debug;$(SolutionDir)3rdparty\directx8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include</ExternalIncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include;$(SolutionDir)3rdparty\spdlog\include;$(SolutionDir)3rdparty\fmt\include</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)3rdparty\freeglut\build\lib\Release;$(SolutionDir)3rdparty\directx8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalOptions>/wd 4430 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/wd 4430 /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -84,14 +85,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppwd.lib;opengl32.lib;glu32.lib;dxguid.lib;gdi32.lib;msvcprtd.lib;strmiids.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Dxerr8.lib;Netapi32.lib;dplayx.lib;dxguid.lib;winmm.lib;winhttp.lib;dsound.lib;comsuppw.lib;opengl32.lib;glu32.lib;dxguid.lib;gdi32.lib;msvcprt.lib;strmiids.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +163,16 @@
     <ClCompile Include="wad.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="xmlmessaging.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3rdparty\fmt.vcxproj">
+      <Project>{6B1E45F0-3A7D-4E9C-B2F5-8D1A4C6E7B21}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <ProjectReference Include="..\3rdparty\spdlog.vcxproj">
+      <Project>{8392F45E-1B60-4C7D-A9E8-3F5D7B2C4A61}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitset.h" />

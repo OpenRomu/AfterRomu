@@ -1,9 +1,6 @@
 Debug/
 Release/
 
-directx8/
-freeglut/
-
 data/
 
 .vs/

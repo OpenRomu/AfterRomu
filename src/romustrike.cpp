@@ -14,6 +14,9 @@
 
 #include "romustrike.h"
 
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
 #include <dplay8.h>
 #include <dplobby8.h>
 #include <dxerr8.h>
@@ -146,6 +149,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
     {
         CoInitialize(NULL);
 
+        auto file_logger = spdlog::create<spdlog::sinks::basic_file_sink_mt>("system", "system.log");
+        spdlog::set_global_logger(file_logger);
+        spdlog::info("Logger started");
+
         InitializeCriticalSection(&g_csPlayerContext);
 
         if (S_OK == init_dplay()) //
@@ -248,6 +255,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
                 e.Error(), e.ErrorMessage(), (LPCSTR)bstrSource, (LPCSTR)bstrDescription);
         MessageBox(NULL, buf, "erreur COM", 0);
     }
+
+    spdlog::info("Logger shutdown");
+    spdlog::shutdown();
+
     return 0; // (int) msg.wParam
 }
 
