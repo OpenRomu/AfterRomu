@@ -359,7 +359,6 @@ class world_t
         wads.add(file);
     }
     void InitSkyBox();
-    void DessineSkyBox(vec3_t pos);
     void render_skyfaces(vec3_t pos);
 
     bool DessineEntites(vec3_t pos);
