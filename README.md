@@ -39,7 +39,7 @@ Follow these steps:
    directory.
 2. Create a new `build` directory and change into it:
    ```powershell
-   > cd freeglut
+   > cd 3rdparty/freeglut
    > mkdir build && cd build
    ```
 3. Generate the project files for Visual Studio 2022 (32-bit):

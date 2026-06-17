@@ -46,15 +46,15 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)freeglut\include;$(SolutionDir)directx8\include</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)freeglut\build\lib\Debug;$(SolutionDir)directx8\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)3rdparty\freeglut\build\lib\Debug;$(SolutionDir)3rdparty\directx8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)freeglut\include;$(SolutionDir)directx8\include</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)freeglut\build\lib\Release;$(SolutionDir)directx8\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath);$(SolutionDir)3rdparty\freeglut\include;$(SolutionDir)3rdparty\directx8\include</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)3rdparty\freeglut\build\lib\Release;$(SolutionDir)3rdparty\directx8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
