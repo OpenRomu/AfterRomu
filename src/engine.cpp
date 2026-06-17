@@ -6855,36 +6855,6 @@ HRESULT Engine::SessionsDlgEnumHosts()
 }
 
 //-----------------------------------------------------------------------------
-// Name: SessionsDlgInitListbox()
-// Desc: Initializes the listbox
-//-----------------------------------------------------------------------------
-VOID Engine::SessionsDlgInitListbox()
-{
-    // HWND hWndListBox = GetDlgItem( hDlg, IDC_GAMES_LIST );
-
-    // Clear the contents from the list box, and
-    // display "Looking for games" text in listbox
-    /*SendMessage( hWndListBox, LB_RESETCONTENT, 0, 0 );
-    if( m_bSearchingForSessions )
-    {
-        SendMessage( hWndListBox, LB_ADDSTRING, 0,
-                     (LPARAM) TEXT("Looking for games...") );
-    }
-    else
-    {
-        SendMessage( hWndListBox, LB_ADDSTRING, 0,
-                     (LPARAM) TEXT("Click Start Search to see a list of games.  ")
-                              TEXT("Click Create to start a new game.") );
-    }
-
-    SendMessage( hWndListBox, LB_SETITEMDATA,  0, NULL );
-    SendMessage( hWndListBox, LB_SETCURSEL,    0, 0 );
-
-    // Disable the join button until sessions are found
-    EnableWindow( GetDlgItem( hDlg, IDC_JOIN ), FALSE ); */
-}
-
-//-----------------------------------------------------------------------------
 // Name: ConnectionsDlgOnOK()
 // Desc: Stores the player name m_strPlayerName, and in creates a IDirectPlay
 //       object based on the connection type the user selected.

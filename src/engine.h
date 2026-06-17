@@ -612,7 +612,6 @@ class Engine : public GLWindow
     HRESULT SessionsDlgEnumHosts();
     VOID SessionsDlgExpireOldHostEnums();
     HRESULT SessionsDlgJoinGame(DPHostEnumInfo *pDPHostEnumSelected);
-    VOID SessionsDlgInitListbox();
     HRESULT ConnectionsDlgOnOK();
 
     HRESULT SessionsDlgCreateGame();
